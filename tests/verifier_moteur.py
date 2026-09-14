@@ -33,6 +33,8 @@ from pathlib import Path
 RACINE = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(RACINE))
 
+from core.criteres import analyser_mots_cles, formater_mots_cles, total_des_poids
+from core.modeles import MODELES, charger_modele, noms_des_modeles
 from core.normalisation import normaliser
 from core.parser import SEUIL_TEXTE_MINIMUM, parser_cv
 from core.scorer import scorer_candidat, terme_present
@@ -44,67 +46,43 @@ DOSSIER_CORPUS = RACINE / "tests" / "corpus"
 # Le modèle de critères utilisé pour la vérification
 # ----------------------------------------------------------------------
 
-# Modèle « Développeur web » du §8 du cadrage, transcrit dans la structure du
-# §7.2. La syntaxe du cadrage « react = vue, angular » signifie : un groupe
-# dont le terme principal est « react » et les synonymes « vue » et
-# « angular ».
-#
-# PROVISOIRE. Ce modèle vivra dans core/modeles.py au lot 3, avec les quatre
-# autres. Il est écrit ici parce que la porte P1 se franchit AVANT le lot 3 :
-# le moteur doit être validé avant qu'on écrive les modèles qui s'en servent.
-MODELE_DEVELOPPEUR_WEB = [
-    {
-        "nom": "Langages & frameworks",
-        "poids": 35,
-        "type": "requis",
-        "groupes": [
-            ["python"],
-            ["javascript", "js"],
-            ["django", "flask"],
-            ["react", "vue", "angular"],
-        ],
-    },
-    {
-        "nom": "Bases de données",
-        "poids": 20,
-        "type": "requis",
-        "groupes": [
-            ["sql"],
-            ["postgresql", "postgres"],
-            ["mysql"],
-            ["mongodb", "nosql"],
-        ],
-    },
-    {
-        "nom": "Outils & versioning",
-        "poids": 15,
-        "type": "requis",
-        "groupes": [
-            ["git", "github", "gitlab"],
-            ["docker"],
-            ["linux"],
-        ],
-    },
-    {
-        "nom": "Expérience terrain",
-        "poids": 20,
-        "type": "requis",
-        "groupes": [
-            ["developpeur", "developer", "ingenieur logiciel"],
-            ["freelance"],
-            ["stage"],
-        ],
-    },
-    {
-        "nom": "Formation",
-        "poids": 10,
-        "type": "requis",
-        "groupes": [
-            ["licence", "bachelor"],
-            ["master"],
-            ["informatique"],
-        ],
-    },
+# Le moteur est vérifié avec le VRAI modèle, celui que l'interface servira.
+# Si core/modeles.py transcrit mal le §8 du cadrage, les scores ci-dessous
+# changent et les vérifications tombent.
+MODELE_DEVELOPPEUR_WEB = charger_modele("Développeur web")
+
+# Le §8 du cadrage, retranscrit indépendamment pour servir de référence à la
+# partie C. Cette redite est volontaire : si les deux transcriptions
+# divergent, c'est qu'au moins l'une des deux est fausse — et c'est
+# exactement ce qu'on veut détecter. Le format est (nom, poids, groupes).
+SECTION_8_DEVELOPPEUR_WEB = [
+    ("Langages & frameworks", 35, [
+        ["python"],
+        ["javascript", "js"],
+        ["django", "flask"],
+        ["react", "vue", "angular"],
+    ]),
+    ("Bases de données", 20, [
+        ["sql"],
+        ["postgresql", "postgres"],
+        ["mysql"],
+        ["mongodb", "nosql"],
+    ]),
+    ("Outils & versioning", 15, [
+        ["git", "github", "gitlab"],
+        ["docker"],
+        ["linux"],
+    ]),
+    ("Expérience terrain", 20, [
+        ["developpeur", "developer", "ingenieur logiciel"],
+        ["freelance"],
+        ["stage"],
+    ]),
+    ("Formation", 10, [
+        ["licence", "bachelor"],
+        ["master"],
+        ["informatique"],
+    ]),
 ]
 
 
@@ -520,6 +498,124 @@ def _trouves(resultat, nom_critere):
 
 
 # ----------------------------------------------------------------------
+# PARTIE C — Syntaxe de saisie et modèles (lot 3)
+# ----------------------------------------------------------------------
+
+
+def partie_c_syntaxe():
+    sous_titre("C1. Syntaxe de saisie — le « = » crée le groupe")
+
+    cas = [
+        ("python", [["python"]]),
+        ("python, javascript", [["python"], ["javascript"]]),
+        ("python\njavascript", [["python"], ["javascript"]]),
+        ("react = vue, angular", [["react", "vue", "angular"]]),
+        (
+            "python, javascript\nreact = vue, angular",
+            [["python"], ["javascript"], ["react", "vue", "angular"]],
+        ),
+    ]
+
+    for saisie, attendu in cas:
+        obtenu = analyser_mots_cles(saisie)
+        apercu = saisie.replace("\n", " ⏎ ")
+        print(f'  "{apercu}"')
+        print(f"      -> {obtenu}")
+        verifier(f'saisie "{apercu}"', obtenu == attendu, obtenu)
+
+    print()
+    sous_titre("C2. Tolérance de saisie et aller-retour")
+
+    verifier(
+        "espaces superflus absorbés",
+        analyser_mots_cles("  python  ,  django  ") == [["python"], ["django"]],
+    )
+    verifier(
+        "lignes vides et virgules en trop absorbées",
+        analyser_mots_cles("python,,\n\n  \ndjango,") == [["python"], ["django"]],
+    )
+    verifier(
+        "doublons retirés",
+        analyser_mots_cles("python\npython") == [["python"]],
+    )
+    verifier(
+        "un second « = » sur la ligne ne coupe pas deux fois",
+        analyser_mots_cles("a = b = c") == [["a", "b = c"]],
+        analyser_mots_cles("a = b = c"),
+    )
+    verifier("saisie vide rend une liste vide", analyser_mots_cles("") == [])
+
+    # Aller-retour : le texte reformaté doit avoir le même SENS que
+    # l'original. C'est ce qui garantit qu'un modèle affiché dans la zone de
+    # saisie score bien ce qu'il montre.
+    for nom_modele in noms_des_modeles():
+        for critere in charger_modele(nom_modele):
+            retour = analyser_mots_cles(formater_mots_cles(critere["groupes"]))
+            if retour != critere["groupes"]:
+                verifier(
+                    f"aller-retour stable — {nom_modele} / {critere['nom']}",
+                    False,
+                    retour,
+                )
+                break
+        else:
+            continue
+        break
+    else:
+        verifier("aller-retour texte → groupes → texte stable sur les 5 modèles", True)
+
+
+def partie_c_modeles():
+    sous_titre("C3. Les cinq modèles")
+
+    print(f"  {'Modèle':<26} {'Critères':<10} {'Poids':<7} Groupes")
+    for nom_modele in noms_des_modeles():
+        criteres = charger_modele(nom_modele)
+        total = total_des_poids(criteres)
+        nb_groupes = sum(len(c["groupes"]) for c in criteres)
+        print(f"  {nom_modele:<26} {len(criteres):<10} {total:<7} {nb_groupes}")
+    print()
+
+    verifier("les 5 modèles du §8 sont présents", len(MODELES) == 5, len(MODELES))
+
+    for nom_modele in noms_des_modeles():
+        criteres = charger_modele(nom_modele)
+        total = total_des_poids(criteres)
+        verifier(f"« {nom_modele} » totalise exactement 100 points", total == 100, total)
+        verifier(
+            f"« {nom_modele} » : aucun critère sans mot-clé",
+            all(c["groupes"] for c in criteres),
+        )
+        verifier(
+            f"« {nom_modele} » : tous les critères sont de type requis",
+            all(c["type"] == "requis" for c in criteres),
+        )
+
+    # Comparaison avec la transcription indépendante du §8.
+    print()
+    reel = charger_modele("Développeur web")
+    verifier(
+        "« Développeur web » a les 5 critères du §8",
+        [c["nom"] for c in reel] == [n for n, _, _ in SECTION_8_DEVELOPPEUR_WEB],
+        [c["nom"] for c in reel],
+    )
+    for critere, (nom, poids, groupes) in zip(reel, SECTION_8_DEVELOPPEUR_WEB):
+        verifier(
+            f"« {nom} » : poids et groupes conformes au §8",
+            critere["poids"] == poids and critere["groupes"] == groupes,
+            f"{critere['poids']} / {critere['groupes']}",
+        )
+
+    # Les copies doivent être indépendantes de la constante.
+    premier = charger_modele("Comptable")
+    premier[0]["poids"] = 999
+    verifier(
+        "charger_modele rend des copies : modifier le résultat n'altère pas MODELES",
+        total_des_poids(charger_modele("Comptable")) == 100,
+    )
+
+
+# ----------------------------------------------------------------------
 
 
 def principal():
@@ -530,6 +626,10 @@ def principal():
     partie_a_exclusions()
 
     partie_b_corpus()
+
+    titre("PARTIE C — Syntaxe de saisie et modèles (lot 3)")
+    partie_c_syntaxe()
+    partie_c_modeles()
 
     titre("RÉSULTAT DE LA PORTE P1")
     if _echecs:
