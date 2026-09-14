@@ -1,0 +1,21 @@
+# Environnement Python
+venv/
+__pycache__/
+*.py[cod]
+
+# Secrets et configuration locale
+.env
+.streamlit/secrets.toml
+
+# ----------------------------------------------------------------------
+# Aucun CV réel ne doit jamais entrer dans ce dépôt.
+# Tous les documents candidats sont exclus par défaut...
+*.pdf
+*.docx
+*.doc
+*.xlsx
+
+# ...SAUF le corpus de test, qui est entièrement fictif et doit être
+# versionné pour que les tests restent rejouables (PROCESS §5.1.1).
+!tests/corpus/*.pdf
+!tests/corpus/*.docx
