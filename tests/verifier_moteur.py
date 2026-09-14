@@ -255,8 +255,13 @@ def partie_a_exclusions():
 
     verifier(
         "le critère d'exclusion produit un signalement",
-        avec_exclusion["signalements"] == ["Recherche un stage"],
+        [s["critere"] for s in avec_exclusion["signalements"]] == ["Recherche un stage"],
         avec_exclusion["signalements"],
+    )
+    verifier(
+        "le signalement dit QUEL mot-clé a déclenché (décision C4)",
+        avec_exclusion["signalements"][0]["declencheurs"] == ["recherche un stage"],
+        avec_exclusion["signalements"][0]["declencheurs"],
     )
     verifier(
         "le signalement ne modifie pas le score",

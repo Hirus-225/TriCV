@@ -148,9 +148,16 @@ def scorer_candidat(texte_brut, criteres):
 
         {
             "score": 72,
-            "signalements": ["Intérim"],
+            "signalements": [
+                {"critere": "Intérim", "declencheurs": ["interim"]},
+            ],
             "detail": [ ... un dictionnaire par critère requis ... ],
         }
+
+    ÉCART ASSUMÉ AVEC LE §7.6 DU CADRAGE. Celui-ci donne `signalements` comme
+    une simple liste de noms de critères. On y ajoute le terme déclencheur,
+    parce que la décision C4 du 14/09/2026 affiche la règle qui a sonné plutôt
+    qu'un extrait du CV — et qu'on ne peut pas l'afficher sans la connaître.
 
     LA NORMALISATION PAR LE TOTAL DES POIDS (§7.4).
 
@@ -192,8 +199,25 @@ def scorer_candidat(texte_brut, criteres):
 
         if type_critere == TYPE_EXCLUSION:
             groupes = [g for g in critere.get("groupes", []) if g]
-            if any(groupe_trouve(g, texte_normalise) for g in groupes):
-                signalements.append(critere.get("nom", ""))
+            # On retient QUELS groupes ont sonné, pas seulement le fait qu'un
+            # d'eux ait sonné. Un critère d'exclusion porte souvent plusieurs
+            # mots-clés ; savoir lequel a déclenché le signalement évite au
+            # RH de rouvrir le CV pour une information qu'on avait sous la
+            # main.
+            #
+            # Ces termes viennent de la SAISIE DE L'UTILISATEUR, pas du CV.
+            # Les afficher ne conserve donc aucun texte de candidat — c'est
+            # ce qui permet de tenir la règle n°3 du §5 tout en restant
+            # explicite (décision C4 du 14/09/2026).
+            declencheurs = [
+                groupe[0] for groupe in groupes
+                if groupe_trouve(groupe, texte_normalise)
+            ]
+            if declencheurs:
+                signalements.append({
+                    "critere": critere.get("nom", ""),
+                    "declencheurs": declencheurs,
+                })
             continue
 
         evaluation = evaluer_critere(critere, texte_normalise)

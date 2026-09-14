@@ -122,6 +122,29 @@ def _largeurs(feuille, largeurs):
         feuille.column_dimensions[get_column_letter(index)].width = largeur
 
 
+def _resumer_signalements(signalements):
+    """
+    Met en forme les signalements d'exclusion pour une cellule de tableau.
+
+    Chaque signalement porte le nom du critère et le ou les termes qui l'ont
+    déclenché. Quand les deux sont identiques — cas courant, l'utilisateur
+    nommant souvent son critère d'après son mot-clé — on n'écrit pas deux
+    fois la même chose.
+    """
+    if not signalements:
+        return "—"
+    morceaux = []
+    for signalement in signalements:
+        critere = signalement.get("critere", "")
+        declencheurs = signalement.get("declencheurs") or []
+        termes = ", ".join(declencheurs)
+        if termes and termes != critere:
+            morceaux.append(f"{critere} ({termes})")
+        else:
+            morceaux.append(critere or termes)
+    return " ; ".join(morceaux) or "—"
+
+
 def _ou_tiret(valeur):
     """Rend la valeur, ou un tiret cadratin si elle est absente."""
     return valeur if valeur else "—"
@@ -240,7 +263,7 @@ def _feuille_classement(classeur, classes, illisibles, criteres):
             _ou_tiret(candidat.get("email")),
             _ou_tiret(candidat.get("telephone")),
             score,
-            ", ".join(candidat.get("signalements") or []) or "—",
+            _resumer_signalements(candidat.get("signalements")),
         ]
         for nom in noms_criteres:
             ligne_detail = detail.get(nom)
