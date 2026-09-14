@@ -5,12 +5,16 @@ Ce script fait tourner le parser et le scorer sur le corpus de test fictif et
 affiche, pour chaque fichier : le nom extrait, l'email, le téléphone, le
 statut lisible/illisible, le score et le détail par critère.
 
-Il se lit en deux parties :
+Il se lit en quatre parties :
 
   PARTIE A — les trois corrections du lot 1, démontrées sur du texte écrit à
              la main. C'est le critère de sortie du lot 1 dans PROCESS §4.
   PARTIE B — le moteur complet sur le corpus, avec le modèle « Développeur
              web » du §8 du cadrage. C'est le critère de sortie du lot 2.
+  PARTIE C — la syntaxe de saisie des mots-clés et les cinq modèles.
+             C'est le critère de sortie du lot 3.
+  PARTIE D — le classeur Excel, généré puis relu en mémoire.
+             C'est le critère de sortie du lot 4.
 
 Chaque partie se termine par des vérifications automatiques. Le script sort
 avec le code 0 si tout passe, 1 sinon — de quoi le brancher plus tard sur une
@@ -27,13 +31,17 @@ pointer vers des CV réels.
 
 import io
 import sys
+from datetime import date
 from pathlib import Path
 
 # Permet de lancer le script directement, sans installer le projet.
 RACINE = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(RACINE))
 
+from openpyxl import load_workbook
+
 from core.criteres import analyser_mots_cles, formater_mots_cles, total_des_poids
+from core.export import AVERTISSEMENT, generer_classeur, nom_du_fichier_export
 from core.modeles import MODELES, charger_modele, noms_des_modeles
 from core.normalisation import normaliser
 from core.parser import SEUIL_TEXTE_MINIMUM, parser_cv
@@ -341,7 +349,7 @@ def partie_b_corpus():
     if not fichiers:
         print("  Corpus vide. Lancer d'abord : ./venv/bin/python tests/generer_corpus.py")
         _echecs.append("corpus absent")
-        return
+        return []
 
     resultats = [analyser_fichier(chemin) for chemin in fichiers]
 
@@ -488,6 +496,8 @@ def partie_b_corpus():
         all(0 <= r["score"] <= 100 for r in classes),
     )
 
+    return resultats
+
 
 def _trouves(resultat, nom_critere):
     """Retourne la liste des termes trouvés pour un critère donné."""
@@ -616,6 +626,180 @@ def partie_c_modeles():
 
 
 # ----------------------------------------------------------------------
+# PARTIE D — Classeur Excel (lot 4)
+# ----------------------------------------------------------------------
+
+
+def partie_d_export(resultats):
+    sous_titre("D1. Génération du classeur depuis les résultats du corpus")
+
+    criteres = MODELE_DEVELOPPEUR_WEB + [
+        {
+            "nom": "Recherche un stage",
+            "poids": 0,
+            "type": "exclusion",
+            "mots_cles": "recherche un stage\ninterim",
+            "groupes": analyser_mots_cles("recherche un stage\ninterim"),
+        }
+    ]
+
+    # On rejoue le scoring en incluant le critère d'exclusion, pour que le
+    # classeur contienne au moins un signalement à mettre en forme.
+    candidats = []
+    for resultat in resultats:
+        candidat = dict(resultat)
+        if candidat["lisible"]:
+            candidat.update(scorer_candidat_depuis_corpus(candidat, criteres))
+        candidats.append(candidat)
+
+    jour = date(2026, 9, 14)
+    tampon = generer_classeur(candidats, criteres, "Développeur web", jour)
+
+    octets = tampon.getvalue()
+    print(f"  Classeur généré en mémoire : {len(octets):,} octets".replace(",", " "))
+    print(f"  Nom proposé : {nom_du_fichier_export(jour)}")
+    print()
+
+    verifier("le classeur est rendu dans un tampon mémoire", isinstance(tampon, io.BytesIO))
+    verifier("le tampon est positionné au début", tampon.tell() == 0)
+    verifier(
+        "le contenu est bien un fichier xlsx (signature ZIP « PK »)",
+        octets[:2] == b"PK",
+        octets[:2],
+    )
+
+    # ------------------------------------------------------------------
+    # Relecture : le classeur doit s'ouvrir et contenir ce qu'on attend
+    # ------------------------------------------------------------------
+    sous_titre("D2. Relecture du classeur")
+
+    relu = load_workbook(io.BytesIO(octets))
+    print(f"  Feuilles : {relu.sheetnames}")
+
+    verifier(
+        "les trois feuilles attendues sont présentes",
+        relu.sheetnames == ["Résumé", "Classement", "Critères"],
+        relu.sheetnames,
+    )
+
+    classes = [c for c in candidats if c["lisible"]]
+    illisibles = [c for c in candidats if not c["lisible"]]
+
+    feuille = relu["Classement"]
+    valeurs = [
+        [cellule.value for cellule in ligne]
+        for ligne in feuille.iter_rows()
+    ]
+    plat = [str(v) for ligne in valeurs for v in ligne if v is not None]
+
+    verifier(
+        "l'en-tête porte une colonne par critère requis",
+        all(f"{c['nom']} (pts)" in plat for c in MODELE_DEVELOPPEUR_WEB),
+    )
+    verifier(
+        "chaque candidat classé a une ligne",
+        all(c["fichier"] in plat for c in classes),
+    )
+    verifier(
+        "les illisibles figurent dans le bloc séparé",
+        all(c["fichier"] in plat for c in illisibles),
+    )
+    # Les lignes du classement sont celles dont la première cellule est un
+    # numéro de rang. Aucun fichier illisible ne doit s'y trouver.
+    fichiers_classes = {
+        ligne[-1] for ligne in valeurs if ligne and isinstance(ligne[0], int)
+    }
+    verifier(
+        "aucun illisible ne figure parmi les lignes numérotées du classement",
+        all(c["fichier"] not in fichiers_classes for c in illisibles),
+        fichiers_classes & {c["fichier"] for c in illisibles},
+    )
+    verifier(
+        "le bloc séparé donne la raison au lieu d'un score",
+        "Document scanné, aucun texte lisible" in plat,
+    )
+    verifier(
+        "tous les candidats lisibles sont numérotés",
+        fichiers_classes == {c["fichier"] for c in classes},
+        fichiers_classes,
+    )
+
+    # Le premier du classement doit être en première ligne de données.
+    premier_attendu = max(classes, key=lambda c: c["score"])
+    ligne_1 = next((l for l in valeurs if l and l[0] == 1), None)
+    verifier(
+        "le rang 1 est bien le meilleur score",
+        ligne_1 is not None and ligne_1[4] == premier_attendu["score"],
+        ligne_1[4] if ligne_1 else None,
+    )
+
+    feuille_resume = relu["Résumé"]
+    plat_resume = [
+        str(c.value) for ligne in feuille_resume.iter_rows() for c in ligne if c.value
+    ]
+    verifier(
+        "l'avertissement méthodologique figure dans le résumé",
+        any(AVERTISSEMENT in texte for texte in plat_resume),
+    )
+    verifier(
+        "le résumé compte les illisibles à part",
+        "À examiner manuellement" in plat_resume,
+    )
+
+    feuille_criteres = relu["Critères"]
+    plat_criteres = [
+        str(c.value) for ligne in feuille_criteres.iter_rows() for c in ligne if c.value
+    ]
+    verifier(
+        "la feuille Critères liste le critère d'exclusion et son type",
+        "Recherche un stage" in plat_criteres and "Exclusion" in plat_criteres,
+    )
+    verifier(
+        "la feuille Critères réaffiche la syntaxe des synonymes",
+        any("react = vue, angular" in texte for texte in plat_criteres),
+    )
+
+    # ------------------------------------------------------------------
+    # Confidentialité
+    # ------------------------------------------------------------------
+    sous_titre("D3. Aucune écriture disque")
+
+    avant = set(RACINE.rglob("*.xlsx"))
+    generer_classeur(candidats, criteres, "Développeur web", jour)
+    apres = set(RACINE.rglob("*.xlsx"))
+    verifier(
+        "générer un classeur ne crée aucun fichier dans le dépôt",
+        avant == apres,
+        apres - avant,
+    )
+    verifier(
+        "le nom de fichier proposé ne contient aucun nom de candidat",
+        not any(
+            (c.get("nom") or "").split()[0].lower() in nom_du_fichier_export(jour).lower()
+            for c in classes
+            if c.get("nom")
+        ),
+        nom_du_fichier_export(jour),
+    )
+
+
+def scorer_candidat_depuis_corpus(candidat, criteres):
+    """
+    Rejoue le scoring d'un candidat du corpus.
+
+    Le texte brut ayant été libéré en partie B (règle n°3 du §5), on le
+    réextrait du fichier. C'est acceptable ici : le corpus est fictif, et
+    cela évite de garder du texte en mémoire plus longtemps que nécessaire
+    pour le seul confort d'un script de vérification.
+    """
+    chemin = DOSSIER_CORPUS / candidat["fichier"]
+    with open(chemin, "rb") as fichier:
+        memoire = io.BytesIO(fichier.read())
+    relu = parser_cv(memoire, chemin.name)
+    return scorer_candidat(relu["texte"], criteres)
+
+
+# ----------------------------------------------------------------------
 
 
 def principal():
@@ -625,11 +809,17 @@ def principal():
     partie_a_normalisation_des_poids()
     partie_a_exclusions()
 
-    partie_b_corpus()
+    resultats = partie_b_corpus()
 
     titre("PARTIE C — Syntaxe de saisie et modèles (lot 3)")
     partie_c_syntaxe()
     partie_c_modeles()
+
+    titre("PARTIE D — Classeur Excel (lot 4)")
+    if resultats:
+        partie_d_export(resultats)
+    else:
+        print("  Sautée : le corpus est vide.")
 
     titre("RÉSULTAT DE LA PORTE P1")
     if _echecs:
