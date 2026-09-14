@@ -1,0 +1,147 @@
+# Thème TriCV
+#
+# Les valeurs viennent des jetons de la maquette « TriCV — 5 planches ».
+# La correspondance jeton par jeton est documentée dans docs/DESIGN-MAPPING.md,
+# avec les écarts assumés. Ne pas modifier une couleur ici sans mettre ce
+# document à jour : c'est lui qui explique d'où vient chaque valeur.
+#
+# Aucune feuille de style du design system n'est reprise dans l'application.
+# Streamlit génère son propre DOM ; ces feuilles ne s'y appliqueraient pas
+# proprement. Tout ce qui est réalisable par le thème l'est ici, et le reste
+# est un écart assumé, listé dans DESIGN-MAPPING.md.
+
+[theme]
+
+# ---------------------------------------------------------------------
+# Couleurs de base
+# ---------------------------------------------------------------------
+
+# --accent : couleur d'action. Boutons principaux, barre de progression,
+# curseurs, état actif des onglets.
+primaryColor = "#4F46E5"
+
+# --bg : fond de la page.
+backgroundColor = "#FFFFFF"
+
+# --surface : fond des blocs en retrait. Chez Streamlit, c'est le fond de la
+# barre latérale, des zones de dépôt de fichiers, des blocs dépliables et des
+# champs de saisie.
+secondaryBackgroundColor = "#F1F5F9"
+
+# --text : couleur du texte courant.
+textColor = "#1E293B"
+
+# --border : filets et contours.
+borderColor = "#E2E8F0"
+
+# Le design encadre les champs de saisie. C'est aussi ce qui rend le
+# formulaire de critères lisible quand il compte cinq lignes ou plus.
+showWidgetBorder = true
+
+# --accent : les liens reprennent la couleur d'action.
+linkColor = "#4F46E5"
+
+# ---------------------------------------------------------------------
+# Typographie
+# ---------------------------------------------------------------------
+
+# --font-sans et --font-display de la maquette, déclarés comme piles de
+# repli locales.
+#
+# DÉCISION : aucune police n'est téléchargée depuis un serveur tiers.
+# Streamlit 1.63 sait charger IBM Plex Sans et Fraunces depuis Google Fonts
+# via [[theme.fontFaces]], mais chaque visiteur émettrait alors une requête
+# vers Google, qui verrait son adresse IP. C'est incompatible avec la règle
+# n°4 du §5 du cadrage (aucun appel réseau sortant), et cela affaiblirait
+# l'argument central du produit pour un gain purement esthétique.
+#
+# Conséquence assumée : un visiteur qui n'a pas ces polices installées verra
+# la police système de son appareil. La hiérarchie (corps sans empattement,
+# titres à empattement, chiffres en chasse fixe) est conservée dans tous les
+# cas, parce que chaque pile se termine par une famille générique.
+font = "IBM Plex Sans, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif"
+headingFont = "Fraunces, Georgia, Times New Roman, serif"
+codeFont = "IBM Plex Mono, ui-monospace, SFMono-Regular, Menlo, monospace"
+
+# --text-base : 16px.
+baseFontSize = 16
+
+# L'échelle typographique de la maquette :
+#   --text-3xl 36px  --text-2xl 28px  --text-xl 22px
+#   --text-lg  18px  --text-base 16px --text-sm 14px
+# convertie en rem sur une base de 16px, pour h1 à h6.
+headingFontSizes = ["2.25rem", "1.75rem", "1.375rem", "1.125rem", "1rem", "0.875rem"]
+
+# ---------------------------------------------------------------------
+# Formes
+# ---------------------------------------------------------------------
+
+# --r-md : 8px. C'est le rayon des boutons et des alertes dans la maquette.
+# Les cartes et les tableaux y utilisent --r-lg (10px), mais Streamlit n'a
+# qu'un rayon de base — écart de 2px, invisible à l'œil.
+baseRadius = "0.5rem"
+buttonRadius = "0.5rem"
+
+# ---------------------------------------------------------------------
+# Couleurs sémantiques
+# ---------------------------------------------------------------------
+#
+# Ces quatre familles alimentent st.info, st.success, st.warning et st.error.
+# Les renseigner évite d'avoir à fabriquer des encarts colorés en HTML :
+# l'avertissement méthodologique du §4 du cadrage et le message « Session
+# effacée » de la planche 5 sont des composants Streamlit standards.
+
+# --info : #3730A3 sur --info-bg #EEF2FF
+blueColor = "#3730A3"
+blueBackgroundColor = "#EEF2FF"
+blueTextColor = "#3730A3"
+
+# --success : #15803D sur --success-bg #F0FDF4
+greenColor = "#15803D"
+greenBackgroundColor = "#F0FDF4"
+greenTextColor = "#15803D"
+
+# --warning : #B45309 sur --warning-bg #FFFBEB
+yellowColor = "#B45309"
+yellowBackgroundColor = "#FFFBEB"
+yellowTextColor = "#B45309"
+
+# --danger : #B91C1C sur --danger-bg #FEF2F2
+redColor = "#B91C1C"
+redBackgroundColor = "#FEF2F2"
+redTextColor = "#B91C1C"
+
+# --text-muted : textes secondaires et légendes.
+grayColor = "#64748B"
+grayTextColor = "#64748B"
+grayBackgroundColor = "#F1F5F9"
+
+# ---------------------------------------------------------------------
+# Tableau de classement et code
+# ---------------------------------------------------------------------
+
+# --surface-2 : l'en-tête du tableau de la planche 4 est légèrement en retrait
+# par rapport aux lignes de données.
+dataframeHeaderBackgroundColor = "#F8FAFC"
+dataframeBorderColor = "#E2E8F0"
+
+codeBackgroundColor = "#F8FAFC"
+codeTextColor = "#1E293B"
+
+# ---------------------------------------------------------------------
+# Serveur
+# ---------------------------------------------------------------------
+
+[server]
+# Plafond de 5 Mo par fichier, conformément au §3 du cadrage.
+#
+# ATTENTION : la maquette annonce « 10 Mo par fichier » dans sa zone de dépôt.
+# Les deux sources se contredisent. Le cadrage fait autorité, donc 5 Mo — et
+# le libellé de la maquette devra être corrigé au lot 5, sans quoi
+# l'application affichera une limite qu'elle n'applique pas.
+maxUploadSize = 5
+
+[browser]
+# Règle n°4 du §5 du cadrage : aucun appel réseau sortant, télémétrie
+# comprise.
+gatherUsageStats = false
