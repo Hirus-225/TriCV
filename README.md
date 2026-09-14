@@ -45,3 +45,13 @@ pour chaque fichier, les informations extraites et le détail du score :
 4. `core/` n'importe jamais `streamlit`.
 
 Détail en §5 du cadrage.
+
+## Lancer l'application en local
+
+```
+./venv/bin/streamlit run app.py
+```
+
+L'application s'ouvre sur http://localhost:8501. `Ctrl+C` arrête le serveur.
+Le thème est lu dans `.streamlit/config.toml`, relativement au dossier depuis
+lequel la commande est lancée.

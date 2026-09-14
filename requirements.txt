@@ -2,3 +2,11 @@ streamlit
 pdfplumber
 python-docx
 openpyxl
+
+# pandas n'est pas une dépendance supplémentaire au sens du déploiement :
+# streamlit l'installe déjà, et pip ne télécharge rien de plus. Il est
+# déclaré parce que app.py l'importe DIRECTEMENT, pour appliquer les bandes
+# de couleur du score au tableau de classement (Styler). Dépendre en silence
+# d'un paquet installé par un autre est ce qui casse le jour où celui-ci
+# change ses propres dépendances.
+pandas

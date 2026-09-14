@@ -141,6 +141,12 @@ codeTextColor = "#1E293B"
 # l'application affichera une limite qu'elle n'applique pas.
 maxUploadSize = 5
 
+[client]
+# Masque le menu « Deploy » et les options de développement de Streamlit.
+# Ce sont des éléments de l'outil, pas du produit : un professionnel RH n'a
+# rien à y faire, et ils sont en anglais.
+toolbarMode = "minimal"
+
 [browser]
 # Règle n°4 du §5 du cadrage : aucun appel réseau sortant, télémétrie
 # comprise.

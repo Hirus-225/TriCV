@@ -218,28 +218,59 @@ n'est nécessaire.**
 
 | # | Écart | Portée | Position retenue |
 |---|---|---|---|
-| **E1** | Les trois teintes de score ne sont pas des jetons du thème | Planche 4 | Appliquées au cas par cas via un `Styler` pandas, comme la maquette le prévoit elle-même. Pas de HTML. |
+| **E1** | Les trois teintes de score ne sont pas des jetons du thème | Planche 4 | Appliquées via un `Styler` pandas, comme la maquette le prévoit elle-même. Pas de HTML. Voir E9. |
 | **E2** | IBM Plex Sans et Fraunces ne sont pas chargées | Toutes | Pile de repli locale, aucune requête sortante. Un visiteur sans ces polices voit sa police système ; la hiérarchie est conservée. Décision du 14/09/2026. |
 | **E3** | `--r-lg` (10px) sur les cartes et tableaux | Planches 2, 4, 5 | Streamlit n'a qu'un rayon de base. Tout est à 8px. Écart de 2px, invisible. |
 | **E4** | L'échelle d'espacement `--sp-1…8` n'est pas exposée | Toutes | Le rythme vertical reste celui de Streamlit. Non contournable sans CSS. |
-| **E5** | Surtitres en chasse fixe et petites capitales (« OUTIL INTERNE RH ») | Planches 1, 4 | `st.caption` rend dans la police du corps. La fonction (surtitre discret) est conservée, pas la forme. |
-| **E6** | Pas de variante sombre pour la palette indigo | Toutes | Streamlit dérivera un thème sombre. La palette teal de la maquette en fournissait une ; elle n'est pas retenue. |
+| **E5** | Surtitres en chasse fixe et petites capitales | Planches 1, 4 | `st.caption` rend dans la police du corps. La fonction est conservée, pas la forme. |
+| **E6** | Pas de variante sombre pour la palette indigo | Toutes | Streamlit dérivera un thème sombre. La palette teal en fournissait une ; elle n'est pas retenue. |
 | **E7** | Bordures d'alerte (`--*-border`) | Planches 1, 3, 5 | Streamlit dérive la bordure du fond de l'alerte. Écart invisible. |
+| **E8** | **Libellés internes de Streamlit en anglais** | Planches 1, 2, 5 | **Non résolu — voir ci-dessous.** |
+| **E9** | `pandas` ajouté à `requirements.txt` | Planche 4 | `app.py` l'importe directement pour le `Styler` des teintes de score. Ce n'est pas une dépendance de plus au déploiement : streamlit l'installe déjà. Le déclarer évite de dépendre en silence d'un paquet tiers. |
+
+### E8 — Les libellés que Streamlit écrit lui-même
+
+La décision D8 de PROCESS impose une interface **en français uniquement**.
+Tous les textes que TriCV écrit le sont. Mais certains composants Streamlit
+incrustent leurs propres libellés, non traduisibles et non configurables :
+
+| Où | Ce qui s'affiche |
+|---|---|
+| `st.file_uploader` | « Upload », « Drag and drop files here », « Browse files », « 5MB per file » |
+| `st.text_area` | « Press Ctrl+Enter to apply » |
+| `st.dataframe` | l'infobulle de recherche et de téléchargement |
+
+Streamlit 1.63 n'offre aucun mécanisme d'internationalisation. Les seules
+façons de les remplacer passent par l'injection de CSS ou de JavaScript dans
+le DOM de Streamlit — exactement ce que la consigne interdit, et une dette
+qui casserait à la première montée de version, silencieusement.
+
+Trois issues possibles, à trancher :
+
+1. **Assumer l'écart.** Le reste de l'interface est en français ; ces
+   fragments sont ceux d'un composant technique. C'est le choix par défaut
+   tant qu'aucune décision n'est prise.
+2. **Compenser par les libellés voisins.** Déjà fait en partie : la légende
+   française « 40 fichiers maximum · 5 Mo par fichier · PDF, DOCX » est
+   affichée juste sous la zone de dépôt, en doublon du texte anglais.
+3. **Injecter du CSS.** Écarté, sauf demande explicite.
+
+Le menu « Deploy » et les options de développement, eux, sont supprimés
+proprement par `client.toolbarMode = "minimal"` dans `config.toml`.
 
 ---
 
 ## 5. Contradictions entre la maquette et le cadrage
 
-Ces points opposent deux sources. **Le cadrage fait autorité** (PROCESS §0),
-mais chacun demande une décision explicite avant le lot 5.
+Les cinq points relevés au lot design. **Quatre sont tranchés.**
 
-| # | Sujet | Maquette | Cadrage | État |
-|---|---|---|---|---|
-| **C1** | Taille maximale par fichier | « 10 Mo par fichier » | §3 : « 5 Mo maximum par fichier » | `config.toml` applique **5 Mo**. Le libellé de la maquette doit être corrigé au lot 5, sinon l'application affichera une limite qu'elle n'applique pas. |
-| **C2** | Nombre de modèles de poste | 4 : Développeur web, Comptable, Assistant administratif, Commercial terrain | §8 : 5, dont « Logistique / Supply chain » | **À trancher.** La liste déroulante de la maquette n'a pas de place pour un cinquième, mais rien n'empêche de l'ajouter. |
-| **C3** | Syntaxe des mots-clés | Liste plate séparée par des virgules, « Un mot-clé par virgule » — aucun synonyme | §3 et §7.2 : un groupe **par ligne**, synonymes après `=` (`react = vue, angular`) | **À trancher, et c'est la plus lourde.** Le moteur du lot 1 est construit sur les groupes. La maquette les supprime, ce qui revient à un groupe d'un seul terme par mot-clé — donc à renoncer aux synonymes, que la décision D6 de PROCESS désigne comme « ce qui distingue l'outil d'un Ctrl+F pondéré ». |
-| **C4** | « Extrait du CV » sous un signalement | Planche 5 affiche un extrait du texte du CV | §5 règle n°3 : le texte brut est libéré dès le score calculé | **À trancher.** Afficher l'extrait oblige à conserver le texte brut en session, ou au moins l'extrait. Deux issues possibles : renoncer à l'extrait, ou ne conserver que la phrase déclenchante (quelques dizaines de caractères) en documentant l'écart dans la notice. |
-| **C5** | Contenu de la planche « Livrable » | Déclare 4 options et `font = "sans serif"` | — | La planche est un croquis. `config.toml` va plus loin : couleurs sémantiques, typographie, formes, taille de dépôt. Les 4 options qu'elle déclare sont reprises à l'identique. |
+| # | Sujet | Décision |
+|---|---|---|
+| **C1** | Taille par fichier — maquette 10 Mo, cadrage 5 Mo | **Cadrage.** `server.maxUploadSize = 5`. Streamlit affiche « 5MB per file », et `app.py` double la mention en français. Le libellé « 10 Mo » de la maquette est caduc. |
+| **C2** | 4 modèles (maquette) ou 5 (cadrage) | **Cadrage — 5 modèles**, en gardant les intitulés courts de la maquette et en ajoutant « Logistique ». |
+| **C3** | Syntaxe des mots-clés | **Règle mixte.** Le signe `=` est la seule chose qui crée un groupe de synonymes ; virgules et retours à la ligne séparent des mots-clés indépendants. La liste plate de la maquette fonctionne telle quelle, sans renoncer aux synonymes du cadrage. Implémentée dans `core/criteres.py`. |
+| **C4** | « Extrait du CV » sous un signalement | **Supprimé.** On affiche « Règle d'exclusion déclenchée : « recherche un stage » ». Ce mot-clé vient de la saisie de l'utilisateur, pas du document : rien du CV n'est conservé, et la règle n°3 du §5 reste intacte. `signalements` porte désormais le terme déclencheur (écart documenté avec le §7.6). |
+| **C5** | La planche « Livrable » déclare 4 options | Informatif. `config.toml` va plus loin ; les 4 options qu'elle déclare sont reprises à l'identique. |
 
 ---
 
@@ -250,3 +281,8 @@ mais chacun demande une décision explicite avant le lot 5.
 | 14/09/2026 | Palette indigo `#4F46E5` retenue | C'est ce que les planches affichent réellement et ce que leur planche « Livrable » déclare. La palette teal est recouverte par le kit importé et ne s'applique jamais. |
 | 14/09/2026 | Aucune police chargée depuis un tiers | La fidélité typographique ne vaut pas l'affaiblissement de la règle n°4 du §5 du cadrage. |
 | 14/09/2026 | Le CSS du design system n'est pas porté | Streamlit génère son propre DOM ; ces feuilles créeraient une dette immédiate. |
+| 14/09/2026 | C2 tranchée : 5 modèles | Le cadrage fait autorité et le modèle logistique est déjà rédigé. |
+| 14/09/2026 | C3 tranchée : le `=` crée le groupe | Concilie la liste plate de la maquette et les groupes du cadrage sans rien perdre. |
+| 14/09/2026 | C4 tranchée : la règle, pas l'extrait | Le mot-clé vient de la saisie, pas du CV : on reste explicite sans conserver de texte de candidat. |
+| 14/09/2026 | `pandas` déclaré dans `requirements.txt` | `app.py` l'importe directement ; streamlit l'installait déjà, le déploiement ne change pas. |
+| 14/09/2026 | E8 ouvert : libellés internes de Streamlit en anglais | Aucun mécanisme d'i18n en 1.63 ; les contournements passent tous par du CSS injecté, écarté par consigne. |
