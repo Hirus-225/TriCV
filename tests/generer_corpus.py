@@ -150,7 +150,7 @@ def ecrire_docx_tableaux(nom_fichier, entete, sections):
 def cas_1_pdf_texte_standard():
     """Chemin nominal : PDF texte, profil développeur web bien pourvu."""
     return ecrire_pdf(
-        "01_cv_texte_standard.pdf",
+        "01_CV_Konan_Bernard.pdf",
         [
             "Konan Bernard",
             "konan.bernard@example.ci",
@@ -196,7 +196,7 @@ def cas_2_pdf_accents_prenoms_composes():
     nom_decompose = unicodedata.normalize("NFD", "— Kouassi Guy-Désiré")
 
     return ecrire_pdf(
-        "02_cv_accents_prenoms_composes.pdf",
+        "02_CV_Kouassi_Guy_Desire.pdf",
         [
             nom_decompose,
             "guy.kouassi@example.ci",
@@ -228,7 +228,7 @@ def cas_2_pdf_accents_prenoms_composes():
 def cas_3_pdf_scanne():
     """PDF scanné : une image, aucune couche texte. Doit sortir « illisible »."""
     return ecrire_pdf_scanne(
-        "03_cv_scanne_sans_couche_texte.pdf",
+        "03_CV_Traore_Aminata.pdf",
         [
             "Traore Aminata",
             "aminata.traore@example.ci",
@@ -249,7 +249,7 @@ def cas_3_pdf_scanne():
 def cas_4_docx_tableaux():
     """CV Word entièrement construit en tableaux : le piège du lot 2."""
     return ecrire_docx_tableaux(
-        "04_cv_docx_tableaux.docx",
+        "04_CV_Diabate_Fatoumata.docx",
         entete=["Diabaté Fatoumata"],
         sections=[
             (
@@ -291,7 +291,7 @@ def cas_4_docx_tableaux():
 def cas_5_docx_paragraphes():
     """Chemin nominal Word : tout en paragraphes simples."""
     return ecrire_docx_paragraphes(
-        "05_cv_docx_paragraphes.docx",
+        "05_CV_Yao_Emmanuel.docx",
         [
             "Yao Kouadio Emmanuel",
             "yao.emmanuel@example.ci",
@@ -326,7 +326,7 @@ def cas_6_cv_en_anglais():
     francophone équivalent. C'est la limite assumée du §9 du cadrage.
     """
     return ecrire_pdf(
-        "06_cv_en_anglais.pdf",
+        "06_CV_Mensah_Kwame.pdf",
         [
             "Mensah Kwame",
             "kwame.mensah@example.com",
@@ -433,7 +433,7 @@ def cas_9_sans_email_ni_telephone():
     deux états distincts (§7.5 du cadrage).
     """
     return ecrire_pdf(
-        "09_cv_sans_email_ni_telephone.pdf",
+        "09_CV_Ouattara_Salimata.pdf",
         [
             "Ouattara Salimata",
             "",
