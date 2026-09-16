@@ -1,62 +1,63 @@
 # Manuel de procédure — TriCV
 
-**Version 1.0 — 16 septembre 2026**
+**Version 2.0 — 16 septembre 2026**
 
-Ce manuel décrit comment utiliser TriCV correctement : dans quel ordre, avec
-quels contrôles, et avec quelles précautions. Il s'adresse à la personne qui
-trie les CV, pas à celle qui développe l'outil.
+Ce manuel explique comment utiliser TriCV : dans quel ordre, avec quelles
+vérifications, et avec quelles précautions.
 
-Il complète les deux documents de référence du projet — le cadrage (ce que
-fait l'outil) et le process (comment il a été construit). En cas de
-divergence, **le cadrage fait autorité** et ce manuel doit être corrigé.
+Il s'adresse à la personne qui trie les CV. Aucune connaissance technique
+n'est nécessaire : si vous savez utiliser une messagerie et un tableur, vous
+savez utiliser TriCV.
 
 ---
 
-## 1. Objet et périmètre
+## 1. À quoi sert TriCV
 
-TriCV **ordonne un lot de CV** selon des critères que vous définissez, et vous
-dit pourquoi chaque candidat se trouve à sa place.
+TriCV **met un lot de CV dans l'ordre** selon des critères que vous
+choisissez, et vous montre pourquoi chaque candidat se trouve à sa place.
 
-Il traite jusqu'à 40 fichiers PDF ou Word par lot, de 5 Mo maximum chacun.
+Il traite jusqu'à 40 CV à la fois, au format PDF ou Word, de 5 Mo maximum
+chacun.
 
-**Ce que TriCV ne fait pas**, et ne fera pas :
+### Ce qu'il ne fait pas
 
 | Il ne fait pas | Pourquoi |
 |---|---|
-| Émettre un verdict « retenu / rejeté » | Il n'a pas la compétence de juger une candidature. Il compte des mots. |
-| Masquer les candidats faibles | Un score bas doit rester visible : il signale un écart de vocabulaire, pas un écart de valeur. |
-| Écarter automatiquement un candidat | Un critère d'exclusion produit un signalement, jamais un retrait. |
-| Lire un CV scanné | Sans couche de texte, il n'y a rien à lire. Ces CV vont dans « À examiner manuellement ». |
-| Conserver quoi que ce soit | Rien n'est écrit sur disque, à aucun moment. |
+| Dire « retenu » ou « rejeté » | Il ne sait pas juger une candidature. Il compte des mots. |
+| Cacher les candidats mal classés | Un score bas signale un écart de vocabulaire, pas un candidat moins bon. |
+| Écarter quelqu'un tout seul | Un critère d'exclusion pose un drapeau. Il ne retire personne. |
+| Lire un CV scanné | Un scan est une photo. Il n'y a pas de texte à lire dedans. |
+| Garder vos CV | Rien n'est enregistré, à aucun moment. |
 
 ---
 
-## 2. Le principe qu'il faut avoir compris
+## 2. Ce qu'il faut avoir compris avant de s'en servir
 
-**TriCV mesure la présence de mots, pas la qualité d'un candidat.**
+> **TriCV mesure la présence de mots. Il ne mesure pas la valeur d'un
+> candidat.**
 
 Un score de 40 ne veut pas dire « candidat moyen ». Il veut dire : *les mots
-que vous avez demandés figurent à 40 % dans ce document.* Un excellent
-candidat qui décrit son travail avec d'autres mots que les vôtres obtiendra
-un score bas. C'est la limite structurelle de l'outil, et c'est pourquoi
+que vous avez demandés se trouvent à 40 % dans ce CV.*
+
+Un excellent candidat qui décrit son travail avec d'autres mots que les
+vôtres obtiendra un score bas. C'est la limite de l'outil, et c'est pourquoi
 l'avertissement reste affiché en permanence au-dessus du classement.
 
-La bonne façon de s'en servir : **lire le classement de haut en bas, et
-s'arrêter quand on a assez de candidats à rencontrer** — en sachant que le
-bas du tableau mérite un coup d'œil, pas une poubelle.
+La bonne façon de s'en servir : **lire le classement de haut en bas et
+s'arrêter quand vous avez assez de candidats à rencontrer** — en gardant à
+l'esprit que le bas du tableau mérite un coup d'œil, pas la corbeille.
 
 ---
 
-## 3. Rôles et responsabilités
+## 3. Qui fait quoi
 
-| Rôle | Responsabilité |
+| | |
 |---|---|
-| **Utilisateur** (RH, recruteur) | Définit les critères, lit le classement, décide. La décision lui appartient entièrement. |
-| **TriCV** | Extrait, compte, ordonne, explique. Ne décide rien. |
-| **Responsable de l'outil** | Vérifie périodiquement la recette (§8), met à jour les modèles de critères quand le vocabulaire du marché évolue. |
+| **Vous** | Choisissez les critères, lisez le classement, décidez. La décision vous appartient entièrement. |
+| **TriCV** | Lit, compte, classe, explique. Ne décide rien. |
 
-Vous restez responsable du traitement des données des candidats, y compris de
-la façon dont vous avez obtenu leurs CV et de ce que vous en faites après.
+Vous restez responsable des données des candidats : de la façon dont vous
+avez obtenu leurs CV, et de ce que vous en faites ensuite.
 
 ---
 
@@ -64,214 +65,211 @@ la façon dont vous avez obtenu leurs CV et de ce que vous en faites après.
 
 ### Étape 1 — Préparer le lot
 
-1. Rassemblez les CV dans un dossier, hors de tout partage public.
-2. Vérifiez les **noms de fichiers**. Ils comptent : quand TriCV ne trouve pas
-   le nom dans le document, il le déduit du nom du fichier.
+Rassemblez les CV dans un dossier.
 
-> **Point de contrôle.** Un fichier nommé d'après un modèle ou d'après une
-> autre personne fera afficher le mauvais nom. Ce cas s'est produit lors des
-> essais : un CV exporté depuis un outil de mise en page avait conservé le nom
-> du modèle d'origine, et TriCV affichait ce nom-là à côté de l'adresse
-> e-mail du vrai candidat. **Avant d'appeler quelqu'un, recoupez le nom avec
-> l'adresse e-mail.**
+Regardez les **noms des fichiers** au passage. Ils comptent : quand TriCV ne
+trouve pas le nom du candidat dans le document, il le déduit du nom du
+fichier.
 
-### Étape 2 — Définir les critères
+> **À vérifier.** Un CV enregistré sous le nom de quelqu'un d'autre fera
+> afficher le mauvais nom. Cela s'est produit pendant les essais : un candidat
+> avait construit son CV à partir du modèle d'une autre personne, et le
+> fichier avait gardé le nom de cette personne. TriCV affichait donc ce
+> nom-là, à côté de la vraie adresse e-mail.
+>
+> **Avant d'appeler quelqu'un, vérifiez que le nom et l'adresse e-mail vont
+> bien ensemble.**
 
-Choisissez un modèle dans la liste déroulante, puis ajustez-le. Ou partez de
-zéro.
+### Étape 2 — Choisir les critères
 
-Pour chaque critère :
+Prenez un modèle tout prêt dans la liste, puis ajustez-le. Ou partez d'une
+page blanche.
 
-- un **nom** (« Comptabilité générale ») ;
-- un **poids** en points — leur somme n'a pas besoin de faire 100, le score
-  est ramené sur 100 automatiquement ;
-- des **mots-clés**, un groupe par ligne ;
-- un **type** : *requis* (compte dans le score) ou *exclusion* (signale, sans
-  rien retirer).
+Chaque critère comporte :
 
-La syntaxe des mots-clés tient en une règle :
+- un **nom** — par exemple « Comptabilité générale » ;
+- un **poids** en points, qui dit son importance. Leur total n'a pas besoin
+  de faire 100 : le score est ramené sur 100 tout seul ;
+- des **mots-clés**, un par ligne ;
+- un **type** : *requis*, qui compte dans le score, ou *exclusion*, qui pose
+  simplement un drapeau.
 
-> **Le signe `=` est la seule chose qui crée un groupe de synonymes.**
+Une seule règle d'écriture à retenir :
+
+> **Une ligne = une chose à chercher. Le signe `=` sert à dire « ces mots
+> veulent dire la même chose pour moi ».**
 
 ```
-python                          →  un groupe
-javascript = js                 →  un groupe, deux écritures acceptées
-react = vue, angular            →  un groupe, trois écritures acceptées
-sql, mysql                      →  deux groupes distincts
+comptabilite                          une chose à chercher
+tva = taxe sur la valeur ajoutee      la même chose, écrite de deux façons
+sage = saari, sage 100                la même chose, écrite de trois façons
+paie, recrutement                     deux choses différentes
 ```
 
-Un critère vaut ses points quand **tous** ses groupes sont trouvés. Chaque
-groupe manquant coûte une fraction des points, à parts égales.
+Un critère vaut tous ses points quand **toutes** ses lignes sont trouvées.
+Chaque ligne manquante en coûte une part égale.
 
-### Étape 3 — Analyser
+### Étape 3 — Lancer l'analyse
 
-Déposez les fichiers, lancez l'analyse. Le traitement se fait en mémoire ;
-rien n'est enregistré.
+Déposez les fichiers et lancez l'analyse. Tout se passe en mémoire, le temps
+du calcul. Rien n'est enregistré.
 
 ### Étape 4 — Lire le classement
 
-Le tableau donne le rang, le nom, les coordonnées, le score et le détail par
-critère : ce qui a été **trouvé** et ce qui était **absent**.
+Le tableau donne le rang, le nom, les coordonnées, le score, et pour chaque
+critère ce qui a été **trouvé** et ce qui était **absent**.
 
-La section **« À examiner manuellement »** est séparée du classement. Elle
-regroupe les documents dont le texte n'a pas pu être extrait.
+Sous le classement, une liste séparée, **« À examiner manuellement »**,
+rassemble les CV que l'outil n'a pas pu lire.
 
-> **Point de contrôle.** « Illisible » et « score de 0 » sont deux états
-> différents et ne doivent jamais être confondus. Un score de 0 veut dire :
-> *j'ai lu ce CV, aucun de vos mots-clés n'y figure.* Illisible veut dire :
-> *je n'ai pas pu le lire du tout.* Le second demande une lecture humaine, pas
-> un rejet.
+> **À retenir.** « Illisible » et « score de 0 » ne veulent pas dire la même
+> chose. Un score de 0 veut dire : *j'ai lu ce CV, aucun de vos mots-clés n'y
+> figure.* Illisible veut dire : *je n'ai pas réussi à le lire du tout.* Le
+> second demande une lecture de votre part, pas un rejet.
 
 ### Étape 5 — Exporter
 
-Le classeur Excel contient trois feuilles : Résumé, Classement, Critères. Il
-est produit en mémoire et téléchargé directement.
+Le fichier Excel contient trois feuilles : Résumé, Classement, Critères. Il se
+télécharge directement.
 
-> **Point de contrôle.** Le fichier exporté, lui, est un fichier ordinaire sur
-> **votre** poste. La promesse de non-conservation couvre l'application, pas
-> votre disque dur. Rangez-le et supprimez-le comme n'importe quel document
-> contenant des données personnelles.
+> **À retenir.** Ce fichier Excel, lui, reste sur **votre** ordinateur. La
+> promesse « rien n'est conservé » concerne l'application, pas votre disque
+> dur. Rangez-le et supprimez-le comme n'importe quel document contenant des
+> données personnelles.
 
 ### Étape 6 — Effacer la session
 
 Cliquez sur **« Effacer la session »** quand vous avez terminé. L'écran
-revient à son état initial : critères vidés, résultats effacés, zone de dépôt
-vide.
+revient à son état de départ : critères vidés, résultats effacés, plus aucun
+fichier affiché.
 
-C'est un geste de fin de travail, au même titre que fermer une armoire.
+C'est un geste de fin de travail, comme refermer une armoire à dossiers.
 
 ---
 
-## 5. Écrire des critères qui mesurent vraiment quelque chose
+## 5. Bien choisir ses mots-clés
 
-C'est le vrai savoir-faire, et c'est là que se joue la qualité du classement.
-Les trois règles ci-dessous viennent d'un essai mené sur un lot réel de dix
-CV de comptables, qui a montré que le modèle d'origine comportait quatre
-mots-clés ne se déclenchant **jamais**.
+C'est là que se joue la qualité du classement. Les règles ci-dessous viennent
+d'un essai mené sur un vrai lot de dix CV de comptables, qui a montré que
+quatre des mots-clés prévus au départ ne se trouvaient dans **aucun** CV.
 
-### Règle 1 — Un mot-clé de plusieurs mots est une expression exacte
+### Les accents et les majuscules ne comptent pas
+
+Écrivez comme cela vous vient. `comptabilité générale`,
+`comptabilite generale` et `COMPTABILITÉ GÉNÉRALE` cherchent exactement la
+même chose.
+
+### Les pluriels, en revanche, comptent
+
+`facture` ne trouve **pas** « factures ». Sur le lot d'essai, `facture` était
+absent des huit CV, et `factures` présent dans six.
+
+Écrivez donc les deux formes :
+
+```
+facture = factures
+declaration = declarations
+```
+
+### Plusieurs mots collés forment une expression exacte
 
 `grand livre` ne trouve que « grand livre », dans cet ordre, sans rien entre
-les deux. Une offre d'emploi écrit « comptabilité générale » ; un CV écrit
-« comptabilité analytique **et** générale ». Les deux disent la même chose et
-ne se rencontrent jamais.
+les deux.
 
-**À faire :** ancrer le concept sur plusieurs écritures.
+C'est le piège le plus courant. Une offre d'emploi écrit « comptabilité
+générale » ; un CV écrit « comptabilité analytique **et** générale ». Les
+deux parlent de la même chose et ne se rencontrent jamais.
+
+Prévoyez donc les façons dont un candidat écrirait réellement la chose :
 
 ```
 comptabilite generale = comptabilite analytique, ecritures comptables
 ```
 
-### Règle 2 — Les pluriels ne sont pas automatiques
+### Un critère peut se dérégler dans les deux sens
 
-`facture` ne trouve pas « factures ». Sur le lot d'essai, `facture` était
-absent des huit CV et `factures` présent dans six.
+Relisez la colonne **« absents »** du tableau, c'est elle qui vous le dira.
 
-**À faire :** écrire les deux formes.
-
-```
-facture = factures
-fiscalite = fiscal, fiscale, fiscales, fiscaux
-```
-
-### Règle 3 — Un critère se dérègle dans les deux sens
-
-| Symptôme dans le tableau | Cause | Correction |
+| Ce que vous voyez | Ce que cela veut dire | Ce qu'il faut faire |
 |---|---|---|
-| La colonne « absents » est pleine chez **tout le monde** | Mots-clés trop précis, ils ne se déclenchent jamais | Élargir avec des synonymes |
-| La colonne « trouvés » est pleine chez **tout le monde** | Mots-clés trop génériques | Resserrer, ou retirer le groupe |
+| La colonne « absents » est pleine chez **tout le monde** | Vos mots-clés sont trop précis, ils ne se trouvent nulle part | Ajouter des façons de dire la même chose, avec le `=` |
+| La colonne « trouvés » est pleine chez **tout le monde** | Vos mots-clés sont trop courants, ils se trouvent partout | Être plus précis, ou retirer la ligne |
 
-Dans les deux cas, le critère cesse d'ordonner quoi que ce soit — tous les
-candidats montent ou descendent ensemble — **et aucun message d'erreur ne
-vous le dira**. Seule la lecture de la colonne « absents » le révèle.
+Dans les deux cas, le critère ne classe plus rien : tous les candidats montent
+ou descendent ensemble. **Et rien ne vous préviendra** — seule la lecture de
+la colonne « absents » le montre.
 
-Un critère bien réglé mélange les deux : un ou deux groupes que **tout
-professionnel du métier** possède — ils écartent les profils hors sujet — et
-deux ou trois groupes plus rares, qui ordonnent les candidats entre eux.
+Un bon critère mélange les deux : une ou deux lignes que **tout professionnel
+du métier** aura — elles écartent les candidatures hors sujet — et deux ou
+trois lignes plus rares, qui départagent les candidats sérieux entre eux.
 
-### Règle 4 — Un CV long marque plus de points
+### Un CV long marque plus de points
 
-Plus un document est long, plus il a d'occasions de contenir vos mots. Un CV
-de deux pages bien rédigé peut passer derrière un CV de quatre pages
-bavard. Gardez-le en tête en haut du tableau.
+Plus un CV est long, plus il a d'occasions de contenir vos mots. Un CV de deux
+pages bien écrit peut passer derrière un CV de quatre pages bavard.
+Gardez-le en tête en haut du tableau.
 
 ---
 
-## 6. Anomalies et conduite à tenir
+## 6. Quand quelque chose cloche
 
-| Constat | Interprétation | Conduite |
+| Ce que vous constatez | Ce que cela veut dire | Ce qu'il faut faire |
 |---|---|---|
-| CV dans « À examiner manuellement » | Document scanné, ou texte inaccessible | Le lire à la main. Ne jamais le traiter comme un score de 0. |
-| Nom affiché = nom du fichier | Aucun nom trouvé dans les premières lignes | Normal. Recoupez avec l'e-mail. |
-| Nom affiché manifestement faux | Nom de fichier trompeur | Recoupez avec l'e-mail avant tout contact. |
-| Aucun e-mail ni téléphone | Coordonnées dans une image, ou absentes | Ouvrir le CV. |
-| Tous les scores sont bas | Critères trop précis (règles 1 et 2) | Élargir les mots-clés, relancer. |
-| Tous les scores sont proches | Critères trop génériques | Resserrer, ou différencier les poids. |
-| Un signalement d'exclusion apparaît | Un mot-clé d'exclusion a été trouvé | C'est une alerte à vérifier, pas un rejet. Le candidat reste classé. |
+| Un CV dans « À examiner manuellement » | C'est un scan, ou son texte est inaccessible | Le lire vous-même. Ne jamais le traiter comme un score de 0. |
+| Le nom affiché est celui du fichier | Aucun nom trouvé en haut du CV | C'est normal. Vérifiez avec l'adresse e-mail. |
+| Le nom affiché est visiblement faux | Le fichier porte le nom de quelqu'un d'autre | Vérifiez avec l'adresse e-mail avant tout appel. |
+| Ni e-mail ni téléphone | Les coordonnées sont dans une image, ou absentes | Ouvrir le CV. |
+| Tous les scores sont bas | Vos mots-clés sont trop précis | Les élargir avec le `=`, relancer. |
+| Tous les scores se ressemblent | Vos mots-clés sont trop courants | Être plus précis, ou différencier les poids. |
+| Un drapeau d'exclusion apparaît | Un mot que vous surveilliez a été trouvé | C'est une alerte à vérifier, pas un rejet. Le candidat reste classé. |
 
 ---
 
 ## 7. Confidentialité
 
-L'application ne conserve rien : les CV sont analysés en mémoire vive, jamais
-écrits sur un disque, jamais transmis à un tiers, jamais utilisés pour
-entraîner un modèle. Aucun compte, aucune base de données, aucun historique.
+L'application ne garde rien. Les CV sont lus le temps du calcul, jamais
+enregistrés, jamais transmis à qui que ce soit, jamais utilisés pour entraîner
+un programme. Il n'y a ni compte, ni base de données, ni historique.
 
-L'hébergement est situé aux États-Unis : les fichiers y transitent le temps de
-l'analyse. Cette information doit rester visible dans l'application — elle
-couvre l'obligation d'information de la loi ivoirienne n° 2013-450, et du
-RGPD si un candidat est européen.
+L'application est hébergée sur des serveurs situés aux États-Unis : les
+fichiers y passent le temps de l'analyse. Cette information doit rester
+visible dans l'application — elle répond à l'obligation d'information de la
+loi ivoirienne n° 2013-450, et du RGPD si un candidat est européen.
 
-**Ce qui reste à votre charge :**
+### Ce qui reste à votre charge
 
-1. Le classeur Excel exporté est un document contenant des données
-   personnelles. Il vous appartient et vous en répondez.
-2. N'utilisez l'outil que sur des CV que vous avez légitimement reçus.
+1. Le fichier Excel que vous téléchargez contient des données personnelles. Il
+   est à vous, et vous en répondez.
+2. N'utilisez l'outil que sur des CV que vous avez reçus légitimement.
 3. Cliquez sur « Effacer la session » en fin de travail, surtout sur un poste
    partagé.
-4. Ne conservez pas les CV plus longtemps que nécessaire au recrutement en
-   cours.
+4. Ne gardez pas les CV plus longtemps que le recrutement en cours ne
+   l'exige.
 
 ---
 
-## 8. Contrôle périodique
+## 8. Vérifier que le classement reste juste
 
-À refaire après toute modification de l'outil, et au minimum avant chaque
-mise en ligne d'une nouvelle version.
+**À chaque nouveau jeu de critères**, avant de vous fier au classement :
+relisez la colonne « absents » sur les trois ou quatre premiers candidats. Si
+elle est pleine partout, vos critères ne mesurent pas ce que vous croyez.
 
-**Contrôle automatique.** Lancer le script de vérification du moteur :
+**À chaque nouveau type de poste**, faites un essai sur une dizaine de CV que
+vous connaissez déjà. Si le classement place en haut les candidats que vous
+auriez retenus vous-même, vos critères sont bons. Sinon, ce sont les critères
+qu'il faut corriger — pas le classement qu'il faut ignorer.
 
-```
-./venv/bin/python tests/verifier_moteur.py
-```
+C'est un essai de ce genre, sur dix CV de comptables, qui a révélé les quatre
+mots-clés introuvables et un CV Word que l'outil ne savait pas lire.
 
-Il doit afficher « Toutes les vérifications passent » et se terminer sur le
-code 0. Il couvre les frontières de mots, les accents, la normalisation des
-poids, les critères d'exclusion, l'extraction PDF et Word, les cinq modèles
-et l'export Excel.
-
-**Contrôle manuel.** Les dix points de recette du §12 du cadrage, sur
-l'application déployée et pas seulement en local.
-
-**Contrôle sur lot réel.** Le contrôle automatique prouve que le moteur est
-*correct*. Il ne prouve pas que le classement est *crédible*. Seul un passage
-sur une dizaine de CV authentiques le montre — c'est ce passage qui a révélé
-les quatre mots-clés morts et le CV Word invisible. À refaire pour chaque
-nouveau modèle de critères.
-
-> Ces CV réels ne doivent jamais entrer dans le dépôt de code. Conservez-les
-> dans un dossier séparé.
+> La personne qui maintient l'outil dispose d'une vérification technique
+> séparée, décrite dans la documentation du projet. Elle ne vous concerne pas.
 
 ---
 
-## 9. Journal des versions
+## 9. Versions
 
 | Version | Date | Changement |
 |---|---|---|
-| 1.0 | 16/09/2026 | Rédaction initiale, après le passage du moteur sur un lot réel de dix CV. |
-
----
-
-*Ce manuel est versionné avec le code, dans `docs/`. Toute évolution de
-l'outil qui modifie une procédure décrite ici doit modifier ce document dans
-le même commit.*
+| 2.0 | 16/09/2026 | Réécriture pour un lecteur non technique. |
+| 1.0 | 16/09/2026 | Première rédaction, après l'essai sur un lot réel de dix CV. |
