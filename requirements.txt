@@ -1,12 +1,30 @@
-streamlit
-pdfplumber
-python-docx
-openpyxl
+# Dépendances de l'application déployée.
+#
+# Streamlit Community Cloud n'installe QUE ce fichier. Les outils de
+# développement sont dans requirements-dev.txt et ne partent pas en
+# production.
+#
+# POURQUOI DES VERSIONS MINIMALES ET NON DES VERSIONS EXACTES.
+#
+# Sans plancher, l'hébergeur installe ce qu'il veut — y compris une version
+# antérieure à celles où les fonctions utilisées ici existent. `st.dialog`,
+# le thème étendu de .streamlit/config.toml : tout cela est récent, et une
+# version trop ancienne ne planterait pas franchement. Elle ignorerait les
+# options du thème en silence et ferait échouer la confirmation d'effacement.
+#
+# Sans plafond non plus : figer des versions exactes prive l'application des
+# correctifs de sécurité, pour un outil qui reçoit des documents déposés par
+# des tiers. Le plancher est donc la version sur laquelle tout a été vérifié.
 
-# pandas n'est pas une dépendance supplémentaire au sens du déploiement :
-# streamlit l'installe déjà, et pip ne télécharge rien de plus. Il est
+streamlit>=1.63        # vérifié en 1.63.0
+pdfplumber>=0.11        # vérifié en 0.11.10
+python-docx>=1.2        # vérifié en 1.2.0
+openpyxl>=3.1           # vérifié en 3.1.5
+
+# pandas n'est pas une dépendance de plus au déploiement : streamlit
+# l'installe déjà, et pip ne télécharge rien de supplémentaire. Il est
 # déclaré parce que app.py l'importe DIRECTEMENT, pour appliquer les bandes
-# de couleur du score au tableau de classement (Styler). Dépendre en silence
-# d'un paquet installé par un autre est ce qui casse le jour où celui-ci
-# change ses propres dépendances.
-pandas
+# de couleur du score au tableau de classement. Dépendre en silence d'un
+# paquet qu'un autre paquet a amené est une dette qui se paie le jour où
+# celui-ci cesse de l'amener.
+pandas>=2.0             # vérifié en 3.0.5

@@ -279,20 +279,20 @@ En dehors de ces signaux, les décisions de la section 2 tiennent.
 - [x] Décisions structurantes D1 à D8
 - [x] Cadrage produit rédigé (`CADRAGE-TriCV.md`)
 - [x] Processus de travail rédigé (ce document)
-- [ ] Relecture des modèles de critères par un œil de recruteur
-- [ ] Lot 0 — initialisation du dépôt
-- [ ] Lot 0 bis — corpus de test synthétique + échantillon réel
-- [ ] Lot 1 — moteur de normalisation et de scoring
-- [ ] Lot 2 — parser PDF et Word
-- [ ] **Porte P1**
-- [ ] Lot 3 — modèles de critères
-- [ ] Lot 4 — export Excel
-- [ ] Lot 5 — interface Streamlit
-- [ ] **Porte P2**
-- [ ] Lot 6 — notice, README, déploiement
+- [ ] Relecture des modèles de critères par un œil de recruteur — *faite pour « Comptable » seul, et par la mesure plutôt que par la relecture : recalibré le 16/09/2026 sur un lot réel. Les quatre autres modèles n'ont jamais rencontré un vrai CV.*
+- [x] Lot 0 — initialisation du dépôt
+- [x] Lot 0 bis — corpus de test synthétique (dix cas) + échantillon réel (dix CV, hors dépôt)
+- [x] Lot 1 — moteur de normalisation et de scoring
+- [x] Lot 2 — parser PDF et Word
+- [x] **Porte P1** — corpus fictif *et* lot réel. L'échantillon réel a révélé trois défauts, tous corrigés.
+- [x] Lot 3 — modèles de critères
+- [x] Lot 4 — export Excel
+- [x] Lot 5 — interface Streamlit
+- [x] **Porte P2** — parcours complet au navigateur sur le lot réel, le 16/09/2026. Le classement de l'interface est identique à celui du moteur.
+- [ ] Lot 6 — notice, README, déploiement — *notice conforme au §5, README et fiche de recette écrits ; le déploiement reste à faire.*
 - [ ] **Porte P3**
 
-**Prochaine action** : relecture des cinq modèles de critères (§8 du cadrage), puis lots 1 et 2.
+**Prochaine action** : déployer sur Streamlit Community Cloud, puis dérouler les dix points de `docs/RECETTE.md` sur l'application en ligne. Le déploiement demande le compte GitHub et une connexion à share.streamlit.io : il ne peut être fait que par le propriétaire du projet.
 
 ---
 
