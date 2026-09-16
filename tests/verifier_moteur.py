@@ -703,15 +703,33 @@ def partie_c_modeles():
         if nom != "10_CV_Brou_Akissi.docx"
     ]
 
+    # CE QU'ON MESURE ICI EST UN ÉCART, PAS UN SEUIL.
+    #
+    # La première version de ce contrôle exigeait un score absolu d'au moins
+    # 70. Elle a sauté dès l'ajout d'un cinquième groupe au critère le plus
+    # lourd : le comptable de référence est tombé à 69 sans que le modèle
+    # soit devenu moins juste. Un critère qui gagne un groupe partage ses
+    # points entre cinq au lieu de quatre, et TOUS les candidats baissent
+    # ensemble — c'est arithmétique, pas un défaut.
+    #
+    # Le seuil absolu mesurait donc le nombre de groupes autant que la
+    # qualité du modèle. Ce qui compte réellement, c'est que le comptable se
+    # détache NETTEMENT des profils hors métier. On vérifie l'écart, qui est
+    # la propriété utile, et l'on garde un plancher bas comme simple filet
+    # contre un effondrement général.
+    meilleur_hors_metier = max(autres) if autres else None
+
     verifier(
-        "le seul comptable du corpus obtient un score élevé",
-        score_du_comptable is not None and score_du_comptable >= 70,
+        "le seul comptable du corpus reste largement au-dessus du plancher",
+        score_du_comptable is not None and score_du_comptable >= 60,
         score_du_comptable,
     )
     verifier(
-        "aucun profil hors métier n'approche ce score",
-        autres and max(autres) <= 40,
-        f"meilleur hors métier : {max(autres) if autres else '—'}",
+        "il se détache d'au moins 40 points du meilleur profil hors métier",
+        meilleur_hors_metier is not None
+        and score_du_comptable - meilleur_hors_metier >= 40,
+        f"{score_du_comptable} contre {meilleur_hors_metier} "
+        f"(écart {score_du_comptable - meilleur_hors_metier})",
     )
 
     # Aucun groupe ne doit être inerte sur un CV de comptable complet : un

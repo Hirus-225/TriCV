@@ -107,6 +107,16 @@ MODELES = {
     # présente chez tout comptable — elle écarte les profils hors métier —
     # et des groupes plus rares qui, eux, ordonnent les comptables entre eux.
     #
+    # LE CINQUIÈME GROUPE, « manuel de procédure », suit la même logique que
+    # « rapprochement bancaire » : une mission concrète et vérifiable, qui
+    # distingue un comptable qui a formalisé l'organisation comptable d'un
+    # comptable qui a seulement tenu les comptes. Écrit en expression exacte,
+    # « manuel de procedure » ne se déclenchait sur AUCUN des huit CV réels ;
+    # le concept, lui, y figure trois fois, sous les formes « procédures
+    # comptables », « procédures de gestion » et « procédures » tout court.
+    # Le groupe porte donc ces écritures-là, faute de quoi il aurait rejoint
+    # les mots morts qu'on vient de retirer.
+    #
     # LIMITE ASSUMÉE. Ce réglage s'appuie sur huit CV. C'est assez pour voir
     # qu'un mot-clé est mort, pas pour prétendre à une mesure fine. Les mots
     # retenus sont ceux qui ont un sens pour le métier, pas ceux qui
@@ -121,7 +131,10 @@ MODELES = {
                 "rapprochement bancaire = rapprochements bancaires\n"
                 "etats financiers = etat financier, bilan, compte de resultat, "
                 "balance generale\n"
-                "syscohada = ohada, syscoa"
+                "syscohada = ohada, syscoa\n"
+                "manuel de procedure = manuel de procedures, "
+                "procedures comptables, procedures de gestion, procedures, "
+                "procedure"
             ),
         },
         {

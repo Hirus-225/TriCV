@@ -9,8 +9,12 @@ pas de base de données, pas d'historique.
 
 ## État d'avancement
 
-Voir `docs/PROCESS-TriCV.md` §7. Actuellement : moteur en cours, interface non
-commencée.
+Voir `docs/PROCESS-TriCV.md` §7. Les lots 0 à 5 sont faits : moteur, parser,
+modèles de critères, export Excel et interface Streamlit. La porte P1 est
+franchie sur les deux volets — corpus fictif et lot réel de dix CV.
+
+Reste le lot 6 : notice de confidentialité, déploiement sur Streamlit
+Community Cloud, et recette complète sur l'application déployée (porte P3).
 
 ## Installation
 
@@ -36,6 +40,7 @@ pour chaque fichier, les informations extraites et le détail du score :
 | `docs/CADRAGE-TriCV.md` | Le **quoi** : produit, moteur, règles de confidentialité |
 | `docs/PROCESS-TriCV.md` | Le **comment** : méthode, séquence des lots, points de contrôle |
 | `docs/DESIGN-MAPPING.md` | Correspondance entre la maquette et le thème Streamlit |
+| `docs/MANUEL-PROCEDURE.md` | Le **mode d'emploi** : procédure d'utilisation, points de contrôle, réglage des critères |
 
 ## Règles non négociables
 
