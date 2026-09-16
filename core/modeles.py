@@ -81,35 +81,67 @@ MODELES = {
             ),
         },
     ],
+    # Modèle « Comptable » — RECALIBRÉ LE 16/09/2026 SUR ÉCHANTILLON RÉEL.
+    #
+    # Les poids restent ceux du §8 du cadrage (35/25/20/20) : c'est le
+    # jugement métier, il n'appartient pas au moteur de le corriger. Seuls
+    # les MOTS-CLÉS ont changé, et pour une raison mesurée, pas ressentie.
+    #
+    # CE QUE L'ESSAI A MONTRÉ. Passés sur huit CV réels de comptables, quatre
+    # des quinze mots-clés d'origine ne se déclenchaient JAMAIS — « grand
+    # livre », « erp », « quickbooks », « aide comptable » — et
+    # « comptabilite generale » une seule fois sur huit. Le critère le plus
+    # lourd, 35 points, reposait en pratique sur un seul terme.
+    #
+    # LA CAUSE. Un mot-clé de plusieurs mots est une EXPRESSION EXACTE
+    # (§7.3 : `\bterme\b`). Une offre d'emploi écrit « comptabilité
+    # générale » ; un CV écrit « comptabilité analytique et générale », ou
+    # « gestion de la comptabilité ». Les deux parlent de la même chose et ne
+    # se rencontrent jamais. Même cause pour « aide comptable », que personne
+    # ne s'attribue : on se dit « assistant comptable ».
+    #
+    # LA CORRECTION. Chaque groupe porte désormais un CONCEPT et ses
+    # écritures usuelles, réunis par le signe « = ». Un mot-clé mort ne
+    # mesure rien et abaisse tout le monde pareil ; un mot-clé présent chez
+    # tous ne classe rien non plus. On vise donc, par critère, une ANCRE
+    # présente chez tout comptable — elle écarte les profils hors métier —
+    # et des groupes plus rares qui, eux, ordonnent les comptables entre eux.
+    #
+    # LIMITE ASSUMÉE. Ce réglage s'appuie sur huit CV. C'est assez pour voir
+    # qu'un mot-clé est mort, pas pour prétendre à une mesure fine. Les mots
+    # retenus sont ceux qui ont un sens pour le métier, pas ceux qui
+    # séparaient joliment cet échantillon-là.
     "Comptable": [
         {
             "nom": "Comptabilité générale",
             "poids": 35,
             "mots_cles": (
-                "comptabilite generale\n"
-                "grand livre\n"
-                "rapprochement bancaire\n"
-                "syscohada = ohada"
+                "comptabilite generale = comptabilite analytique, "
+                "ecritures comptables, saisie comptable\n"
+                "rapprochement bancaire = rapprochements bancaires\n"
+                "etats financiers = etat financier, bilan, compte de resultat, "
+                "balance generale\n"
+                "syscohada = ohada, syscoa"
             ),
         },
         {
             "nom": "Fiscalité & déclarations",
             "poids": 25,
             "mots_cles": (
-                "fiscalite = impots\n"
+                "fiscalite = fiscal, fiscale, fiscales, fiscaux\n"
                 "tva\n"
-                "declaration fiscale\n"
-                "cnps"
+                "declaration fiscale = declarations fiscales, "
+                "declaration d'impots\n"
+                "cnps = charges sociales, cotisations sociales"
             ),
         },
         {
             "nom": "Outils",
             "poids": 20,
             "mots_cles": (
-                "sage\n"
-                "excel\n"
-                "erp\n"
-                "quickbooks"
+                "sage = saari, sage 100\n"
+                "excel = tableur\n"
+                "erp = sap, dynamics, odoo, tompro, oracle"
             ),
         },
         {
@@ -117,8 +149,11 @@ MODELES = {
             "poids": 20,
             "mots_cles": (
                 "comptable\n"
-                "aide comptable\n"
-                "cabinet"
+                "chef comptable = comptable senior, responsable comptable, "
+                "directeur financier\n"
+                "cabinet = cabinet comptable, cabinet d'expertise\n"
+                "audit = controle de gestion, controle interne, "
+                "commissariat aux comptes"
             ),
         },
     ],

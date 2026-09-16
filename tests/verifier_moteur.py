@@ -670,6 +670,65 @@ def partie_c_modeles():
         total_des_poids(charger_modele("Comptable")) == 100,
     )
 
+    sous_titre("C4. Le modèle « Comptable » sépare bien le métier")
+
+    # GARDE-FOU DU RECALIBRAGE DU 16/09/2026.
+    #
+    # Un modèle se dérègle de deux façons opposées, et les deux passent
+    # inaperçues sans mesure. Trop de mots-clés en expression exacte — « grand
+    # livre », « aide comptable » — et plus rien ne se déclenche : tous les
+    # candidats s'effondrent ensemble. Trop de mots-clés génériques, et tout
+    # se déclenche partout : tous les candidats montent ensemble. Dans les
+    # deux cas le classement cesse d'ordonner, sans qu'aucune erreur ne
+    # s'affiche.
+    #
+    # Le corpus fictif tient lieu de témoin : il contient un seul comptable
+    # (cas 10) au milieu de développeurs et d'une assistante. L'écart entre
+    # les deux est ce que ce critère est censé mesurer.
+    criteres_comptable = charger_modele("Comptable")
+    scores_comptable = {}
+    for chemin_cv in sorted(DOSSIER_CORPUS.iterdir()):
+        if chemin_cv.suffix.lower() not in (".pdf", ".docx"):
+            continue
+        with open(chemin_cv, "rb") as fichier:
+            resultat = parser_cv(io.BytesIO(fichier.read()), chemin_cv.name)
+        if resultat["lisible"]:
+            scores_comptable[chemin_cv.name] = scorer_candidat(
+                resultat["texte"], criteres_comptable
+            )["score"]
+
+    score_du_comptable = scores_comptable.get("10_CV_Brou_Akissi.docx")
+    autres = [
+        score for nom, score in scores_comptable.items()
+        if nom != "10_CV_Brou_Akissi.docx"
+    ]
+
+    verifier(
+        "le seul comptable du corpus obtient un score élevé",
+        score_du_comptable is not None and score_du_comptable >= 70,
+        score_du_comptable,
+    )
+    verifier(
+        "aucun profil hors métier n'approche ce score",
+        autres and max(autres) <= 40,
+        f"meilleur hors métier : {max(autres) if autres else '—'}",
+    )
+
+    # Aucun groupe ne doit être inerte sur un CV de comptable complet : un
+    # mot-clé qui ne se déclenche jamais n'est pas un critère exigeant, c'est
+    # un critère mort, et il abaisse tout le monde à l'identique.
+    with open(DOSSIER_CORPUS / "10_CV_Brou_Akissi.docx", "rb") as fichier:
+        reference = parser_cv(io.BytesIO(fichier.read()), "10_CV_Brou_Akissi.docx")
+    detail_reference = scorer_candidat(
+        reference["texte"], criteres_comptable
+    )["detail"]
+    for ligne in detail_reference:
+        verifier(
+            f"« {ligne['critere']} » : au moins un groupe se déclenche",
+            bool(ligne["trouves"]),
+            f"trouvés {ligne['trouves']} / absents {ligne['absents']}",
+        )
+
 
 # ----------------------------------------------------------------------
 # PARTIE D — Classeur Excel (lot 4)
