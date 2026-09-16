@@ -227,6 +227,7 @@ n'est nécessaire.**
 | **E7** | Bordures d'alerte (`--*-border`) | Planches 1, 3, 5 | Streamlit dérive la bordure du fond de l'alerte. Écart invisible. |
 | **E8** | **Libellés internes de Streamlit en anglais** | Planches 1, 2, 5 | **Non résolu — voir ci-dessous.** |
 | **E9** | `pandas` ajouté à `requirements.txt` | Planche 4 | `app.py` l'importe directement pour le `Styler` des teintes de score. Ce n'est pas une dépendance de plus au déploiement : streamlit l'installe déjà. Le déclarer évite de dépendre en silence d'un paquet tiers. |
+| **E10** | **Barre latérale à deux entrées** | Toutes | La maquette n'en comporte pas : ses cinq planches sont un écran unique. L'application en gagne une pour donner accès au manuel de procédure. Ajout au périmètre, demandé le 16/09/2026 — voir ci-dessous. |
 
 ### E8 — Les libellés que Streamlit écrit lui-même
 
@@ -260,6 +261,39 @@ proprement par `client.toolbarMode = "minimal"` dans `config.toml`.
 
 ---
 
+### E10 — La barre latérale, absente de la maquette
+
+Les cinq planches décrivent **un seul écran**, parcouru de haut en bas. Aucune
+navigation n'y figure, et c'était cohérent : l'application ne faisait qu'une
+chose.
+
+Elle en fait deux depuis que le manuel de procédure lui est rattaché. Il
+fallait donc un moyen de passer de l'un à l'autre, et la maquette n'en
+propose aucun.
+
+**Ce qui a été retenu.** Une barre latérale portant un `st.radio` à deux
+entrées — « Trier des CV » et « Manuel de procédure » — dépliée par défaut.
+C'est le composant que Streamlit fournit pour un choix unique parmi quelques
+options, et la barre latérale est l'emplacement qu'il prévoit pour la
+navigation. Rien n'est reconstruit en HTML.
+
+**Ce qui a été écarté.** Un lien dans l'en-tête aurait respecté la maquette à
+la lettre, mais un lien ne dit pas où l'on se trouve : l'utilisateur qui lit
+le manuel ne saurait pas comment revenir. Le `st.radio` montre en permanence
+les deux pages et celle qui est active.
+
+**Conséquence sur l'effacement.** « Effacer la session » vide tout
+`st.session_state`, y compris la clé du widget de navigation. La page courante
+est donc relue avant l'effacement et réécrite après : effacer ses données ne
+doit pas déplacer l'utilisateur. Vérifié au navigateur le 16/09/2026 — après
+effacement, la zone de dépôt est vide, le classement et les critères ont
+disparu, la page reste « Trier des CV » et aucune exception n'est levée.
+
+**Le manuel est lu depuis `docs/MANUEL-PROCEDURE.md`**, jamais recopié dans le
+code. Deux versions du même document divergeraient à la première correction —
+et ce serait la version affichée à l'utilisateur qui serait la périmée.
+
+---
 ## 5. Contradictions entre la maquette et le cadrage
 
 Les cinq points relevés au lot design. **Quatre sont tranchés.**
@@ -286,3 +320,5 @@ Les cinq points relevés au lot design. **Quatre sont tranchés.**
 | 14/09/2026 | C4 tranchée : la règle, pas l'extrait | Le mot-clé vient de la saisie, pas du CV : on reste explicite sans conserver de texte de candidat. |
 | 14/09/2026 | `pandas` déclaré dans `requirements.txt` | `app.py` l'importe directement ; streamlit l'installait déjà, le déploiement ne change pas. |
 | 14/09/2026 | E8 ouvert : libellés internes de Streamlit en anglais | Aucun mécanisme d'i18n en 1.63 ; les contournements passent tous par du CSS injecté, écarté par consigne. |
+| 16/09/2026 | Barre latérale ajoutée (E10) | Le manuel de procédure est rattaché à l'application ; il fallait une navigation, absente de la maquette. |
+| 16/09/2026 | Le manuel est lu depuis `docs/`, pas recopié | Une seule source. Deux copies divergeraient, et c'est celle vue par l'utilisateur qui serait périmée. |

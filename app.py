@@ -24,6 +24,8 @@ LES CINQ RÈGLES DE CONFIDENTIALITÉ DU §5 S'APPLIQUENT ICI INTÉGRALEMENT :
    de candidat.
 """
 
+from pathlib import Path
+
 import pandas as pd
 import streamlit as st
 
@@ -77,7 +79,42 @@ Le score est une aide à la lecture, pas une décision : il classe, il n'élimin
 pas.
 """
 
-st.set_page_config(page_title="TriCV", page_icon="📄", layout="centered")
+# ----------------------------------------------------------------------
+# Navigation
+# ----------------------------------------------------------------------
+#
+# L'application a deux pages : l'outil de tri, et son mode d'emploi. Une
+# barre latérale à deux entrées suffit — `st.radio` est le composant que
+# Streamlit fournit pour un choix unique parmi quelques options, et c'est
+# exactement ce dont il s'agit.
+#
+# POURQUOI LE MANUEL EST LU DEPUIS LE DISQUE ET NON RECOPIÉ ICI.
+#
+# `docs/MANUEL-PROCEDURE.md` est la seule source. Recopier son texte dans une
+# constante Python créerait deux versions du même document, qui divergeraient
+# à la première correction — et c'est la version affichée à l'utilisateur qui
+# serait la périmée, puisque c'est l'autre qu'on relit en écrivant.
+#
+# Cette lecture ne contrevient pas à la règle n°1 du §5 du cadrage : celle-ci
+# interdit d'ÉCRIRE sur le disque, et ne concerne que le contenu des CV. Lire
+# un fichier livré avec l'application est sans rapport.
+
+PAGE_TRI = "Trier des CV"
+PAGE_MANUEL = "Manuel de procédure"
+CLE_NAVIGATION = "navigation"
+
+CHEMIN_DU_MANUEL = Path(__file__).parent / "docs" / "MANUEL-PROCEDURE.md"
+
+
+st.set_page_config(
+    page_title="TriCV",
+    page_icon="📄",
+    layout="centered",
+    # La barre latérale porte l'accès au manuel. Repliée par défaut, elle
+    # serait invisible pour qui ne sait pas qu'elle existe — et un mode
+    # d'emploi qu'on ne trouve pas ne sert à rien.
+    initial_sidebar_state="expanded",
+)
 
 
 # ----------------------------------------------------------------------
@@ -154,11 +191,16 @@ def effacer_la_session():
     # fait.
     generation_suivante = st.session_state.get("generation_depot", 0) + 1
 
+    # La page affichée n'est pas une donnée de session : c'est l'endroit où
+    # se tient l'utilisateur. Effacer ses données ne doit pas le déplacer.
+    page_courante = st.session_state.get(CLE_NAVIGATION, PAGE_TRI)
+
     oublier_widgets_des_criteres()
     for cle in list(st.session_state.keys()):
         del st.session_state[cle]
     initialiser_etat()
     st.session_state.generation_depot = generation_suivante
+    st.session_state[CLE_NAVIGATION] = page_courante
     st.session_state.session_effacee = True
 
 
@@ -820,11 +862,68 @@ def demander_confirmation_effacement():
 
 
 # ----------------------------------------------------------------------
+# Barre latérale et manuel
+# ----------------------------------------------------------------------
+
+
+def afficher_navigation():
+    """
+    Affiche les deux entrées de la barre latérale et rend la page choisie.
+    """
+    with st.sidebar:
+        st.caption("TRICV")
+
+        page = st.radio(
+            "Page",
+            [PAGE_TRI, PAGE_MANUEL],
+            key=CLE_NAVIGATION,
+            # Le libellé reste présent pour les lecteurs d'écran, mais n'est
+            # pas dessiné : deux entrées surmontées du mot « Page » est une
+            # redondance visuelle.
+            label_visibility="collapsed",
+        )
+
+        st.divider()
+
+        if page == PAGE_TRI:
+            st.caption(
+                "Déposez des CV, définissez vos critères, lisez le classement."
+            )
+        else:
+            st.caption(
+                "Le mode d'emploi. Revenez au tri par la barre latérale."
+            )
+
+    return page
+
+
+def afficher_manuel():
+    """
+    Rend `docs/MANUEL-PROCEDURE.md` tel quel.
+
+    `st.markdown` sait afficher les titres, les tableaux, les citations et les
+    blocs de code du fichier. Rien n'est reconstruit en HTML : le document est
+    du texte, et Streamlit fournit le composant qui affiche du texte mis en
+    forme.
+    """
+    try:
+        contenu = CHEMIN_DU_MANUEL.read_text(encoding="utf-8")
+    except OSError:
+        st.error(
+            "Le manuel de procédure est introuvable. Le fichier "
+            "`docs/MANUEL-PROCEDURE.md` doit être livré avec l'application."
+        )
+        return
+
+    st.markdown(contenu)
+
+
+# ----------------------------------------------------------------------
 # Assemblage de la page
 # ----------------------------------------------------------------------
 
 
-def principal():
+def afficher_page_de_tri():
     afficher_entete()
     st.divider()
     afficher_etape_criteres()
@@ -834,6 +933,14 @@ def principal():
     if st.session_state.resultats is not None:
         st.divider()
         afficher_etape_classement()
+
+
+def principal():
+    if afficher_navigation() == PAGE_MANUEL:
+        afficher_manuel()
+        return
+
+    afficher_page_de_tri()
 
 
 principal()
