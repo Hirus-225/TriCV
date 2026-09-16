@@ -20,6 +20,7 @@ import unicodedata
 from pathlib import Path
 
 from docx import Document
+from docx.oxml import parse_xml
 from docx.shared import Pt
 from PIL import Image, ImageDraw, ImageFont
 from reportlab.lib.pagesizes import A4
@@ -141,6 +142,87 @@ def ecrire_docx_tableaux(nom_fichier, entete, sections):
     document.save(str(chemin))
     return chemin
 
+
+# Espaces de noms nécessaires pour écrire une zone de texte à la main.
+# python-docx n'a pas d'API pour cela : les zones de texte sont des formes
+# graphiques, pas du texte de document, et il faut donc poser le XML soi-même.
+_NS_ZONE_DE_TEXTE = (
+    'xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" '
+    'xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" '
+    'xmlns:v="urn:schemas-microsoft-com:vml" '
+    'xmlns:wps="http://schemas.microsoft.com/office/word/2010/wordprocessingShape"'
+)
+
+
+def _paragraphes_xml(lignes):
+    """Rend une suite de <w:p> à placer dans une zone de texte."""
+    morceaux = []
+    for ligne in lignes:
+        texte = (
+            ligne.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+        )
+        morceaux.append(
+            f'<w:p><w:r><w:t xml:space="preserve">{texte}</w:t></w:r></w:p>'
+        )
+    return "".join(morceaux)
+
+
+def ecrire_docx_zones_de_texte(nom_fichier, blocs):
+    """
+    Écrit un .docx dont TOUT le contenu utile est dans des ZONES DE TEXTE.
+
+    C'est la mise en page que produisent Canva et les modèles Word
+    graphiques : chaque bloc est une forme flottante posée sur la page, et le
+    fil du document est vide. `document.paragraphs` et `document.tables` n'y
+    accèdent NI l'un NI l'autre.
+
+    L'essai sur échantillon réel du 16/09/2026 a rencontré exactement ce cas :
+    un CV de comptable ressortait avec zéro caractère et disparaissait du
+    classement. Ce fichier est le garde-fou contre le retour de ce défaut.
+
+    LE SECOND PIÈGE, VOLONTAIREMENT REPRODUIT ICI. Le premier bloc est écrit
+    en `mc:AlternateContent` : la même zone de texte y figure DEUX FOIS, en
+    version moderne (`mc:Choice`) et en version de repli (`mc:Fallback`) pour
+    les traitements de texte anciens. Un parser qui ramasse tout sans
+    discernement compte ce bloc en double. Le corpus doit donc contenir ce
+    cas, sinon la déduplication n'est jamais éprouvée.
+
+    `blocs` est une liste de listes de lignes : un bloc par zone de texte.
+    """
+    document = Document()
+    document.styles["Normal"].font.size = Pt(11)
+
+    for index, lignes in enumerate(blocs):
+        paragraphe = document.add_paragraph()
+        contenu = _paragraphes_xml(lignes)
+        forme = (
+            '<v:shape style="width:400pt;height:80pt">'
+            f"<v:textbox><w:txbxContent>{contenu}</w:txbxContent></v:textbox>"
+            "</v:shape>"
+        )
+
+        if index == 0:
+            # Bloc écrit en double : version moderne + version de repli.
+            interne = (
+                "<mc:AlternateContent>"
+                '<mc:Choice Requires="wps">'
+                f"<w:pict>{forme}</w:pict>"
+                "</mc:Choice>"
+                "<mc:Fallback>"
+                f"<w:pict>{forme}</w:pict>"
+                "</mc:Fallback>"
+                "</mc:AlternateContent>"
+            )
+        else:
+            interne = f"<w:pict>{forme}</w:pict>"
+
+        paragraphe._p.append(
+            parse_xml(f"<w:r {_NS_ZONE_DE_TEXTE}>{interne}</w:r>")
+        )
+
+    chemin = DOSSIER_CORPUS / nom_fichier
+    document.save(str(chemin))
+    return chemin
 
 # ----------------------------------------------------------------------
 # Les neuf cas
@@ -457,6 +539,50 @@ def cas_9_sans_email_ni_telephone():
     )
 
 
+def cas_10_docx_zones_de_texte():
+    """
+    Cas 10 : CV Word entièrement composé de zones de texte flottantes.
+
+    Ajouté après l'essai sur échantillon réel du 16/09/2026, où un CV de ce
+    type ressortait à zéro caractère, donc « illisible », alors qu'il était
+    parfaitement extractible. Le candidat disparaissait du classement sans le
+    moindre signal d'anomalie — le pire mode de défaillance possible pour un
+    outil de tri.
+
+    Ce que ce fichier doit prouver :
+      - le texte des zones de texte est bien extrait ;
+      - il n'est PAS compté en double malgré le bloc `mc:AlternateContent` ;
+      - le document est déclaré LISIBLE et obtient un score.
+    """
+    return ecrire_docx_zones_de_texte(
+        "10_CV_Brou_Akissi.docx",
+        [
+            [
+                "BROU AKISSI",
+                "Comptable",
+                "akissi.brou@example.ci",
+                "07 11 22 33 44",
+            ],
+            [
+                "EXPERIENCE",
+                "2021 - 2026 : Comptable, Cabinet Agboville Conseil",
+                "  Tenue de la comptabilite generale et du grand livre.",
+                "  Etats de rapprochement bancaire mensuels.",
+                "  Declaration fiscale TVA et cotisations CNPS.",
+            ],
+            [
+                "COMPETENCES",
+                "Logiciels : Sage 100, Excel, QuickBooks",
+                "Referentiel SYSCOHADA revise",
+            ],
+            [
+                "FORMATION",
+                "2021 : Licence en finance et comptabilite",
+            ],
+        ],
+    )
+
+
 def principal():
     DOSSIER_CORPUS.mkdir(parents=True, exist_ok=True)
     enregistrer_police_unicode()
@@ -471,6 +597,7 @@ def principal():
         cas_7_nom_de_fichier_inexploitable,
         cas_8_nom_de_fichier_exploitable,
         cas_9_sans_email_ni_telephone,
+        cas_10_docx_zones_de_texte,
     ]
 
     for fonction in cas:

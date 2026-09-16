@@ -44,7 +44,7 @@ from core.criteres import analyser_mots_cles, formater_mots_cles, total_des_poid
 from core.export import AVERTISSEMENT, generer_classeur, nom_du_fichier_export
 from core.modeles import MODELES, charger_modele, noms_des_modeles
 from core.normalisation import normaliser
-from core.parser import SEUIL_TEXTE_MINIMUM, parser_cv
+from core.parser import SEUIL_TEXTE_MINIMUM, extraire_texte, parser_cv
 from core.scorer import scorer_candidat, terme_present
 
 DOSSIER_CORPUS = RACINE / "tests" / "corpus"
@@ -485,6 +485,47 @@ def partie_b_corpus():
             cas["lisible"] and cas["score"] is not None,
         )
         verifier("cas 9 — score bas (profil éloigné du poste)", cas["score"] < 30, cas["score"])
+
+    # Cas 10 — DOCX en zones de texte
+    #
+    # Ce cas vient de l'essai sur échantillon réel du 16/09/2026, où un CV
+    # composé uniquement de zones de texte flottantes ressortait à zéro
+    # caractère. Il était donc classé « illisible » — un candidat réel
+    # disparaissait du classement, sans qu'aucun signal ne distingue ce
+    # défaut d'un vrai scan illisible.
+    cas = attendu("10_CV_Brou_Akissi.docx")
+    if cas:
+        verifier(
+            "cas 10 — DOCX en zones de texte : le contenu flottant est extrait",
+            cas["lisible"],
+        )
+        verifier(
+            "cas 10 — nom extrait depuis la zone de texte",
+            cas["nom"] == "BROU AKISSI",
+            repr(cas["nom"]),
+        )
+        verifier(
+            "cas 10 — email extrait depuis la zone de texte",
+            cas["email"] == "akissi.brou@example.ci",
+            cas["email"],
+        )
+        verifier(
+            "cas 10 — téléphone extrait depuis la zone de texte",
+            cas["telephone"] is not None,
+            cas["telephone"],
+        )
+
+        # Le premier bloc du fichier est écrit en mc:AlternateContent : la
+        # même zone de texte y figure deux fois. Un parcours naïf la
+        # compterait deux fois.
+        with open(DOSSIER_CORPUS / "10_CV_Brou_Akissi.docx", "rb") as fichier:
+            texte_10 = extraire_texte(io.BytesIO(fichier.read()),
+                                      "10_CV_Brou_Akissi.docx")
+        verifier(
+            "cas 10 — le bloc en double (mc:Fallback) n'est compté qu'une fois",
+            texte_10.count("BROU AKISSI") == 1,
+            f"{texte_10.count('BROU AKISSI')} occurrence(s)",
+        )
 
     # Vérifications d'ensemble
     verifier(

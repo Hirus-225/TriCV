@@ -95,7 +95,28 @@ _MOTS_DE_SECTION = {
     "stage", "stages", "projet", "projets", "projects", "realisations",
     "candidature", "motivation", "lettre", "poste", "technique", "techniques",
     "certifications", "distinctions", "publications", "benevolat",
+
+    # Ajoutés après l'essai sur échantillon réel du 16/09/2026. Ces lignes
+    # figuraient en tête de CV et étaient prises pour des noms :
+    # « Permis de conduire ABCDE », « Ingénieur ESCA Finance ».
+    "permis", "conduire", "conduite", "nationalite", "situation",
+    "matrimoniale", "celibataire", "naissance", "enfant", "enfants", "charge",
+    # Intitulés de poste, souvent placés juste sous le nom ou à sa place.
+    "ingenieur", "technicien", "assistant", "assistante", "responsable",
+    "directeur", "directrice", "gestionnaire", "secretaire", "comptable",
+    "commercial", "commerciale", "developpeur", "auditeur", "consultant",
+    "finance", "audit", "marketing", "gestion", "administration",
+    "logistique", "informatique", "juriste", "senior", "junior",
 }
+
+# NOTE DE MAINTENANCE. Cette liste ne sera jamais complète : elle écarte des
+# lignes vues sur de vrais CV, pas une catégorie close. Elle a une limite
+# assumée — un mot qui y figure ne peut plus apparaître dans un nom de
+# candidat. C'est pourquoi on n'y met QUE des mots qui ne sont ni prénoms ni
+# patronymes en usage. « Marie » a été écarté pour cette raison, alors même
+# qu'il produisait un faux nom sur l'échantillon : c'est un prénom courant, et
+# le coût de le bannir dépasse le gain. Ce cas-là est traité autrement, par la
+# règle sur les documents illisibles dans `extraire_nom`.
 
 # Mots à écarter d'un NOM DE FICHIER avant d'en dériver un nom de candidat.
 _MOTS_DE_FICHIER_A_IGNORER = {
@@ -186,12 +207,71 @@ def extraire_texte_pdf(fichier):
     return "\n".join(morceaux)
 
 
+# Espaces de noms du format Word. Un fichier .docx est une archive zip
+# contenant du XML, et chaque balise y est préfixée par l'URL de sa
+# spécification. On compare donc des balises de la forme « {url}p », pas « p ».
+_BALISE_PARAGRAPHE = "{http://schemas.openxmlformats.org/wordprocessingml/2006/main}p"
+_BALISE_TEXTE = "{http://schemas.openxmlformats.org/wordprocessingml/2006/main}t"
+_BALISE_REPLI = "{http://schemas.openxmlformats.org/markup-compatibility/2006}Fallback"
+
+
+def _collecter_paragraphes(element, lignes):
+    """
+    Parcourt l'arbre XML et ajoute à `lignes` le texte de chaque paragraphe
+    Word rencontré, dans l'ordre du document.
+
+    Le parcours descend dans TOUT : tableaux, tableaux imbriqués, zones de
+    texte, en-têtes de formes. C'est ce qui le rend plus complet que
+    `document.paragraphs` et `document.tables`, qui ne voient que les deux
+    premiers niveaux.
+
+    DEUX PRÉCAUTIONS.
+
+    1. On saute les sous-arbres `mc:Fallback`. Word écrit souvent une zone de
+       texte DEUX FOIS : une version moderne dans `mc:Choice` et une version
+       de repli dans `mc:Fallback`, pour les traitements de texte anciens.
+       Sans ce filtre, tout le contenu des zones de texte serait compté en
+       double — sans effet sur le score, mais avec un texte extrait deux fois
+       plus long et illisible à la relecture.
+
+    2. Un paragraphe peut en contenir d'autres, quand une zone de texte est
+       ancrée dedans. On sépare donc le texte PROPRE du paragraphe (ses
+       balises `w:t` directes) des paragraphes imbriqués, traités ensuite.
+       Sans cette séparation, le texte de la zone de texte serait collé à
+       celui du paragraphe hôte, et deux mots sans rapport se retrouveraient
+       accolés — de quoi créer ou détruire une correspondance de mot-clé.
+    """
+    propre = []
+    imbriques = []
+
+    def descendre(noeud):
+        for enfant in noeud:
+            if enfant.tag == _BALISE_REPLI:
+                continue
+            if enfant.tag == _BALISE_PARAGRAPHE:
+                imbriques.append(enfant)
+            elif enfant.tag == _BALISE_TEXTE:
+                if enfant.text:
+                    propre.append(enfant.text)
+            else:
+                descendre(enfant)
+
+    descendre(element)
+
+    texte = "".join(propre).strip()
+    if texte:
+        lignes.append(texte)
+
+    for paragraphe in imbriques:
+        _collecter_paragraphes(paragraphe, lignes)
+
+
 def extraire_texte_docx(fichier):
     """
-    Extrait le texte d'un .docx fourni comme objet mémoire — PARAGRAPHES ET
-    TABLEAUX.
+    Extrait le texte d'un .docx fourni comme objet mémoire — PARAGRAPHES,
+    TABLEAUX ET ZONES DE TEXTE.
 
-    C'EST LE PIÈGE DU LOT 2 (§7.8 du cadrage).
+    C'EST LE PIÈGE DU LOT 2 (§7.8 du cadrage), ÉLARGI PAR LA PORTE P1.
 
     Beaucoup de CV Word sont entièrement construits dans des tableaux : une
     colonne étroite à gauche pour les intitulés, une large à droite pour le
@@ -199,40 +279,38 @@ def extraire_texte_docx(fichier):
     colonnes dans Word, et les modèles gratuits en sont remplis.
 
     Or `document.paragraphs` ne rend QUE les paragraphes de premier niveau.
-    Le texte à l'intérieur des cellules n'y figure pas. Un parser qui s'en
-    contenterait rendrait un texte quasi vide sur ces CV, qui seraient alors
-    classés « illisibles » à tort — et le RH conclurait que l'outil ne sait
-    pas lire les fichiers Word.
+    Le texte à l'intérieur des cellules n'y figure pas.
 
-    On parcourt donc `document.tables` en plus, cellule par cellule.
+    L'ESSAI SUR ÉCHANTILLON RÉEL (16/09/2026) a montré un second cas, plus
+    sévère encore : un CV dont la totalité du contenu était placée dans des
+    ZONES DE TEXTE flottantes — la mise en page que produisent Canva, les
+    modèles Word graphiques et tout ce qui ressemble à une maquette. Ni
+    `paragraphs` ni `tables` n'y accèdent. Le CV ressortait avec ZÉRO
+    caractère, donc classé « illisible », alors qu'il contenait onze cents
+    caractères parfaitement extractibles. Un candidat réel disparaissait du
+    classement sans que rien ne le signale comme une anomalie.
 
-    Note : `cell.text` ramène déjà le contenu des paragraphes de la cellule.
-    Les tableaux imbriqués dans une cellule sont rendus par la propriété
-    `cell.tables`, parcourue récursivement ci-dessous.
+    On ne se fie donc plus aux deux propriétés de commodité de python-docx :
+    on descend dans l'arbre XML et on ramasse tous les paragraphes, où qu'ils
+    soient.
+
+    CONTREPARTIE ASSUMÉE. Les zones de texte sont POSITIONNÉES, pas enchaînées
+    dans le fil du document. L'ordre des lignes rendues peut donc ne pas
+    correspondre à l'ordre de lecture à l'écran — un titre de section peut
+    arriver après son contenu. C'est sans effet sur le score, qui ne regarde
+    que la présence des mots. Cela affaiblit en revanche l'extraction du nom,
+    qui suppose que le nom figure dans les premières lignes ; le repli par le
+    nom du fichier prend alors le relais.
     """
-    morceaux = []
     try:
         document = Document(fichier)
     except Exception:
         return ""
 
-    for paragraphe in document.paragraphs:
-        if paragraphe.text.strip():
-            morceaux.append(paragraphe.text)
+    lignes = []
+    _collecter_paragraphes(document.element.body, lignes)
 
-    def parcourir_tableaux(tableaux):
-        for tableau in tableaux:
-            for ligne in tableau.rows:
-                for cellule in ligne.cells:
-                    if cellule.text.strip():
-                        morceaux.append(cellule.text)
-                    # Un tableau peut en contenir un autre.
-                    if cellule.tables:
-                        parcourir_tableaux(cellule.tables)
-
-    parcourir_tableaux(document.tables)
-
-    return "\n".join(morceaux)
+    return "\n".join(lignes)
 
 
 def extraire_texte(fichier, nom_fichier):
@@ -334,6 +412,53 @@ def _ressemble_a_un_nom(ligne):
     if mots_normalises & _MOTS_DE_SECTION:
         return False
 
+    if not _capitalisation_de_nom(mots):
+        return False
+
+    return True
+
+
+# Particules nobiliaires et liaisons qui s'écrivent légitimement en
+# minuscules À L'INTÉRIEUR d'un nom : « Jean de La Fontaine », « Kouamé
+# N'guessan », « Van der Berg ».
+_PARTICULES = {
+    "de", "du", "des", "d", "da", "di", "del", "della", "dos",
+    "le", "la", "les", "el", "al", "ben", "bin", "ould",
+    "van", "von", "der", "den", "ter",
+}
+
+
+def _capitalisation_de_nom(mots):
+    """
+    Vérifie que chaque mot commence par une majuscule, particules exceptées.
+
+    POURQUOI CETTE RÈGLE PLUTÔT QU'UNE LISTE DE MOTS INTERDITS.
+
+    L'essai sur échantillon réel du 16/09/2026 a produit deux faux noms :
+    « Permis de conduire ABCDE » et « Déclarations fiscales et sociales ».
+    Les écarter par une liste de mots aurait marché ce jour-là et échoué au
+    CV suivant : la liste des phrases qu'on peut trouver en tête d'un CV
+    n'est pas close, et l'allonger à chaque cas est une course perdue.
+
+    Il existe une règle, elle : un nom propre s'écrit en capitales initiales.
+    « Oumar Anicet KABORE », « Gérard Dion », « KONE HAMED KARAMOKO » la
+    respectent tous. Une phrase, non — elle porte au moins un mot en
+    minuscules qui n'est pas une particule.
+
+    COÛT ASSUMÉ. Un candidat qui écrit son nom tout en minuscules — « jean
+    kouassi » — n'est plus reconnu, et le repli par le nom du fichier prend
+    le relais. C'est rare, et l'échec est silencieux et sans dommage, alors
+    qu'un faux nom, lui, s'affiche avec l'aplomb d'un vrai.
+    """
+    for mot in mots:
+        lettres = [c for c in mot if c.isalpha()]
+        if not lettres:
+            return False
+        if lettres[0].isupper():
+            continue
+        if normaliser(mot) in _PARTICULES:
+            continue
+        return False
     return True
 
 
@@ -432,7 +557,28 @@ def extraire_nom(texte, nom_fichier):
 
     None est une valeur de retour légitime. L'interface affichera le nom du
     fichier à la place — une information vraie — plutôt qu'un nom fabriqué.
+
+    SUR UN DOCUMENT ILLISIBLE, LE TEXTE NE VAUT RIEN.
+
+    Un PDF scanné porte souvent une maigre couche de texte : un tampon, un
+    en-tête, une mention isolée. Elle passe sous le seuil de lisibilité, donc
+    le document n'est pas scoré — mais rien n'empêchait jusqu'ici d'y pêcher
+    un nom.
+
+    L'essai sur échantillon réel du 16/09/2026 a montré ce que cela donne :
+    un CV scanné ne livrait que « MARIE SANS / ENFANT EN CHARGE », soit
+    vingt-sept caractères de situation de famille. L'outil en tirait « MARIE
+    SANS » et l'affichait comme identité du candidat, alors que le nom du
+    fichier, lui, portait le vrai nom.
+
+    Afficher une situation matrimoniale à la place d'un nom n'est pas une
+    imprécision, c'est une information fausse présentée avec l'aplomb d'une
+    information vraie. Quand le document est illisible, on va donc
+    directement au nom du fichier.
     """
+    if not est_lisible(texte):
+        return extraire_nom_depuis_fichier(nom_fichier)
+
     nom = extraire_nom_depuis_texte(texte)
     if nom:
         return nom
