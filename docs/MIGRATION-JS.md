@@ -593,23 +593,39 @@ caractère près des deux côtés.
 - **`.streamlit/config.toml`** note lui-même que la maquette annonce « 10 Mo »
   alors que la limite appliquée est 5 Mo. À trancher avec D1.
 
-### Ce qu'on en fait
+### Où en est chacun — état au terme de l'étape E7
 
-**La migration reproduit le comportement actuel, défauts compris**, pour que
-les tests de référence puissent être verts. Les défauts 1 à 5 sont corrigés
-**dans une étape séparée** (E7), après validation du socle — un défaut corrigé
-pendant le portage, c'est un écart dont on ne sait plus dire s'il est une
-correction ou une erreur de traduction.
+**La migration a reproduit le comportement actuel, défauts compris**, pour que
+les tests de référence puissent être verts. Les corrections sont venues
+ensuite, sauf celles que la refonte de l'interface rendait inévitables.
 
-Le défaut 8, les ligatures, est d'une autre nature : il ne vient pas de
-l'interface mais du moteur, il touche **aussi la version Python en
-production**, et son ampleur dépend de CV réels qu'on n'a pas encore lus. Il
-se traite donc après la mesure de l'étape E4, et la correction s'applique des
-deux côtés.
+| # | Défaut | État | Où |
+|---|---|---|---|
+| 1 | L'export est faux quand deux critères portent le même nom | **corrigé** à l'étape E7 — le détail est repris par POSITION et non par nom | `web/js/export.js` |
+| 2 | La règle d'exclusion s'affiche comme un critère, avec un poids inutile | **corrigé** à l'étape E5 — elle a son propre bloc, sans poids | `web/js/vue-criteres.js` |
+| 3 | Le classement affiché peut correspondre à d'anciens critères | **corrigé** à l'étape E7 — un bandeau le dit, sans effacer le classement | `web/js/vue-classement.js` |
+| 4 | Le plafond de 5 Mo n'est vérifié nulle part | **corrigé** à l'étape E5 — il fallait bien le programmer, l'hébergeur ayant disparu | `web/js/vue-depot.js` |
+| 5 | Le message d'un format non pris en charge est trompeur | **corrigé** à l'étape E5 — un `.doc` reçoit la marche à suivre | `web/js/vue-depot.js` |
+| 6 | Le classeur Excel est reconstruit à chaque interaction | **corrigé** à l'étape E6 — il est construit au clic | `web/js/vue-classement.js` |
+| 7 | Un texte extrait mais illisible passe pour du contenu valable | **non corrigé**, assumé — la piste demanderait une mesure qu'on n'a pas | — |
+| 8 | Le « œ » est détruit par la normalisation | **non corrigé** — en attente de la décision D5, voir ci-dessous | — |
+| 9 | Petites choses | deux fichiers de même nom sont maintenant **signalés** ; l'étape d'analyse ne clignote plus ; le reste est sans objet | `web/js/vue-depot.js` |
 
-Seule exception : **l'arrondi (§2.3)**. Il ne s'agit pas d'un défaut mais d'une
-différence entre les deux langages, et il faut le régler dès le portage du
-moteur, sans quoi aucun test n'est fiable.
+**Le seul écart volontaire avec Python est le défaut n°1**, et il est inscrit
+dans la page de tests : les quatre cellules concernées y figurent en
+« toléré », avec la valeur que JavaScript doit écrire et la raison. Le test ne
+se contente pas d'excuser la différence, il vérifie que la version JavaScript
+écrit la valeur JUSTE. Le jour où `core/export.py` sera corrigé, la référence
+changera et ces cas redeviendront de simples conformités : c'est à cela qu'on
+verra que la correction a été reportée côté Python.
+
+**Pourquoi le défaut n°8 attend.** Les autres corrections ne touchent que
+l'affichage ou le fichier exporté : le CLASSEMENT reste identique des deux
+côtés. Corriger le « œ » changerait les SCORES — un même candidat n'aurait pas
+le même score dans l'application Streamlit encore en ligne et dans la version
+JavaScript. Les deux versions doivent donc être corrigées ensemble, et cela
+suppose de modifier `core/normalisation.py`, ce qui sort du « travail dans
+`web/` ». C'est l'objet de la décision D5.
 
 ---
 

@@ -149,6 +149,30 @@ export function rafraichir() {
     );
   }
 
+  // DEUX FICHIERS DE MÊME NOM. Python ne le signalait pas : deux lignes
+  // identiques apparaissaient dans le classement, sans moyen de les
+  // distinguer, puisque le nom du fichier est la seule colonne qui identifie
+  // un candidat quand le nom n'a pas pu être extrait. On ne refuse pas le
+  // dépôt — ce sont peut-être deux candidats homonymes — mais on le dit.
+  const comptes = new Map();
+  for (const entree of valides) comptes.set(entree.nom, (comptes.get(entree.nom) ?? 0) + 1);
+  const doublons = [...comptes.entries()].filter(([, n]) => n > 1).map(([nom]) => nom);
+
+  if (doublons.length) {
+    const liste = doublons.map((nom) => `« ${nom} »`).join(", ");
+    messages.append(
+      element(
+        "p",
+        "alerte alerte--avertissement",
+        doublons.length === 1
+          ? `Deux fichiers portent le même nom : ${liste}. Ils seront analysés ` +
+            "tous les deux et apparaîtront sous le même intitulé dans le classement."
+          : `Plusieurs fichiers portent le même nom : ${liste}. Ils seront analysés ` +
+            "et apparaîtront sous les mêmes intitulés dans le classement.",
+      ),
+    );
+  }
+
   if (manquants.length) {
     const noms = manquants.map((nom) => `« ${nom || "critère sans nom"} »`).join(", ");
     messages.append(

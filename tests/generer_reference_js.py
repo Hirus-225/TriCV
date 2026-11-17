@@ -758,6 +758,38 @@ def _jeux_de_classeur():
          "criteres": criteres, "modele": None},
         {"intitule": "un seul candidat, aucun critère d'exclusion",
          "candidats": classes[:1], "criteres": criteres[:3], "modele": "Développeur web"},
+        # LE DÉFAUT N°1 DU §4, PRIS SUR LE FAIT.
+        #
+        # Deux critères SANS NOM — ce que « Ajouter un critère » produit par
+        # défaut — s'écrasent dans le dictionnaire indexé par nom de
+        # core/export.py. Ce jeu enregistre ce que Python écrit : « 0 / 50 »
+        # sur les deux colonnes et « — » en mots-clés trouvés, pour un
+        # candidat à 50 dont « python » est trouvé.
+        #
+        # La version JavaScript, elle, indexe par position et écrit la bonne
+        # chose. L'écart est donc VOULU, et la page de tests le classe comme
+        # toléré en vérifiant au passage que la valeur JavaScript est la
+        # valeur juste. Le jour où core/export.py sera corrigé, ce jeu
+        # changera et le test redeviendra une simple conformité.
+        {"intitule": "deux critères de même nom",
+         "candidats": [{
+             "fichier": "CV_Sans_Nom.pdf", "lisible": True, "nom": "Sans Nom",
+             "email": None, "telephone": None, "score": 50, "signalements": [],
+             "taille": "12 Ko",
+             "detail": [
+                 {"critere": "", "poids": 50, "points": 50, "points_exacts": 50.0,
+                  "trouves": ["python"], "absents": []},
+                 {"critere": "", "poids": 50, "points": 0, "points_exacts": 0.0,
+                  "trouves": [], "absents": ["excel"]},
+             ],
+         }],
+         "criteres": [
+             {"nom": "", "poids": 50, "type": "requis",
+              "groupes": [["python"]], "mots_cles": "python"},
+             {"nom": "", "poids": 50, "type": "requis",
+              "groupes": [["excel"]], "mots_cles": "excel"},
+         ],
+         "modele": None},
     ]
 
 

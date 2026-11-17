@@ -75,6 +75,9 @@ function demarrer() {
   vueCriteres.brancher(() => {
     messageDeSession("");
     vueDepot.rafraichir();
+    // Le classement affiché a peut-être été calculé avec d'autres critères :
+    // c'est au moment où l'on touche au formulaire qu'il faut le dire.
+    vueClassement.rafraichirBandeauPerime();
   });
 
   vueDepot.brancher(

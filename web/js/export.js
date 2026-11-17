@@ -130,12 +130,22 @@ function cahier(feuille) {
     get ligne() {
       return derniere;
     },
-    /** Écrit une ligne de valeurs et rend son numéro. */
+    /**
+     * Écrit une ligne de valeurs et rend son numéro.
+     *
+     * UNE CHAÎNE VIDE DONNE UNE CELLULE VIDE, comme chez openpyxl : celui-ci
+     * garde bien `""` en mémoire, mais n'écrit aucune valeur dans le fichier,
+     * si bien qu'une relecture rend `None`. ExcelJS, lui, enregistrerait une
+     * chaîne vide pour de bon. Les deux cellules s'affichent pareil dans
+     * Excel, mais la comparaison cellule par cellule les distinguerait — et
+     * le cas se présente vraiment : un critère ajouté sans nom.
+     */
     ajouter(valeurs = []) {
       derniere += 1;
       const ligne = feuille.getRow(derniere);
       valeurs.forEach((valeur, index) => {
-        if (valeur !== undefined && valeur !== null) ligne.getCell(index + 1).value = valeur;
+        if (valeur === undefined || valeur === null || valeur === "") return;
+        ligne.getCell(index + 1).value = valeur;
       });
       return derniere;
     },
@@ -293,21 +303,32 @@ function feuilleClassement(classeur, classes, illisibles, criteres) {
     const rang = index + 1;
     const score = candidat.score ?? 0;
 
-    // ATTENTION : le détail est repris DANS L'ORDRE DES CRITÈRES, et non
-    // retrouvé par son nom. Python l'indexe par nom, et deux critères de même
-    // nom — ce que « Ajouter un critère » produit par défaut, sans nom — s'y
-    // écrasent : le classeur annonce alors zéro point sur les deux colonnes.
-    // C'est le défaut n°1 du §4 de docs/MIGRATION-JS.md ; il est reproduit
-    // ici tel quel pour que la comparaison avec Python reste exacte, et la
-    // correction est l'objet de l'étape E7.
-    const detailParNom = new Map();
-    for (const ligne of candidat.detail ?? []) detailParNom.set(ligne.critere, ligne);
+    // LE DÉTAIL EST REPRIS PAR POSITION, ET NON RETROUVÉ PAR SON NOM.
+    //
+    // C'est la correction du défaut n°1 du §4 de docs/MIGRATION-JS.md.
+    // `core/export.py` écrit `{ligne["critere"]: ligne for ...}` : deux
+    // critères de même nom s'écrasent dans ce dictionnaire. Or « Ajouter un
+    // critère » en crée un SANS NOM, donc deux critères non nommés suffisent.
+    // Mesuré sur un candidat à 50/100 dont « python » est trouvé, le classeur
+    // Python écrit « 0 / 50 » sur les DEUX colonnes et « — » en mots-clés
+    // trouvés. L'affichage à l'écran, lui, est juste : il parcourt la liste
+    // dans l'ordre au lieu de l'indexer. L'export et l'écran se contredisent.
+    //
+    // `scorerCandidat` produit `detail` dans l'ordre des critères requis,
+    // qui est aussi l'ordre des colonnes. La position est donc l'information
+    // fiable, et le nom ne l'est pas — deux critères peuvent le partager,
+    // leur rang non.
+    //
+    // La garde sur la longueur n'est pas décorative : un candidat illisible
+    // n'a pas de détail, et un résultat venu d'une analyse antérieure pourrait
+    // en avoir un nombre différent. On préfère un tiret à une colonne décalée.
+    const detail = candidat.detail ?? [];
+    const detailAligne = detail.length === nomsCriteres.length ? detail : null;
 
     const trouves = [];
     const absents = [];
-    for (const nom of nomsCriteres) {
-      const ligne = detailParNom.get(nom);
-      if (ligne) {
+    if (detailAligne) {
+      for (const ligne of detailAligne) {
         trouves.push(...(ligne.trouves ?? []));
         absents.push(...(ligne.absents ?? []));
       }
@@ -320,8 +341,8 @@ function feuilleClassement(classeur, classes, illisibles, criteres) {
       ouTiret(candidat.telephone),
       score,
       resumerSignalements(candidat.signalements),
-      ...nomsCriteres.map((nom) => {
-        const ligne = detailParNom.get(nom);
+      ...nomsCriteres.map((_, position) => {
+        const ligne = detailAligne?.[position];
         return ligne ? `${ligne.points} / ${ligne.poids}` : "—";
       }),
       trouves.join(", ") || "—",

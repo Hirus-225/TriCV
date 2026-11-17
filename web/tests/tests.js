@@ -590,6 +590,33 @@ const criteresEnFormeJs = (criteres) =>
     motsCles: critere.mots_cles,
   }));
 
+/**
+ * LE SEUL ÉCART VOULU DE TOUTE LA MIGRATION.
+ *
+ * Le défaut n°1 du §4 de docs/MIGRATION-JS.md est corrigé dans la version
+ * JavaScript, et seulement là : `core/export.py` indexe le détail par NOM de
+ * critère, si bien que deux critères sans nom s'écrasent et que le classeur
+ * annonce zéro point sur les deux colonnes. La version JavaScript indexe par
+ * position et écrit la bonne chose.
+ *
+ * Les cellules ci-dessous portent donc la valeur que JavaScript DOIT écrire.
+ * Le test les classe « toléré » au lieu de « conforme », et vérifie que la
+ * valeur obtenue est bien la valeur juste — il ne se contente pas d'excuser
+ * la différence. Le jour où core/export.py sera corrigé, la référence
+ * changera et ces cas redeviendront de simples conformités : c'est à cela
+ * qu'on verra que la correction a été reportée.
+ */
+const CORRECTIONS_VOULUES = {
+  "deux critères de même nom": {
+    Classement: {
+      G2: "50 / 50", //  premier critère : « python » est trouvé
+      H2: "0 / 50", //   second critère : « excel » est absent
+      I2: "python", //   mots-clés trouvés, que Python écrit « — »
+      J2: "excel", //    mots-clés absents, que Python écrit « excel, excel »
+    },
+  },
+};
+
 async function groupeExport(reference) {
   const cas = [];
   const jour = new Date(`${reference.jour}T12:00:00`);
@@ -641,16 +668,32 @@ async function groupeExport(reference) {
 
       // Les cellules, comparées une par une : un écart doit désigner SA
       // cellule, pas « le tableau est différent ».
+      const corrections = CORRECTIONS_VOULUES[jeu.intitule]?.[attendue.nom] ?? {};
       const parAdresse = new Map(obtenue.cellules.map((c) => [c.adresse, c]));
       for (const attendueCellule of attendue.cellules) {
-        cas.push(
-          comparer(
-            `${prefixe} — cellule ${attendueCellule.adresse}`,
-            parAdresse.get(attendueCellule.adresse) ?? null,
-            attendueCellule,
-          ),
-        );
-        parAdresse.delete(attendueCellule.adresse);
+        const adresse = attendueCellule.adresse;
+        const obtenueCellule = parAdresse.get(adresse) ?? null;
+        parAdresse.delete(adresse);
+
+        if (Object.hasOwn(corrections, adresse)) {
+          const valeurJuste = corrections[adresse];
+          cas.push({
+            statut: obtenueCellule?.valeur === valeurJuste ? "tolere" : "ecart",
+            intitule: `${prefixe} — cellule ${adresse} (défaut n°1 corrigé côté JavaScript)`,
+            detail: {
+              obtenu: obtenueCellule?.valeur ?? null,
+              attenduJs: valeurJuste,
+              ecritParPython: attendueCellule.valeur,
+              raison:
+                "core/export.py indexe le détail par nom de critère ; deux " +
+                "critères sans nom s'y écrasent. La version JavaScript indexe " +
+                "par position et écrit la valeur juste.",
+            },
+          });
+          continue;
+        }
+
+        cas.push(comparer(`${prefixe} — cellule ${adresse}`, obtenueCellule, attendueCellule));
       }
       // Ce qui reste a été écrit par la version JavaScript seule.
       for (const [adresse, surplus] of parAdresse) {

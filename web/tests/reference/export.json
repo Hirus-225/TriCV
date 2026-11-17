@@ -6693,6 +6693,845 @@
         "Classement",
         "Critères"
       ]
+    },
+    {
+      "intitule": "deux critères de même nom",
+      "candidats": [
+        {
+          "fichier": "CV_Sans_Nom.pdf",
+          "lisible": true,
+          "nom": "Sans Nom",
+          "email": null,
+          "telephone": null,
+          "score": 50,
+          "signalements": [],
+          "taille": "12 Ko",
+          "detail": [
+            {
+              "critere": "",
+              "poids": 50,
+              "points": 50,
+              "points_exacts": 50.0,
+              "trouves": [
+                "python"
+              ],
+              "absents": []
+            },
+            {
+              "critere": "",
+              "poids": 50,
+              "points": 0,
+              "points_exacts": 0.0,
+              "trouves": [],
+              "absents": [
+                "excel"
+              ]
+            }
+          ]
+        }
+      ],
+      "criteres": [
+        {
+          "nom": "",
+          "poids": 50,
+          "type": "requis",
+          "groupes": [
+            [
+              "python"
+            ]
+          ],
+          "mots_cles": "python"
+        },
+        {
+          "nom": "",
+          "poids": 50,
+          "type": "requis",
+          "groupes": [
+            [
+              "excel"
+            ]
+          ],
+          "mots_cles": "excel"
+        }
+      ],
+      "modele": null,
+      "feuilles": [
+        {
+          "nom": "Résumé",
+          "grille": false,
+          "derniereLigne": 15,
+          "derniereColonne": 2,
+          "fusions": [
+            "A11:B11",
+            "A12:B12",
+            "A14:B14",
+            "A15:B15",
+            "A1:B1",
+            "A2:B2"
+          ],
+          "largeurs": {
+            "A": 34.0,
+            "B": 46.0
+          },
+          "hauteurs": {
+            "1": 50.0,
+            "4": 25.0,
+            "5": 25.0,
+            "6": 25.0,
+            "7": 25.0,
+            "8": 25.0,
+            "9": 25.0,
+            "11": 44.0,
+            "12": 58.0,
+            "15": 58.0
+          },
+          "cellules": [
+            {
+              "adresse": "A1",
+              "valeur": "TriCV — Récapitulatif de tri",
+              "gras": true,
+              "taille": 16.0,
+              "police": "Calibri",
+              "couleur": "FFFFFF",
+              "fond": "4F46E5",
+              "alignementH": "center",
+              "alignementV": "center",
+              "retourLigne": true,
+              "filets": false
+            },
+            {
+              "adresse": "A2",
+              "valeur": "Généré le 17/11/2026",
+              "gras": false,
+              "taille": 10.0,
+              "police": "Calibri",
+              "couleur": "64748B",
+              "fond": "F8FAFC",
+              "alignementH": "center",
+              "alignementV": "center",
+              "retourLigne": true,
+              "filets": false
+            },
+            {
+              "adresse": "A4",
+              "valeur": "Modèle de poste",
+              "gras": true,
+              "taille": 11.0,
+              "police": "Calibri",
+              "couleur": "1E293B",
+              "fond": "E2E8F0",
+              "alignementH": "left",
+              "alignementV": "center",
+              "retourLigne": true,
+              "filets": true
+            },
+            {
+              "adresse": "B4",
+              "valeur": "Critères personnalisés",
+              "gras": false,
+              "taille": 11.0,
+              "police": "Calibri",
+              "couleur": "1E293B",
+              "fond": "F8FAFC",
+              "alignementH": "left",
+              "alignementV": "center",
+              "retourLigne": true,
+              "filets": true
+            },
+            {
+              "adresse": "A5",
+              "valeur": "CV reçus",
+              "gras": true,
+              "taille": 11.0,
+              "police": "Calibri",
+              "couleur": "1E293B",
+              "fond": "E2E8F0",
+              "alignementH": "left",
+              "alignementV": "center",
+              "retourLigne": true,
+              "filets": true
+            },
+            {
+              "adresse": "B5",
+              "valeur": "1",
+              "gras": false,
+              "taille": 11.0,
+              "police": "Calibri",
+              "couleur": "1E293B",
+              "fond": "F8FAFC",
+              "alignementH": "left",
+              "alignementV": "center",
+              "retourLigne": true,
+              "filets": true
+            },
+            {
+              "adresse": "A6",
+              "valeur": "Analysés et classés",
+              "gras": true,
+              "taille": 11.0,
+              "police": "Calibri",
+              "couleur": "1E293B",
+              "fond": "E2E8F0",
+              "alignementH": "left",
+              "alignementV": "center",
+              "retourLigne": true,
+              "filets": true
+            },
+            {
+              "adresse": "B6",
+              "valeur": "1",
+              "gras": false,
+              "taille": 11.0,
+              "police": "Calibri",
+              "couleur": "1E293B",
+              "fond": "F8FAFC",
+              "alignementH": "left",
+              "alignementV": "center",
+              "retourLigne": true,
+              "filets": true
+            },
+            {
+              "adresse": "A7",
+              "valeur": "À examiner manuellement",
+              "gras": true,
+              "taille": 11.0,
+              "police": "Calibri",
+              "couleur": "1E293B",
+              "fond": "E2E8F0",
+              "alignementH": "left",
+              "alignementV": "center",
+              "retourLigne": true,
+              "filets": true
+            },
+            {
+              "adresse": "B7",
+              "valeur": "0",
+              "gras": false,
+              "taille": 11.0,
+              "police": "Calibri",
+              "couleur": "1E293B",
+              "fond": "F8FAFC",
+              "alignementH": "left",
+              "alignementV": "center",
+              "retourLigne": true,
+              "filets": true
+            },
+            {
+              "adresse": "A8",
+              "valeur": "Signalements",
+              "gras": true,
+              "taille": 11.0,
+              "police": "Calibri",
+              "couleur": "1E293B",
+              "fond": "E2E8F0",
+              "alignementH": "left",
+              "alignementV": "center",
+              "retourLigne": true,
+              "filets": true
+            },
+            {
+              "adresse": "B8",
+              "valeur": "0",
+              "gras": false,
+              "taille": 11.0,
+              "police": "Calibri",
+              "couleur": "1E293B",
+              "fond": "F8FAFC",
+              "alignementH": "left",
+              "alignementV": "center",
+              "retourLigne": true,
+              "filets": true
+            },
+            {
+              "adresse": "A9",
+              "valeur": "Critères de sélection",
+              "gras": true,
+              "taille": 11.0,
+              "police": "Calibri",
+              "couleur": "1E293B",
+              "fond": "E2E8F0",
+              "alignementH": "left",
+              "alignementV": "center",
+              "retourLigne": true,
+              "filets": true
+            },
+            {
+              "adresse": "B9",
+              "valeur": "2",
+              "gras": false,
+              "taille": 11.0,
+              "police": "Calibri",
+              "couleur": "1E293B",
+              "fond": "F8FAFC",
+              "alignementH": "left",
+              "alignementV": "center",
+              "retourLigne": true,
+              "filets": true
+            },
+            {
+              "adresse": "A11",
+              "valeur": "Un score faible signifie que les mots-clés recherchés sont absents du CV, pas que le candidat est moins qualifié.",
+              "gras": false,
+              "taille": 11.0,
+              "police": "Calibri",
+              "couleur": "92400E",
+              "fond": "FEF3C7",
+              "alignementH": "left",
+              "alignementV": "center",
+              "retourLigne": true,
+              "filets": true
+            },
+            {
+              "adresse": "A12",
+              "valeur": "Le score mesure la correspondance aux mots-clés définis. Il ne mesure ni la qualité d'un candidat ni son adéquation au poste. Lisez les CV avant toute décision.",
+              "gras": false,
+              "taille": 11.0,
+              "police": "Calibri",
+              "couleur": "92400E",
+              "fond": "FEF3C7",
+              "alignementH": "left",
+              "alignementV": "center",
+              "retourLigne": true,
+              "filets": true
+            },
+            {
+              "adresse": "A14",
+              "valeur": "Traitement éphémère — aucune conservation",
+              "gras": true,
+              "taille": 11.0,
+              "police": "Calibri",
+              "couleur": "64748B",
+              "fond": null,
+              "alignementH": "left",
+              "alignementV": "center",
+              "retourLigne": true,
+              "filets": false
+            },
+            {
+              "adresse": "A15",
+              "valeur": "Les CV analysés pour produire ce récapitulatif n'ont jamais été enregistrés sur un disque ni transmis à un tiers. Ce fichier est la seule trace qui subsiste.",
+              "gras": false,
+              "taille": 10.0,
+              "police": "Calibri",
+              "couleur": "64748B",
+              "fond": null,
+              "alignementH": "left",
+              "alignementV": "center",
+              "retourLigne": true,
+              "filets": false
+            }
+          ]
+        },
+        {
+          "nom": "Classement",
+          "grille": false,
+          "derniereLigne": 2,
+          "derniereColonne": 11,
+          "fusions": [],
+          "largeurs": {
+            "A": 6.0,
+            "B": 28.0,
+            "C": 30.0,
+            "D": 20.0,
+            "E": 12.0,
+            "F": 22.0,
+            "G": 16.0,
+            "H": 16.0,
+            "I": 46.0,
+            "J": 46.0,
+            "K": 30.0
+          },
+          "hauteurs": {
+            "1": 30.0,
+            "2": 25.0
+          },
+          "cellules": [
+            {
+              "adresse": "A1",
+              "valeur": "Rang",
+              "gras": true,
+              "taille": 11.0,
+              "police": "Calibri",
+              "couleur": "FFFFFF",
+              "fond": "4F46E5",
+              "alignementH": "center",
+              "alignementV": "center",
+              "retourLigne": true,
+              "filets": true
+            },
+            {
+              "adresse": "B1",
+              "valeur": "Candidat",
+              "gras": true,
+              "taille": 11.0,
+              "police": "Calibri",
+              "couleur": "FFFFFF",
+              "fond": "4F46E5",
+              "alignementH": "center",
+              "alignementV": "center",
+              "retourLigne": true,
+              "filets": true
+            },
+            {
+              "adresse": "C1",
+              "valeur": "Email",
+              "gras": true,
+              "taille": 11.0,
+              "police": "Calibri",
+              "couleur": "FFFFFF",
+              "fond": "4F46E5",
+              "alignementH": "center",
+              "alignementV": "center",
+              "retourLigne": true,
+              "filets": true
+            },
+            {
+              "adresse": "D1",
+              "valeur": "Téléphone",
+              "gras": true,
+              "taille": 11.0,
+              "police": "Calibri",
+              "couleur": "FFFFFF",
+              "fond": "4F46E5",
+              "alignementH": "center",
+              "alignementV": "center",
+              "retourLigne": true,
+              "filets": true
+            },
+            {
+              "adresse": "E1",
+              "valeur": "Score /100",
+              "gras": true,
+              "taille": 11.0,
+              "police": "Calibri",
+              "couleur": "FFFFFF",
+              "fond": "4F46E5",
+              "alignementH": "center",
+              "alignementV": "center",
+              "retourLigne": true,
+              "filets": true
+            },
+            {
+              "adresse": "F1",
+              "valeur": "Signalements",
+              "gras": true,
+              "taille": 11.0,
+              "police": "Calibri",
+              "couleur": "FFFFFF",
+              "fond": "4F46E5",
+              "alignementH": "center",
+              "alignementV": "center",
+              "retourLigne": true,
+              "filets": true
+            },
+            {
+              "adresse": "G1",
+              "valeur": " (pts)",
+              "gras": true,
+              "taille": 11.0,
+              "police": "Calibri",
+              "couleur": "FFFFFF",
+              "fond": "4F46E5",
+              "alignementH": "center",
+              "alignementV": "center",
+              "retourLigne": true,
+              "filets": true
+            },
+            {
+              "adresse": "H1",
+              "valeur": " (pts)",
+              "gras": true,
+              "taille": 11.0,
+              "police": "Calibri",
+              "couleur": "FFFFFF",
+              "fond": "4F46E5",
+              "alignementH": "center",
+              "alignementV": "center",
+              "retourLigne": true,
+              "filets": true
+            },
+            {
+              "adresse": "I1",
+              "valeur": "Mots-clés trouvés",
+              "gras": true,
+              "taille": 11.0,
+              "police": "Calibri",
+              "couleur": "FFFFFF",
+              "fond": "4F46E5",
+              "alignementH": "center",
+              "alignementV": "center",
+              "retourLigne": true,
+              "filets": true
+            },
+            {
+              "adresse": "J1",
+              "valeur": "Mots-clés absents",
+              "gras": true,
+              "taille": 11.0,
+              "police": "Calibri",
+              "couleur": "FFFFFF",
+              "fond": "4F46E5",
+              "alignementH": "center",
+              "alignementV": "center",
+              "retourLigne": true,
+              "filets": true
+            },
+            {
+              "adresse": "K1",
+              "valeur": "Fichier",
+              "gras": true,
+              "taille": 11.0,
+              "police": "Calibri",
+              "couleur": "FFFFFF",
+              "fond": "4F46E5",
+              "alignementH": "center",
+              "alignementV": "center",
+              "retourLigne": true,
+              "filets": true
+            },
+            {
+              "adresse": "A2",
+              "valeur": 1,
+              "gras": false,
+              "taille": 11.0,
+              "police": "Calibri",
+              "couleur": "64748B",
+              "fond": "F8FAFC",
+              "alignementH": "center",
+              "alignementV": "center",
+              "retourLigne": true,
+              "filets": true
+            },
+            {
+              "adresse": "B2",
+              "valeur": "Sans Nom",
+              "gras": false,
+              "taille": 11.0,
+              "police": "Calibri",
+              "couleur": "1E293B",
+              "fond": "F8FAFC",
+              "alignementH": "left",
+              "alignementV": "center",
+              "retourLigne": true,
+              "filets": true
+            },
+            {
+              "adresse": "C2",
+              "valeur": "—",
+              "gras": false,
+              "taille": 11.0,
+              "police": "Calibri",
+              "couleur": "1E293B",
+              "fond": "F8FAFC",
+              "alignementH": "left",
+              "alignementV": "center",
+              "retourLigne": true,
+              "filets": true
+            },
+            {
+              "adresse": "D2",
+              "valeur": "—",
+              "gras": false,
+              "taille": 11.0,
+              "police": "Calibri",
+              "couleur": "1E293B",
+              "fond": "F8FAFC",
+              "alignementH": "left",
+              "alignementV": "center",
+              "retourLigne": true,
+              "filets": true
+            },
+            {
+              "adresse": "E2",
+              "valeur": 50,
+              "gras": true,
+              "taille": 11.0,
+              "police": "Calibri",
+              "couleur": "92400E",
+              "fond": "FEF3C7",
+              "alignementH": "center",
+              "alignementV": "center",
+              "retourLigne": true,
+              "filets": true
+            },
+            {
+              "adresse": "F2",
+              "valeur": "—",
+              "gras": false,
+              "taille": 11.0,
+              "police": "Calibri",
+              "couleur": "1E293B",
+              "fond": "F8FAFC",
+              "alignementH": "left",
+              "alignementV": "center",
+              "retourLigne": true,
+              "filets": true
+            },
+            {
+              "adresse": "G2",
+              "valeur": "0 / 50",
+              "gras": false,
+              "taille": 11.0,
+              "police": "Calibri",
+              "couleur": "1E293B",
+              "fond": "F8FAFC",
+              "alignementH": "center",
+              "alignementV": "center",
+              "retourLigne": true,
+              "filets": true
+            },
+            {
+              "adresse": "H2",
+              "valeur": "0 / 50",
+              "gras": false,
+              "taille": 11.0,
+              "police": "Calibri",
+              "couleur": "1E293B",
+              "fond": "F8FAFC",
+              "alignementH": "center",
+              "alignementV": "center",
+              "retourLigne": true,
+              "filets": true
+            },
+            {
+              "adresse": "I2",
+              "valeur": "—",
+              "gras": false,
+              "taille": 11.0,
+              "police": "Calibri",
+              "couleur": "1E293B",
+              "fond": "F8FAFC",
+              "alignementH": "left",
+              "alignementV": "center",
+              "retourLigne": true,
+              "filets": true
+            },
+            {
+              "adresse": "J2",
+              "valeur": "excel, excel",
+              "gras": false,
+              "taille": 11.0,
+              "police": "Calibri",
+              "couleur": "1E293B",
+              "fond": "F8FAFC",
+              "alignementH": "left",
+              "alignementV": "center",
+              "retourLigne": true,
+              "filets": true
+            },
+            {
+              "adresse": "K2",
+              "valeur": "CV_Sans_Nom.pdf",
+              "gras": false,
+              "taille": 11.0,
+              "police": "Calibri",
+              "couleur": "1E293B",
+              "fond": "F8FAFC",
+              "alignementH": "left",
+              "alignementV": "center",
+              "retourLigne": true,
+              "filets": true
+            }
+          ]
+        },
+        {
+          "nom": "Critères",
+          "grille": false,
+          "derniereLigne": 5,
+          "derniereColonne": 4,
+          "fusions": [
+            "A5:D5"
+          ],
+          "largeurs": {
+            "A": 28.0,
+            "B": 14.0,
+            "C": 14.0,
+            "D": 62.0
+          },
+          "hauteurs": {
+            "1": 30.0,
+            "2": 25.0,
+            "3": 25.0,
+            "5": 30.0
+          },
+          "cellules": [
+            {
+              "adresse": "A1",
+              "valeur": "Critère",
+              "gras": true,
+              "taille": 11.0,
+              "police": "Calibri",
+              "couleur": "FFFFFF",
+              "fond": "4F46E5",
+              "alignementH": "center",
+              "alignementV": "center",
+              "retourLigne": true,
+              "filets": true
+            },
+            {
+              "adresse": "B1",
+              "valeur": "Type",
+              "gras": true,
+              "taille": 11.0,
+              "police": "Calibri",
+              "couleur": "FFFFFF",
+              "fond": "4F46E5",
+              "alignementH": "center",
+              "alignementV": "center",
+              "retourLigne": true,
+              "filets": true
+            },
+            {
+              "adresse": "C1",
+              "valeur": "Poids",
+              "gras": true,
+              "taille": 11.0,
+              "police": "Calibri",
+              "couleur": "FFFFFF",
+              "fond": "4F46E5",
+              "alignementH": "center",
+              "alignementV": "center",
+              "retourLigne": true,
+              "filets": true
+            },
+            {
+              "adresse": "D1",
+              "valeur": "Mots-clés recherchés",
+              "gras": true,
+              "taille": 11.0,
+              "police": "Calibri",
+              "couleur": "FFFFFF",
+              "fond": "4F46E5",
+              "alignementH": "center",
+              "alignementV": "center",
+              "retourLigne": true,
+              "filets": true
+            },
+            {
+              "adresse": "A2",
+              "valeur": null,
+              "gras": false,
+              "taille": 11.0,
+              "police": "Calibri",
+              "couleur": "1E293B",
+              "fond": "F8FAFC",
+              "alignementH": "left",
+              "alignementV": "center",
+              "retourLigne": true,
+              "filets": true
+            },
+            {
+              "adresse": "B2",
+              "valeur": "Requis",
+              "gras": false,
+              "taille": 11.0,
+              "police": "Calibri",
+              "couleur": "1E293B",
+              "fond": "F8FAFC",
+              "alignementH": "center",
+              "alignementV": "center",
+              "retourLigne": true,
+              "filets": true
+            },
+            {
+              "adresse": "C2",
+              "valeur": 50,
+              "gras": false,
+              "taille": 11.0,
+              "police": "Calibri",
+              "couleur": "1E293B",
+              "fond": "F8FAFC",
+              "alignementH": "center",
+              "alignementV": "center",
+              "retourLigne": true,
+              "filets": true
+            },
+            {
+              "adresse": "D2",
+              "valeur": "python",
+              "gras": false,
+              "taille": 11.0,
+              "police": "Calibri",
+              "couleur": "1E293B",
+              "fond": "F8FAFC",
+              "alignementH": "left",
+              "alignementV": "center",
+              "retourLigne": true,
+              "filets": true
+            },
+            {
+              "adresse": "A3",
+              "valeur": null,
+              "gras": false,
+              "taille": 11.0,
+              "police": "Calibri",
+              "couleur": "1E293B",
+              "fond": "FFFFFF",
+              "alignementH": "left",
+              "alignementV": "center",
+              "retourLigne": true,
+              "filets": true
+            },
+            {
+              "adresse": "B3",
+              "valeur": "Requis",
+              "gras": false,
+              "taille": 11.0,
+              "police": "Calibri",
+              "couleur": "1E293B",
+              "fond": "FFFFFF",
+              "alignementH": "center",
+              "alignementV": "center",
+              "retourLigne": true,
+              "filets": true
+            },
+            {
+              "adresse": "C3",
+              "valeur": 50,
+              "gras": false,
+              "taille": 11.0,
+              "police": "Calibri",
+              "couleur": "1E293B",
+              "fond": "FFFFFF",
+              "alignementH": "center",
+              "alignementV": "center",
+              "retourLigne": true,
+              "filets": true
+            },
+            {
+              "adresse": "D3",
+              "valeur": "excel",
+              "gras": false,
+              "taille": 11.0,
+              "police": "Calibri",
+              "couleur": "1E293B",
+              "fond": "FFFFFF",
+              "alignementH": "left",
+              "alignementV": "center",
+              "retourLigne": true,
+              "filets": true
+            },
+            {
+              "adresse": "A5",
+              "valeur": "Un groupe de synonymes est écrit « terme principal = synonyme, synonyme ». Le groupe compte pour trouvé si au moins un de ses termes figure dans le CV.",
+              "gras": false,
+              "taille": 10.0,
+              "police": "Calibri",
+              "couleur": "64748B",
+              "fond": null,
+              "alignementH": "left",
+              "alignementV": "center",
+              "retourLigne": true,
+              "filets": false
+            }
+          ]
+        }
+      ],
+      "nomsDesFeuilles": [
+        "Résumé",
+        "Classement",
+        "Critères"
+      ]
     }
   ]
 }

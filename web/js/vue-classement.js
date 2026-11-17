@@ -24,6 +24,7 @@ import {
   nomDuFichierExport,
   telecharger,
 } from "./export.js";
+import { criteresPrets } from "./vue-depot.js";
 
 let surEffacement = () => {};
 
@@ -52,6 +53,70 @@ function lien(valeur, protocole) {
   const a = element("a", "lien-contact", valeur);
   a.href = `${protocole}:${valeur.replace(/\s/g, "")}`;
   return a;
+}
+
+// ---------------------------------------------------------------------------
+// Le bandeau des critères périmés
+// ---------------------------------------------------------------------------
+
+/**
+ * La forme d'un critère qui compte pour le calcul : son nom, son poids, son
+ * type, ses groupes. Un identifiant de carte ou un texte de saisie reformulé
+ * sans changement de sens ne doivent PAS déclencher le bandeau.
+ */
+const empreinteDesCriteres = (criteres) =>
+  JSON.stringify(
+    criteres.map((critere) => ({
+      nom: critere.nom ?? "",
+      poids: critere.poids ?? 0,
+      type: critere.type ?? "requis",
+      groupes: critere.groupes ?? [],
+    })),
+  );
+
+/**
+ * Prévient que le classement affiché ne correspond plus au formulaire.
+ *
+ * C'EST LA CORRECTION DU DÉFAUT N°3 DU §4 de docs/MIGRATION-JS.md. Dans la
+ * version Streamlit, `st.session_state.resultats` était remis à None quand on
+ * chargeait un modèle, partait d'une page blanche, ajoutait ou supprimait un
+ * critère — mais PAS quand on modifiait le nom, le poids ou les mots-clés d'un
+ * critère existant. On analysait dix CV, on corrigeait un mot-clé, et le
+ * classement restait à l'écran, calculé avec l'ancien mot-clé, sans que rien
+ * ne le signale. L'export, lui, restait cohérent avec les scores : c'était
+ * donc l'ÉCRAN qui mentait.
+ *
+ * POURQUOI UN BANDEAU ET NON UN EFFACEMENT. Effacer le classement au moindre
+ * ajustement ferait perdre le résultat d'une analyse qui a pris du temps, et
+ * pour une correction que l'utilisateur voulait peut-être seulement essayer.
+ * On garde donc le classement, en disant ce qu'il vaut.
+ */
+export function rafraichirBandeauPerime() {
+  const zone = document.getElementById("bandeau-perime");
+  zone.replaceChildren();
+
+  if (etat.resultats === null || etat.criteresAnalyse === null) return;
+  if (empreinteDesCriteres(criteresPrets()) === empreinteDesCriteres(etat.criteresAnalyse)) return;
+
+  const bandeau = element("div", "alerte alerte--avertissement");
+  bandeau.append(
+    element(
+      "p",
+      null,
+      "Les critères ont changé depuis cette analyse. Le classement ci-dessous " +
+        "a été calculé avec les critères précédents.",
+    ),
+  );
+  bandeau.append(
+    element(
+      "p",
+      null,
+      "Relancez l'analyse pour le mettre à jour. Le récapitulatif Excel, lui, " +
+        "reste cohérent avec les scores affichés : il porte les critères qui " +
+        "ont servi à les calculer.",
+    ),
+  );
+  zone.append(bandeau);
 }
 
 // ---------------------------------------------------------------------------
@@ -329,6 +394,7 @@ export function dessiner() {
 
   const resultats = etat.resultats;
   section.hidden = resultats === null;
+  rafraichirBandeauPerime();
   if (resultats === null) return;
 
   // Tri par score décroissant. Le tri de JavaScript est STABLE, comme celui
