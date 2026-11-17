@@ -1,0 +1,1339 @@
+{
+  "fichiers": [
+    {
+      "chemin": "tests/corpus/01_CV_Konan_Bernard.pdf",
+      "fichier": "01_CV_Konan_Bernard.pdf",
+      "octets": 23284,
+      "texte": "Konan Bernard\nkonan.bernard@example.ci\n+225 07 58 41 22 96\nAbidjan (Cocody)\nPROFIL\nDeveloppeur web full-stack, 6 ans d'experience sur des applications\nmetier a destination de PME ivoiriennes.\nEXPERIENCE\n2022 - 2026 Developpeur senior, Atelier Numerique Abidjan\nConception d'applications Python / Django pour la gestion de stock.\nInterfaces React et integration d'API REST.\nMise en production sur serveurs Linux, conteneurs Docker.\n2020 - 2022 Developpeur, Studio Lagune\nSites JavaScript, requetes SQL sur base PostgreSQL et MySQL.\nTravail en freelance sur trois projets complementaires.\nCOMPETENCES\nLangages : Python, JavaScript, SQL\nFrameworks : Django, React\nBases : PostgreSQL, MySQL\nOutils : Git, GitHub, Docker, Linux\nFORMATION\n2020 Licence en informatique, Universite Felix Houphouet-Boigny",
+      "lisible": true,
+      "nom": "Konan Bernard",
+      "email": "konan.bernard@example.ci",
+      "telephone": "+225 07 58 41 22 96",
+      "nomDepuisFichier": "Konan Bernard",
+      "nomDepuisTexte": "Konan Bernard",
+      "scores": {
+        "Comptable": {
+          "score": 0,
+          "signalements": [],
+          "detail": [
+            {
+              "critere": "Comptabilité générale",
+              "poids": 35,
+              "points": 0,
+              "points_exacts": 0.0,
+              "trouves": [],
+              "absents": [
+                "comptabilite generale",
+                "rapprochement bancaire",
+                "etats financiers",
+                "syscohada",
+                "manuel de procedure"
+              ]
+            },
+            {
+              "critere": "Fiscalité & déclarations",
+              "poids": 25,
+              "points": 0,
+              "points_exacts": 0.0,
+              "trouves": [],
+              "absents": [
+                "fiscalite",
+                "tva",
+                "declaration fiscale",
+                "cnps"
+              ]
+            },
+            {
+              "critere": "Outils",
+              "poids": 20,
+              "points": 0,
+              "points_exacts": 0.0,
+              "trouves": [],
+              "absents": [
+                "sage",
+                "excel",
+                "erp"
+              ]
+            },
+            {
+              "critere": "Expérience",
+              "poids": 20,
+              "points": 0,
+              "points_exacts": 0.0,
+              "trouves": [],
+              "absents": [
+                "comptable",
+                "chef comptable",
+                "cabinet",
+                "audit"
+              ]
+            }
+          ]
+        },
+        "Développeur web": {
+          "score": 85,
+          "signalements": [],
+          "detail": [
+            {
+              "critere": "Langages & frameworks",
+              "poids": 35,
+              "points": 35,
+              "points_exacts": 35.0,
+              "trouves": [
+                "python",
+                "javascript",
+                "django",
+                "react"
+              ],
+              "absents": []
+            },
+            {
+              "critere": "Bases de données",
+              "poids": 20,
+              "points": 15,
+              "points_exacts": 15.0,
+              "trouves": [
+                "sql",
+                "postgresql",
+                "mysql"
+              ],
+              "absents": [
+                "mongodb"
+              ]
+            },
+            {
+              "critere": "Outils & versioning",
+              "poids": 15,
+              "points": 15,
+              "points_exacts": 15.0,
+              "trouves": [
+                "git",
+                "docker",
+                "linux"
+              ],
+              "absents": []
+            },
+            {
+              "critere": "Expérience terrain",
+              "poids": 20,
+              "points": 13,
+              "points_exacts": 13.333333333333332,
+              "trouves": [
+                "developpeur",
+                "freelance"
+              ],
+              "absents": [
+                "stage"
+              ]
+            },
+            {
+              "critere": "Formation",
+              "poids": 10,
+              "points": 7,
+              "points_exacts": 6.666666666666666,
+              "trouves": [
+                "licence",
+                "informatique"
+              ],
+              "absents": [
+                "master"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "chemin": "tests/corpus/02_CV_Kouassi_Guy_Desire.pdf",
+      "fichier": "02_CV_Kouassi_Guy_Desire.pdf",
+      "octets": 23625,
+      "texte": "Kouassi Guy-Désiré\nguy.kouassi@example.ci\n+225 05 44 18 90 33\nPROFIL\nDéveloppeur d'applications, spécialisé en développement back-end.\nExpérience acquise en Côte d'Ivoire et au Sénégal.\nEXPÉRIENCE\n2023 - 2026 Développeur, Société Générale de Données\nDéveloppement d'une plateforme Django de suivi des règlements.\nModélisation et requêtes SQL sur base MySQL.\nDéploiement sur environnement Linux, versionnement sous Git.\n2022 - 2023 Stage de fin d'études, Agence Ivoirienne du Numérique\nAutomatisation de traitements en Python.\nCOMPÉTENCES\nPython, Django, SQL, MySQL, Git, Linux\nMéthodes agiles, rédaction de spécifications\nFORMATION\n2022 Master en génie informatique, Institut National Polytechnique",
+      "lisible": true,
+      "nom": "Kouassi Guy-Désiré",
+      "email": "guy.kouassi@example.ci",
+      "telephone": "+225 05 44 18 90 33",
+      "nomDepuisFichier": "Kouassi Guy Desire",
+      "nomDepuisTexte": "Kouassi Guy-Désiré",
+      "scores": {
+        "Comptable": {
+          "score": 0,
+          "signalements": [],
+          "detail": [
+            {
+              "critere": "Comptabilité générale",
+              "poids": 35,
+              "points": 0,
+              "points_exacts": 0.0,
+              "trouves": [],
+              "absents": [
+                "comptabilite generale",
+                "rapprochement bancaire",
+                "etats financiers",
+                "syscohada",
+                "manuel de procedure"
+              ]
+            },
+            {
+              "critere": "Fiscalité & déclarations",
+              "poids": 25,
+              "points": 0,
+              "points_exacts": 0.0,
+              "trouves": [],
+              "absents": [
+                "fiscalite",
+                "tva",
+                "declaration fiscale",
+                "cnps"
+              ]
+            },
+            {
+              "critere": "Outils",
+              "poids": 20,
+              "points": 0,
+              "points_exacts": 0.0,
+              "trouves": [],
+              "absents": [
+                "sage",
+                "excel",
+                "erp"
+              ]
+            },
+            {
+              "critere": "Expérience",
+              "poids": 20,
+              "points": 0,
+              "points_exacts": 0.0,
+              "trouves": [],
+              "absents": [
+                "comptable",
+                "chef comptable",
+                "cabinet",
+                "audit"
+              ]
+            }
+          ]
+        },
+        "Développeur web": {
+          "score": 57,
+          "signalements": [],
+          "detail": [
+            {
+              "critere": "Langages & frameworks",
+              "poids": 35,
+              "points": 18,
+              "points_exacts": 17.5,
+              "trouves": [
+                "python",
+                "django"
+              ],
+              "absents": [
+                "javascript",
+                "react"
+              ]
+            },
+            {
+              "critere": "Bases de données",
+              "poids": 20,
+              "points": 10,
+              "points_exacts": 10.0,
+              "trouves": [
+                "sql",
+                "mysql"
+              ],
+              "absents": [
+                "postgresql",
+                "mongodb"
+              ]
+            },
+            {
+              "critere": "Outils & versioning",
+              "poids": 15,
+              "points": 10,
+              "points_exacts": 10.0,
+              "trouves": [
+                "git",
+                "linux"
+              ],
+              "absents": [
+                "docker"
+              ]
+            },
+            {
+              "critere": "Expérience terrain",
+              "poids": 20,
+              "points": 13,
+              "points_exacts": 13.333333333333332,
+              "trouves": [
+                "developpeur",
+                "stage"
+              ],
+              "absents": [
+                "freelance"
+              ]
+            },
+            {
+              "critere": "Formation",
+              "poids": 10,
+              "points": 7,
+              "points_exacts": 6.666666666666666,
+              "trouves": [
+                "master",
+                "informatique"
+              ],
+              "absents": [
+                "licence"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "chemin": "tests/corpus/03_CV_Traore_Aminata.pdf",
+      "fichier": "03_CV_Traore_Aminata.pdf",
+      "octets": 57178,
+      "texte": "",
+      "lisible": false,
+      "nom": "Traore Aminata",
+      "email": null,
+      "telephone": null,
+      "nomDepuisFichier": "Traore Aminata",
+      "nomDepuisTexte": null,
+      "scores": null
+    },
+    {
+      "chemin": "tests/corpus/04_CV_Diabate_Fatoumata.docx",
+      "fichier": "04_CV_Diabate_Fatoumata.docx",
+      "octets": 37102,
+      "texte": "Diabaté Fatoumata\nContact\nf.diabate@example.ci\n+225 01 42 77 65 08\nAbidjan (Marcory)\nExpérience\n2021 - 2026 : Développeuse web, Coopérative Tech Lagunes\nApplications JavaScript et React pour la vente en ligne.\nConception de bases de données PostgreSQL.\nIntégration continue, Git et Docker.\nCompétences\nJavaScript, React, Python\nSQL, PostgreSQL, MongoDB\nGit, Docker, Linux\nFormation\n2021 : Master en informatique appliquée\n2019 : Licence en informatique",
+      "lisible": true,
+      "nom": "Diabaté Fatoumata",
+      "email": "f.diabate@example.ci",
+      "telephone": "+225 01 42 77 65 08",
+      "nomDepuisFichier": "Diabate Fatoumata",
+      "nomDepuisTexte": "Diabaté Fatoumata",
+      "scores": {
+        "Comptable": {
+          "score": 0,
+          "signalements": [],
+          "detail": [
+            {
+              "critere": "Comptabilité générale",
+              "poids": 35,
+              "points": 0,
+              "points_exacts": 0.0,
+              "trouves": [],
+              "absents": [
+                "comptabilite generale",
+                "rapprochement bancaire",
+                "etats financiers",
+                "syscohada",
+                "manuel de procedure"
+              ]
+            },
+            {
+              "critere": "Fiscalité & déclarations",
+              "poids": 25,
+              "points": 0,
+              "points_exacts": 0.0,
+              "trouves": [],
+              "absents": [
+                "fiscalite",
+                "tva",
+                "declaration fiscale",
+                "cnps"
+              ]
+            },
+            {
+              "critere": "Outils",
+              "poids": 20,
+              "points": 0,
+              "points_exacts": 0.0,
+              "trouves": [],
+              "absents": [
+                "sage",
+                "excel",
+                "erp"
+              ]
+            },
+            {
+              "critere": "Expérience",
+              "poids": 20,
+              "points": 0,
+              "points_exacts": 0.0,
+              "trouves": [],
+              "absents": [
+                "comptable",
+                "chef comptable",
+                "cabinet",
+                "audit"
+              ]
+            }
+          ]
+        },
+        "Développeur web": {
+          "score": 66,
+          "signalements": [],
+          "detail": [
+            {
+              "critere": "Langages & frameworks",
+              "poids": 35,
+              "points": 26,
+              "points_exacts": 26.25,
+              "trouves": [
+                "python",
+                "javascript",
+                "react"
+              ],
+              "absents": [
+                "django"
+              ]
+            },
+            {
+              "critere": "Bases de données",
+              "poids": 20,
+              "points": 15,
+              "points_exacts": 15.0,
+              "trouves": [
+                "sql",
+                "postgresql",
+                "mongodb"
+              ],
+              "absents": [
+                "mysql"
+              ]
+            },
+            {
+              "critere": "Outils & versioning",
+              "poids": 15,
+              "points": 15,
+              "points_exacts": 15.0,
+              "trouves": [
+                "git",
+                "docker",
+                "linux"
+              ],
+              "absents": []
+            },
+            {
+              "critere": "Expérience terrain",
+              "poids": 20,
+              "points": 0,
+              "points_exacts": 0.0,
+              "trouves": [],
+              "absents": [
+                "developpeur",
+                "freelance",
+                "stage"
+              ]
+            },
+            {
+              "critere": "Formation",
+              "poids": 10,
+              "points": 10,
+              "points_exacts": 10.0,
+              "trouves": [
+                "licence",
+                "master",
+                "informatique"
+              ],
+              "absents": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "chemin": "tests/corpus/05_CV_Yao_Emmanuel.docx",
+      "fichier": "05_CV_Yao_Emmanuel.docx",
+      "octets": 36937,
+      "texte": "Yao Kouadio Emmanuel\nyao.emmanuel@example.ci\n+225 07 09 33 51 74\nPROFIL\nDéveloppeur web junior, sorti de formation en 2024.\nEXPÉRIENCE\n2024 - 2026 : Développeur, Groupe Éburnéen Services\nDéveloppement d'un intranet en Python et Django.\nRequêtes SQL, administration d'une base MySQL.\nVersionnement des sources sous GitLab.\n2024 : Stage de six mois, Bureau d'Études Akwaba\nCOMPÉTENCES\nPython, Django, SQL, MySQL, Git\nFORMATION\n2024 : Licence professionnelle en informatique de gestion",
+      "lisible": true,
+      "nom": "Yao Kouadio Emmanuel",
+      "email": "yao.emmanuel@example.ci",
+      "telephone": "+225 07 09 33 51 74",
+      "nomDepuisFichier": "Yao Emmanuel",
+      "nomDepuisTexte": "Yao Kouadio Emmanuel",
+      "scores": {
+        "Comptable": {
+          "score": 0,
+          "signalements": [],
+          "detail": [
+            {
+              "critere": "Comptabilité générale",
+              "poids": 35,
+              "points": 0,
+              "points_exacts": 0.0,
+              "trouves": [],
+              "absents": [
+                "comptabilite generale",
+                "rapprochement bancaire",
+                "etats financiers",
+                "syscohada",
+                "manuel de procedure"
+              ]
+            },
+            {
+              "critere": "Fiscalité & déclarations",
+              "poids": 25,
+              "points": 0,
+              "points_exacts": 0.0,
+              "trouves": [],
+              "absents": [
+                "fiscalite",
+                "tva",
+                "declaration fiscale",
+                "cnps"
+              ]
+            },
+            {
+              "critere": "Outils",
+              "poids": 20,
+              "points": 0,
+              "points_exacts": 0.0,
+              "trouves": [],
+              "absents": [
+                "sage",
+                "excel",
+                "erp"
+              ]
+            },
+            {
+              "critere": "Expérience",
+              "poids": 20,
+              "points": 0,
+              "points_exacts": 0.0,
+              "trouves": [],
+              "absents": [
+                "comptable",
+                "chef comptable",
+                "cabinet",
+                "audit"
+              ]
+            }
+          ]
+        },
+        "Développeur web": {
+          "score": 52,
+          "signalements": [],
+          "detail": [
+            {
+              "critere": "Langages & frameworks",
+              "poids": 35,
+              "points": 18,
+              "points_exacts": 17.5,
+              "trouves": [
+                "python",
+                "django"
+              ],
+              "absents": [
+                "javascript",
+                "react"
+              ]
+            },
+            {
+              "critere": "Bases de données",
+              "poids": 20,
+              "points": 10,
+              "points_exacts": 10.0,
+              "trouves": [
+                "sql",
+                "mysql"
+              ],
+              "absents": [
+                "postgresql",
+                "mongodb"
+              ]
+            },
+            {
+              "critere": "Outils & versioning",
+              "poids": 15,
+              "points": 5,
+              "points_exacts": 5.0,
+              "trouves": [
+                "git"
+              ],
+              "absents": [
+                "docker",
+                "linux"
+              ]
+            },
+            {
+              "critere": "Expérience terrain",
+              "poids": 20,
+              "points": 13,
+              "points_exacts": 13.333333333333332,
+              "trouves": [
+                "developpeur",
+                "stage"
+              ],
+              "absents": [
+                "freelance"
+              ]
+            },
+            {
+              "critere": "Formation",
+              "poids": 10,
+              "points": 7,
+              "points_exacts": 6.666666666666666,
+              "trouves": [
+                "licence",
+                "informatique"
+              ],
+              "absents": [
+                "master"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "chemin": "tests/corpus/06_CV_Mensah_Kwame.pdf",
+      "fichier": "06_CV_Mensah_Kwame.pdf",
+      "octets": 23185,
+      "texte": "Mensah Kwame\nkwame.mensah@example.com\n+225 05 61 28 43 19\nAbidjan, Cote d'Ivoire\nPROFESSIONAL SUMMARY\nFull-stack web developer with five years of experience building\ncustomer-facing applications for retail companies.\nWORK EXPERIENCE\n2022 - 2026 Senior Developer, Gulf Coast Software\nBuilt single-page applications with React and JavaScript.\nDesigned and queried MongoDB and SQL data stores.\nManaged source control with Git and containers with Docker.\n2021 - 2022 Junior Developer, Accra Web Studio\nMaintained Linux servers and deployment scripts.\nSKILLS\nJavaScript, React, Node, Python\nSQL, MongoDB, Git, Docker, Linux\nEDUCATION\n2021 Bachelor of Science in Computer Science",
+      "lisible": true,
+      "nom": "Mensah Kwame",
+      "email": "kwame.mensah@example.com",
+      "telephone": "+225 05 61 28 43 19",
+      "nomDepuisFichier": "Mensah Kwame",
+      "nomDepuisTexte": "Mensah Kwame",
+      "scores": {
+        "Comptable": {
+          "score": 0,
+          "signalements": [],
+          "detail": [
+            {
+              "critere": "Comptabilité générale",
+              "poids": 35,
+              "points": 0,
+              "points_exacts": 0.0,
+              "trouves": [],
+              "absents": [
+                "comptabilite generale",
+                "rapprochement bancaire",
+                "etats financiers",
+                "syscohada",
+                "manuel de procedure"
+              ]
+            },
+            {
+              "critere": "Fiscalité & déclarations",
+              "poids": 25,
+              "points": 0,
+              "points_exacts": 0.0,
+              "trouves": [],
+              "absents": [
+                "fiscalite",
+                "tva",
+                "declaration fiscale",
+                "cnps"
+              ]
+            },
+            {
+              "critere": "Outils",
+              "poids": 20,
+              "points": 0,
+              "points_exacts": 0.0,
+              "trouves": [],
+              "absents": [
+                "sage",
+                "excel",
+                "erp"
+              ]
+            },
+            {
+              "critere": "Expérience",
+              "poids": 20,
+              "points": 0,
+              "points_exacts": 0.0,
+              "trouves": [],
+              "absents": [
+                "comptable",
+                "chef comptable",
+                "cabinet",
+                "audit"
+              ]
+            }
+          ]
+        },
+        "Développeur web": {
+          "score": 61,
+          "signalements": [],
+          "detail": [
+            {
+              "critere": "Langages & frameworks",
+              "poids": 35,
+              "points": 26,
+              "points_exacts": 26.25,
+              "trouves": [
+                "python",
+                "javascript",
+                "react"
+              ],
+              "absents": [
+                "django"
+              ]
+            },
+            {
+              "critere": "Bases de données",
+              "poids": 20,
+              "points": 10,
+              "points_exacts": 10.0,
+              "trouves": [
+                "sql",
+                "mongodb"
+              ],
+              "absents": [
+                "postgresql",
+                "mysql"
+              ]
+            },
+            {
+              "critere": "Outils & versioning",
+              "poids": 15,
+              "points": 15,
+              "points_exacts": 15.0,
+              "trouves": [
+                "git",
+                "docker",
+                "linux"
+              ],
+              "absents": []
+            },
+            {
+              "critere": "Expérience terrain",
+              "poids": 20,
+              "points": 7,
+              "points_exacts": 6.666666666666666,
+              "trouves": [
+                "developpeur"
+              ],
+              "absents": [
+                "freelance",
+                "stage"
+              ]
+            },
+            {
+              "critere": "Formation",
+              "poids": 10,
+              "points": 3,
+              "points_exacts": 3.333333333333333,
+              "trouves": [
+                "licence"
+              ],
+              "absents": [
+                "master",
+                "informatique"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "chemin": "tests/corpus/09_CV_Ouattara_Salimata.pdf",
+      "fichier": "09_CV_Ouattara_Salimata.pdf",
+      "octets": 23010,
+      "texte": "Ouattara Salimata\nPROFIL\nAssistante de direction, huit ans d'experience en cabinet.\nDisponible immediatement, mobilite sur le district d'Abidjan.\nEXPERIENCE\n2018 - 2026 : Assistante de direction, Cabinet Conseil Plateau\nGestion administrative, tenue de l'agenda et du courrier.\nArchivage des dossiers du personnel.\nOrganisation des deplacements et des reunions.\nCOMPETENCES\nBureautique : Word, Excel, PowerPoint, Outlook\nRedaction administrative, organisation, discretion\nFORMATION\n2018 : BTS en assistanat de direction",
+      "lisible": true,
+      "nom": "Ouattara Salimata",
+      "email": null,
+      "telephone": null,
+      "nomDepuisFichier": "Ouattara Salimata",
+      "nomDepuisTexte": "Ouattara Salimata",
+      "scores": {
+        "Comptable": {
+          "score": 12,
+          "signalements": [],
+          "detail": [
+            {
+              "critere": "Comptabilité générale",
+              "poids": 35,
+              "points": 0,
+              "points_exacts": 0.0,
+              "trouves": [],
+              "absents": [
+                "comptabilite generale",
+                "rapprochement bancaire",
+                "etats financiers",
+                "syscohada",
+                "manuel de procedure"
+              ]
+            },
+            {
+              "critere": "Fiscalité & déclarations",
+              "poids": 25,
+              "points": 0,
+              "points_exacts": 0.0,
+              "trouves": [],
+              "absents": [
+                "fiscalite",
+                "tva",
+                "declaration fiscale",
+                "cnps"
+              ]
+            },
+            {
+              "critere": "Outils",
+              "poids": 20,
+              "points": 7,
+              "points_exacts": 6.666666666666666,
+              "trouves": [
+                "excel"
+              ],
+              "absents": [
+                "sage",
+                "erp"
+              ]
+            },
+            {
+              "critere": "Expérience",
+              "poids": 20,
+              "points": 5,
+              "points_exacts": 5.0,
+              "trouves": [
+                "cabinet"
+              ],
+              "absents": [
+                "comptable",
+                "chef comptable",
+                "audit"
+              ]
+            }
+          ]
+        },
+        "Développeur web": {
+          "score": 0,
+          "signalements": [],
+          "detail": [
+            {
+              "critere": "Langages & frameworks",
+              "poids": 35,
+              "points": 0,
+              "points_exacts": 0.0,
+              "trouves": [],
+              "absents": [
+                "python",
+                "javascript",
+                "django",
+                "react"
+              ]
+            },
+            {
+              "critere": "Bases de données",
+              "poids": 20,
+              "points": 0,
+              "points_exacts": 0.0,
+              "trouves": [],
+              "absents": [
+                "sql",
+                "postgresql",
+                "mysql",
+                "mongodb"
+              ]
+            },
+            {
+              "critere": "Outils & versioning",
+              "poids": 15,
+              "points": 0,
+              "points_exacts": 0.0,
+              "trouves": [],
+              "absents": [
+                "git",
+                "docker",
+                "linux"
+              ]
+            },
+            {
+              "critere": "Expérience terrain",
+              "poids": 20,
+              "points": 0,
+              "points_exacts": 0.0,
+              "trouves": [],
+              "absents": [
+                "developpeur",
+                "freelance",
+                "stage"
+              ]
+            },
+            {
+              "critere": "Formation",
+              "poids": 10,
+              "points": 0,
+              "points_exacts": 0.0,
+              "trouves": [],
+              "absents": [
+                "licence",
+                "master",
+                "informatique"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "chemin": "tests/corpus/10_CV_Brou_Akissi.docx",
+      "fichier": "10_CV_Brou_Akissi.docx",
+      "octets": 37023,
+      "texte": "BROU AKISSI\nComptable\nakissi.brou@example.ci\n07 11 22 33 44\nEXPERIENCE\n2021 - 2026 : Comptable, Cabinet Agboville Conseil\nTenue de la comptabilite generale et du grand livre.\nEtats de rapprochement bancaire mensuels.\nDeclaration fiscale TVA et cotisations CNPS.\nCOMPETENCES\nLogiciels : Sage 100, Excel, QuickBooks\nReferentiel SYSCOHADA revise\nFORMATION\n2021 : Licence en finance et comptabilite",
+      "lisible": true,
+      "nom": "BROU AKISSI",
+      "email": "akissi.brou@example.ci",
+      "telephone": "07 11 22 33 44",
+      "nomDepuisFichier": "Brou Akissi",
+      "nomDepuisTexte": "BROU AKISSI",
+      "scores": {
+        "Comptable": {
+          "score": 69,
+          "signalements": [],
+          "detail": [
+            {
+              "critere": "Comptabilité générale",
+              "poids": 35,
+              "points": 21,
+              "points_exacts": 21.0,
+              "trouves": [
+                "comptabilite generale",
+                "rapprochement bancaire",
+                "syscohada"
+              ],
+              "absents": [
+                "etats financiers",
+                "manuel de procedure"
+              ]
+            },
+            {
+              "critere": "Fiscalité & déclarations",
+              "poids": 25,
+              "points": 25,
+              "points_exacts": 25.0,
+              "trouves": [
+                "fiscalite",
+                "tva",
+                "declaration fiscale",
+                "cnps"
+              ],
+              "absents": []
+            },
+            {
+              "critere": "Outils",
+              "poids": 20,
+              "points": 13,
+              "points_exacts": 13.333333333333332,
+              "trouves": [
+                "sage",
+                "excel"
+              ],
+              "absents": [
+                "erp"
+              ]
+            },
+            {
+              "critere": "Expérience",
+              "poids": 20,
+              "points": 10,
+              "points_exacts": 10.0,
+              "trouves": [
+                "comptable",
+                "cabinet"
+              ],
+              "absents": [
+                "chef comptable",
+                "audit"
+              ]
+            }
+          ]
+        },
+        "Développeur web": {
+          "score": 3,
+          "signalements": [],
+          "detail": [
+            {
+              "critere": "Langages & frameworks",
+              "poids": 35,
+              "points": 0,
+              "points_exacts": 0.0,
+              "trouves": [],
+              "absents": [
+                "python",
+                "javascript",
+                "django",
+                "react"
+              ]
+            },
+            {
+              "critere": "Bases de données",
+              "poids": 20,
+              "points": 0,
+              "points_exacts": 0.0,
+              "trouves": [],
+              "absents": [
+                "sql",
+                "postgresql",
+                "mysql",
+                "mongodb"
+              ]
+            },
+            {
+              "critere": "Outils & versioning",
+              "poids": 15,
+              "points": 0,
+              "points_exacts": 0.0,
+              "trouves": [],
+              "absents": [
+                "git",
+                "docker",
+                "linux"
+              ]
+            },
+            {
+              "critere": "Expérience terrain",
+              "poids": 20,
+              "points": 0,
+              "points_exacts": 0.0,
+              "trouves": [],
+              "absents": [
+                "developpeur",
+                "freelance",
+                "stage"
+              ]
+            },
+            {
+              "critere": "Formation",
+              "poids": 10,
+              "points": 3,
+              "points_exacts": 3.333333333333333,
+              "trouves": [
+                "licence"
+              ],
+              "absents": [
+                "master",
+                "informatique"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "chemin": "tests/corpus/CVBR.pdf",
+      "fichier": "CVBR.pdf",
+      "octets": 23061,
+      "texte": "CURRICULUM VITAE\nbamba.r@example.ci | +225 07 77 12 36 40\nAbidjan (Yopougon)\nEXPERIENCE PROFESSIONNELLE\n2023 - 2026 : Developpeur full-stack, Societe Anonyme Digitale\nApplications Python et Django, front-end React.\nAdministration de bases PostgreSQL.\nConteneurisation Docker, serveurs Linux.\n2021 - 2023 : Developpeur JavaScript, Cabinet Numerique Plateau\nIntegration d'interfaces et requetes SQL.\nCOMPETENCES TECHNIQUES\nPython, JavaScript, Django, React\nSQL, PostgreSQL, Git, Docker, Linux\nFORMATION\n2021 : Master en informatique",
+      "lisible": true,
+      "nom": null,
+      "email": "bamba.r@example.ci",
+      "telephone": "+225 07 77 12 36 40",
+      "nomDepuisFichier": null,
+      "nomDepuisTexte": null,
+      "scores": {
+        "Comptable": {
+          "score": 5,
+          "signalements": [],
+          "detail": [
+            {
+              "critere": "Comptabilité générale",
+              "poids": 35,
+              "points": 0,
+              "points_exacts": 0.0,
+              "trouves": [],
+              "absents": [
+                "comptabilite generale",
+                "rapprochement bancaire",
+                "etats financiers",
+                "syscohada",
+                "manuel de procedure"
+              ]
+            },
+            {
+              "critere": "Fiscalité & déclarations",
+              "poids": 25,
+              "points": 0,
+              "points_exacts": 0.0,
+              "trouves": [],
+              "absents": [
+                "fiscalite",
+                "tva",
+                "declaration fiscale",
+                "cnps"
+              ]
+            },
+            {
+              "critere": "Outils",
+              "poids": 20,
+              "points": 0,
+              "points_exacts": 0.0,
+              "trouves": [],
+              "absents": [
+                "sage",
+                "excel",
+                "erp"
+              ]
+            },
+            {
+              "critere": "Expérience",
+              "poids": 20,
+              "points": 5,
+              "points_exacts": 5.0,
+              "trouves": [
+                "cabinet"
+              ],
+              "absents": [
+                "comptable",
+                "chef comptable",
+                "audit"
+              ]
+            }
+          ]
+        },
+        "Développeur web": {
+          "score": 73,
+          "signalements": [],
+          "detail": [
+            {
+              "critere": "Langages & frameworks",
+              "poids": 35,
+              "points": 35,
+              "points_exacts": 35.0,
+              "trouves": [
+                "python",
+                "javascript",
+                "django",
+                "react"
+              ],
+              "absents": []
+            },
+            {
+              "critere": "Bases de données",
+              "poids": 20,
+              "points": 10,
+              "points_exacts": 10.0,
+              "trouves": [
+                "sql",
+                "postgresql"
+              ],
+              "absents": [
+                "mysql",
+                "mongodb"
+              ]
+            },
+            {
+              "critere": "Outils & versioning",
+              "poids": 15,
+              "points": 15,
+              "points_exacts": 15.0,
+              "trouves": [
+                "git",
+                "docker",
+                "linux"
+              ],
+              "absents": []
+            },
+            {
+              "critere": "Expérience terrain",
+              "poids": 20,
+              "points": 7,
+              "points_exacts": 6.666666666666666,
+              "trouves": [
+                "developpeur"
+              ],
+              "absents": [
+                "freelance",
+                "stage"
+              ]
+            },
+            {
+              "critere": "Formation",
+              "poids": 10,
+              "points": 7,
+              "points_exacts": 6.666666666666666,
+              "trouves": [
+                "master",
+                "informatique"
+              ],
+              "absents": [
+                "licence"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "chemin": "tests/corpus/CV_Adjoua_Kouadio_2026.pdf",
+      "fichier": "CV_Adjoua_Kouadio_2026.pdf",
+      "octets": 22955,
+      "texte": "PROFIL PROFESSIONNEL\nDeveloppeuse web, quatre ans d'experience en agence.\nadjoua.kouadio@example.ci\n+225 05 12 84 60 27\nEXPERIENCE\n2022 - 2026 : Developpeuse, Agence Web Treichville\nSites JavaScript, framework Vue et composants React.\nBases de donnees MySQL, requetes SQL complexes.\nVersionnement sous Git, hebergement Linux.\nCOMPETENCES\nJavaScript, Vue, React, SQL, MySQL, Git, Linux\nFORMATION\n2022 : Licence en informatique",
+      "lisible": true,
+      "nom": "Adjoua Kouadio",
+      "email": "adjoua.kouadio@example.ci",
+      "telephone": "+225 05 12 84 60 27",
+      "nomDepuisFichier": "Adjoua Kouadio",
+      "nomDepuisTexte": null,
+      "scores": {
+        "Comptable": {
+          "score": 0,
+          "signalements": [],
+          "detail": [
+            {
+              "critere": "Comptabilité générale",
+              "poids": 35,
+              "points": 0,
+              "points_exacts": 0.0,
+              "trouves": [],
+              "absents": [
+                "comptabilite generale",
+                "rapprochement bancaire",
+                "etats financiers",
+                "syscohada",
+                "manuel de procedure"
+              ]
+            },
+            {
+              "critere": "Fiscalité & déclarations",
+              "poids": 25,
+              "points": 0,
+              "points_exacts": 0.0,
+              "trouves": [],
+              "absents": [
+                "fiscalite",
+                "tva",
+                "declaration fiscale",
+                "cnps"
+              ]
+            },
+            {
+              "critere": "Outils",
+              "poids": 20,
+              "points": 0,
+              "points_exacts": 0.0,
+              "trouves": [],
+              "absents": [
+                "sage",
+                "excel",
+                "erp"
+              ]
+            },
+            {
+              "critere": "Expérience",
+              "poids": 20,
+              "points": 0,
+              "points_exacts": 0.0,
+              "trouves": [],
+              "absents": [
+                "comptable",
+                "chef comptable",
+                "cabinet",
+                "audit"
+              ]
+            }
+          ]
+        },
+        "Développeur web": {
+          "score": 44,
+          "signalements": [],
+          "detail": [
+            {
+              "critere": "Langages & frameworks",
+              "poids": 35,
+              "points": 18,
+              "points_exacts": 17.5,
+              "trouves": [
+                "javascript",
+                "react"
+              ],
+              "absents": [
+                "python",
+                "django"
+              ]
+            },
+            {
+              "critere": "Bases de données",
+              "poids": 20,
+              "points": 10,
+              "points_exacts": 10.0,
+              "trouves": [
+                "sql",
+                "mysql"
+              ],
+              "absents": [
+                "postgresql",
+                "mongodb"
+              ]
+            },
+            {
+              "critere": "Outils & versioning",
+              "poids": 15,
+              "points": 10,
+              "points_exacts": 10.0,
+              "trouves": [
+                "git",
+                "linux"
+              ],
+              "absents": [
+                "docker"
+              ]
+            },
+            {
+              "critere": "Expérience terrain",
+              "poids": 20,
+              "points": 0,
+              "points_exacts": 0.0,
+              "trouves": [],
+              "absents": [
+                "developpeur",
+                "freelance",
+                "stage"
+              ]
+            },
+            {
+              "critere": "Formation",
+              "poids": 10,
+              "points": 7,
+              "points_exacts": 6.666666666666666,
+              "trouves": [
+                "licence",
+                "informatique"
+              ],
+              "absents": [
+                "master"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "chemin": "web/tests/ligatures.pdf",
+      "fichier": "ligatures.pdf",
+      "octets": 804,
+      "texte": "Fiscalite normale, coeur normal.\nfiscalite, flux, different, œuvre, cœur.",
+      "lisible": false,
+      "nom": null,
+      "email": null,
+      "telephone": null,
+      "nomDepuisFichier": null,
+      "nomDepuisTexte": null,
+      "scores": null
+    }
+  ],
+  "modeleComptable": {
+    "cvDuComptable": "10_CV_Brou_Akissi.docx",
+    "scoreDuComptable": 69,
+    "meilleurHorsMetier": 12,
+    "scores": {
+      "01_CV_Konan_Bernard.pdf": 0,
+      "02_CV_Kouassi_Guy_Desire.pdf": 0,
+      "04_CV_Diabate_Fatoumata.docx": 0,
+      "05_CV_Yao_Emmanuel.docx": 0,
+      "06_CV_Mensah_Kwame.pdf": 0,
+      "09_CV_Ouattara_Salimata.pdf": 12,
+      "10_CV_Brou_Akissi.docx": 69,
+      "CVBR.pdf": 5,
+      "CV_Adjoua_Kouadio_2026.pdf": 0
+    }
+  }
+}

@@ -19,3 +19,11 @@ __pycache__/
 # versionné pour que les tests restent rejouables (PROCESS §5.1.1).
 !tests/corpus/*.pdf
 !tests/corpus/*.docx
+
+# ...et SAUF les pièces d'essai de la page de tests JavaScript, qui ne sont
+# pas des CV : des documents fabriqués de quelques centaines d'octets, chacun
+# destiné à éprouver un point précis de la lecture (ligatures, par exemple).
+# Ils sont hors de tests/corpus/ pour ne pas entrer dans les comptages du
+# script verifier_moteur.py.
+!web/tests/*.pdf
+!web/tests/*.docx

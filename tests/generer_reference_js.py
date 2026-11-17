@@ -22,6 +22,7 @@ du nom, de l'email et du téléphone) s'ajoutera à l'étape E4.
 """
 
 import argparse
+import io
 import json
 import sys
 from pathlib import Path
@@ -38,6 +39,11 @@ from core.criteres import (  # noqa: E402
 )
 from core.modeles import MODELES, charger_modele, noms_des_modeles  # noqa: E402
 from core.normalisation import normaliser, recomposer, supprimer_accents  # noqa: E402
+from core.parser import (  # noqa: E402
+    extraire_nom_depuis_fichier,
+    extraire_nom_depuis_texte,
+    parser_cv,
+)
 from core.scorer import scorer_candidat  # noqa: E402
 
 SORTIE_PAR_DEFAUT = RACINE / "web" / "tests" / "reference"
@@ -511,6 +517,90 @@ def reference_formatage():
 
 
 # ----------------------------------------------------------------------
+# 7. Lecture des fichiers (étape E4)
+# ----------------------------------------------------------------------
+#
+# Le corpus fictif de tests/corpus/, plus les pièces d'essai de web/tests/ qui
+# visent un point précis de la lecture. Pour chaque fichier on enregistre le
+# TEXTE EXTRAIT EN ENTIER : c'est la seule façon de voir qu'un écart de lecture
+# s'est glissé quelque part, plutôt que de ne comparer que le score final, qui
+# peut rester juste par chance.
+
+DOSSIER_CORPUS = RACINE / "tests" / "corpus"
+PIECES_D_ESSAI = RACINE / "web" / "tests"
+
+# Le modèle qui sert de témoin au contrôle C4 de verifier_moteur.py.
+CV_DU_COMPTABLE = "10_CV_Brou_Akissi.docx"
+
+
+def _fichiers_a_lire():
+    chemins = sorted(
+        c for c in DOSSIER_CORPUS.iterdir()
+        if c.suffix.lower() in (".pdf", ".docx")
+    )
+    chemins += sorted(
+        c for c in PIECES_D_ESSAI.iterdir()
+        if c.suffix.lower() in (".pdf", ".docx")
+    )
+    return chemins
+
+
+def reference_lecture():
+    comptable = charger_modele("Comptable")
+    developpeur = charger_modele("Développeur web")
+
+    fichiers = []
+    for chemin in _fichiers_a_lire():
+        with open(chemin, "rb") as fichier:
+            octets = fichier.read()
+
+        resultat = parser_cv(io.BytesIO(octets), chemin.name)
+        entree = {
+            "chemin": chemin.relative_to(RACINE).as_posix(),
+            "fichier": chemin.name,
+            "octets": len(octets),
+            "texte": resultat["texte"],
+            "lisible": resultat["lisible"],
+            "nom": resultat["nom"],
+            "email": resultat["email"],
+            "telephone": resultat["telephone"],
+            # Le nom tiré du seul nom de fichier est enregistré à part : c'est
+            # le repli, et il doit échouer proprement sur « CVBR.pdf ».
+            "nomDepuisFichier": extraire_nom_depuis_fichier(chemin.name),
+            "nomDepuisTexte": extraire_nom_depuis_texte(resultat["texte"]),
+        }
+        if resultat["lisible"]:
+            entree["scores"] = {
+                "Comptable": scorer_candidat(resultat["texte"], comptable),
+                "Développeur web": scorer_candidat(resultat["texte"], developpeur),
+            }
+        else:
+            entree["scores"] = None
+        fichiers.append(entree)
+
+    # Le contrôle C4 de verifier_moteur.py : le modèle « Comptable » doit
+    # séparer le seul comptable du corpus des profils hors métier. On
+    # enregistre les deux nombres qu'il compare, pour que la page de tests
+    # vérifie la même propriété sans la recalculer à sa façon.
+    scores = {
+        f["fichier"]: f["scores"]["Comptable"]["score"]
+        for f in fichiers
+        if f["scores"] and f["chemin"].startswith("tests/corpus/")
+    }
+    autres = [s for nom, s in scores.items() if nom != CV_DU_COMPTABLE]
+
+    return {
+        "fichiers": fichiers,
+        "modeleComptable": {
+            "cvDuComptable": CV_DU_COMPTABLE,
+            "scoreDuComptable": scores.get(CV_DU_COMPTABLE),
+            "meilleurHorsMetier": max(autres) if autres else None,
+            "scores": scores,
+        },
+    }
+
+
+# ----------------------------------------------------------------------
 # Écriture
 # ----------------------------------------------------------------------
 
@@ -542,6 +632,7 @@ def main():
         "modeles.json": reference_modeles(),
         "scoring.json": reference_scoring(),
         "formatage.json": reference_formatage(),
+        "lecture.json": reference_lecture(),
     }
 
     for nom, contenu in fichiers.items():

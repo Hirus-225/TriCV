@@ -112,3 +112,29 @@ export function formaterTaille(octets) {
   // Python affiche « 2 » et Math.round « 3 ».
   return `${arrondirCommePython(octets / 1024)} Ko`;
 }
+
+// ---------------------------------------------------------------------------
+// Espaces, au sens de Python
+// ---------------------------------------------------------------------------
+
+/**
+ * Les caractères que Python considère comme des espaces (`str.isspace()`, donc
+ * `\s` d'une expression régulière).
+ *
+ * Ce n'est pas tout à fait la même liste qu'en JavaScript : Python y range les
+ * séparateurs \x1c à \x1f et la nouvelle ligne \x85, JavaScript y range la
+ * marque d'ordre des octets \ufeff. Là où la distinction compte — la découpe
+ * des mots d'un PDF, qui doit suivre pdfplumber au caractère près — on emploie
+ * cette liste-ci plutôt que `\s`.
+ */
+export const ESPACE_CARACTERES =
+  "\\t\\n\\v\\f\\r\\x1c-\\x1f \\x85\\xa0\\u1680\\u2000-\\u200a\\u2028\\u2029\\u202f\\u205f\\u3000";
+
+export const ESPACE = `[${ESPACE_CARACTERES}]`;
+
+const ESPACES_AUX_BORDS = new RegExp(`^${ESPACE}+|${ESPACE}+$`, "g");
+
+/** Équivalent de `str.strip()` de Python, sur la liste d'espaces ci-dessus. */
+export function rogner(texte) {
+  return texte.replace(ESPACES_AUX_BORDS, "");
+}

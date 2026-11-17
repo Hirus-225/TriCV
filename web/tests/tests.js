@@ -22,8 +22,24 @@ import {
 } from "../js/criteres.js";
 import { MODELES, chargerModele, nomsDesModeles } from "../js/modeles.js";
 import { scorerCandidat } from "../js/scorer.js";
+import {
+  extraireNomDepuisFichier,
+  extraireNomDepuisTexte,
+  parserCv,
+} from "../js/parser.js";
 
 const DOSSIER_REFERENCE = new URL("reference/", import.meta.url);
+// Les CV du corpus sont hors de web/ : on remonte à la racine du projet,
+// que le serveur local sert. En ligne ils n'existent pas — la page de
+// tests est une page de développement.
+const RACINE_PROJET = new URL("../../", import.meta.url);
+
+/** Contenu brut d'un fichier du projet, en octets. */
+async function lireFichier(chemin) {
+  const reponse = await fetch(new URL(encodeURI(chemin), RACINE_PROJET));
+  if (!reponse.ok) throw new Error(`${chemin} : HTTP ${reponse.status}`);
+  return new Uint8Array(await reponse.arrayBuffer());
+}
 
 async function lireJson(nom) {
   const reponse = await fetch(new URL(nom, DOSSIER_REFERENCE));
@@ -302,6 +318,142 @@ function groupeOutils(reference) {
 }
 
 // ---------------------------------------------------------------------------
+// Groupe 7 — la lecture des fichiers
+// ---------------------------------------------------------------------------
+
+/**
+ * Pour chaque fichier du corpus : le TEXTE EXTRAIT EN ENTIER doit être
+ * identique à celui de Python, caractère par caractère.
+ *
+ * C'est le contrôle le plus exigeant de toute la migration, et le plus utile.
+ * Un PDF ne contient pas de texte : il contient des instructions pour
+ * dessiner des caractères à des positions. Deux bibliothèques différentes —
+ * pdfplumber d'un côté, PDF.js de l'autre — peuvent en tirer deux textes
+ * différents sans que ni l'une ni l'autre ait tort. Comparer les scores
+ * seulement ne suffirait pas : un score peut rester juste par chance alors
+ * que le texte diverge.
+ */
+async function groupeLecture(reference) {
+  const cas = [];
+
+  for (const attendu of reference.fichiers) {
+    const intitule = attendu.fichier;
+
+    let octets;
+    try {
+      octets = await lireFichier(attendu.chemin);
+    } catch (erreur) {
+      cas.push({
+        statut: "ecart",
+        intitule: `${intitule} — fichier introuvable`,
+        detail: { message: erreur.message, chemin: attendu.chemin },
+      });
+      continue;
+    }
+
+    cas.push(comparer(`${intitule} — taille lue`, octets.length, attendu.octets));
+
+    const obtenu = await parserCv(octets, attendu.fichier);
+
+    cas.push(comparer(`${intitule} — TEXTE EXTRAIT`, obtenu.texte, attendu.texte));
+    cas.push(comparer(`${intitule} — lisible`, obtenu.lisible, attendu.lisible));
+    cas.push(comparer(`${intitule} — nom`, obtenu.nom, attendu.nom));
+    cas.push(comparer(`${intitule} — email`, obtenu.email, attendu.email));
+    cas.push(comparer(`${intitule} — téléphone`, obtenu.telephone, attendu.telephone));
+
+    // Les deux moitiés de l'extraction du nom, séparément : c'est ce qui dit
+    // laquelle a échoué quand le nom diverge.
+    cas.push(
+      comparer(
+        `${intitule} — nom tiré du nom de fichier`,
+        extraireNomDepuisFichier(attendu.fichier),
+        attendu.nomDepuisFichier,
+      ),
+    );
+    cas.push(
+      comparer(
+        `${intitule} — nom tiré du texte`,
+        extraireNomDepuisTexte(attendu.texte),
+        attendu.nomDepuisTexte,
+      ),
+    );
+
+    if (attendu.scores) {
+      for (const [nomDuModele, resultat] of Object.entries(attendu.scores)) {
+        const calcule = scorerCandidat(obtenu.texte, chargerModele(nomDuModele));
+        cas.push(comparer(`${intitule} — score « ${nomDuModele} »`, calcule.score, resultat.score));
+        cas.push(
+          comparer(
+            `${intitule} — détail « ${nomDuModele} »`,
+            calcule.detail,
+            detailEnFormeJs(resultat.detail),
+          ),
+        );
+      }
+    }
+  }
+
+  return cas;
+}
+
+/**
+ * Le contrôle C4 de verifier_moteur.py, transposé : le modèle « Comptable »
+ * doit séparer le seul comptable du corpus des profils hors métier.
+ *
+ * CE QU'ON MESURE EST UN ÉCART, PAS UN SEUIL. La première version de ce
+ * contrôle, côté Python, exigeait un score absolu d'au moins 70. Elle a sauté
+ * dès l'ajout d'un cinquième groupe au critère le plus lourd : le comptable de
+ * référence est tombé à 69 sans que le modèle soit devenu moins juste. Un
+ * critère qui gagne un groupe partage ses points entre cinq au lieu de quatre,
+ * et TOUS les candidats baissent ensemble — c'est arithmétique, pas un défaut.
+ */
+function groupeModeleComptable(reference, lecture) {
+  const attendu = reference.modeleComptable;
+  const cas = [];
+
+  cas.push(
+    comparer(
+      "le comptable du corpus obtient le même score qu'en Python",
+      lecture.get(attendu.cvDuComptable),
+      attendu.scoreDuComptable,
+    ),
+  );
+
+  const autres = [...lecture.entries()]
+    .filter(([nom]) => nom !== attendu.cvDuComptable)
+    .map(([, score]) => score);
+  const meilleurHorsMetier = autres.length ? Math.max(...autres) : null;
+
+  cas.push(
+    comparer(
+      "le meilleur profil hors métier obtient le même score qu'en Python",
+      meilleurHorsMetier,
+      attendu.meilleurHorsMetier,
+    ),
+  );
+
+  const score = lecture.get(attendu.cvDuComptable);
+  cas.push({
+    statut: score !== undefined && score >= 60 ? "conforme" : "ecart",
+    intitule: "le seul comptable du corpus reste largement au-dessus du plancher",
+    detail: { obtenu: score, attendu: "au moins 60" },
+  });
+  cas.push({
+    statut:
+      score !== undefined && meilleurHorsMetier !== null && score - meilleurHorsMetier >= 40
+        ? "conforme"
+        : "ecart",
+    intitule: "il se détache d'au moins 40 points du meilleur profil hors métier",
+    detail: {
+      obtenu: `${score} contre ${meilleurHorsMetier} (écart ${score - meilleurHorsMetier})`,
+      attendu: "écart d'au moins 40",
+    },
+  });
+
+  return cas;
+}
+
+// ---------------------------------------------------------------------------
 // Affichage
 // ---------------------------------------------------------------------------
 
@@ -373,21 +525,34 @@ async function lancer() {
 
   let references;
   try {
-    const [arrondi, normalisation, criteres, modeles, scoring, formatage] = await Promise.all([
-      lireJson("arrondi.json"),
-      lireJson("normalisation.json"),
-      lireJson("criteres.json"),
-      lireJson("modeles.json"),
-      lireJson("scoring.json"),
-      lireJson("formatage.json"),
-    ]);
-    references = { arrondi, normalisation, criteres, modeles, scoring, formatage };
+    const [arrondi, normalisation, criteres, modeles, scoring, formatage, lecture] =
+      await Promise.all([
+        lireJson("arrondi.json"),
+        lireJson("normalisation.json"),
+        lireJson("criteres.json"),
+        lireJson("modeles.json"),
+        lireJson("scoring.json"),
+        lireJson("formatage.json"),
+        lireJson("lecture.json"),
+      ]);
+    references = { arrondi, normalisation, criteres, modeles, scoring, formatage, lecture };
   } catch (erreur) {
     bilan.className = "bilan echec";
     bilan.textContent =
       `Références introuvables (${erreur.message}). Lancer d'abord : ` +
       "./venv/bin/python tests/generer_reference_js.py";
     return;
+  }
+
+  // Les scores calculés ici servent au contrôle C4, juste après.
+  const casLecture = await groupeLecture(references.lecture);
+  const scoresComptable = new Map();
+  for (const attendu of references.lecture.fichiers) {
+    if (!attendu.scores || !attendu.chemin.startsWith("tests/corpus/")) continue;
+    const octets = await lireFichier(attendu.chemin).catch(() => null);
+    if (!octets) continue;
+    const { texte } = await parserCv(octets, attendu.fichier);
+    scoresComptable.set(attendu.fichier, scorerCandidat(texte, chargerModele("Comptable")).score);
   }
 
   const groupes = [
@@ -397,6 +562,11 @@ async function lancer() {
     ["4. Les cinq modèles", groupeModeles(references.modeles)],
     ["5. Scoring", groupeScoring(references.scoring)],
     ["6. Outils d'affichage", groupeOutils(references.formatage)],
+    ["7. Lecture des fichiers", casLecture],
+    [
+      "8. Le modèle « Comptable » sépare-t-il le métier ?",
+      groupeModeleComptable(references.lecture, scoresComptable),
+    ],
   ];
 
   let total = 0;
