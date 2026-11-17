@@ -116,12 +116,16 @@ fichiers de test et ne partent pas en production.
 
 ## Déploiement — version navigateur (GitHub Pages)
 
+En ligne : **https://charleszogoue.ci/TriCV/**
+
 Le site est publié par `.github/workflows/pages.yml`, qui copie `web/` tel
 quel : aucune étape de construction, rien entre ce qu'on écrit et ce qui est
 servi.
 
-1. **Une seule fois** : Settings → Pages → Build and deployment → Source :
-   **GitHub Actions**.
+1. **Une seule fois, et c'est fait** : Settings → Pages → Build and
+   deployment → Source : **GitHub Actions**. Sans ce réglage, GitHub publie la
+   racine du dépôt et sert le README à la place de l'application — le workflow
+   s'exécute alors sans commander ce qui part en ligne.
 2. Fusionner la branche de travail dans `main` et pousser. La publication se
    déclenche sur toute modification de `web/`, et peut aussi être lancée à la
    main par le bouton **Run workflow** de l'onglet Actions.

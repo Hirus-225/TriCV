@@ -178,7 +178,7 @@ Dix CV du corpus fictif, modèle « Comptable », plus une règle d'exclusion
 
 ## Le passage sur le site publié — 17/11/2026
 
-Adresse : **https://charleszogoue.ci/TriCV/web/index.html**
+Adresse : **https://charleszogoue.ci/TriCV/**
 
 Les treize points ont été repassés en ligne, sur le site réellement servi par
 GitHub Pages, et non sur une copie locale.
@@ -214,36 +214,51 @@ décrite ci-dessous, et cela cessera quand elle sera corrigée — c'est voulu.*
 
 ---
 
-## Un point de configuration à corriger
+## Le réglage de Pages — corrigé le 17/11/2026
 
-**Ce que GitHub Pages sert aujourd'hui n'est pas ce que le workflow prépare.**
+**Ce qui n'allait pas.** Le dépôt était réglé en mode *legacy* : `Source =
+branche main, dossier /`. GitHub publiait donc **la racine du dépôt entier**,
+et non le dossier `web/` empaqueté par `.github/workflows/pages.yml`. Le
+workflow s'exécutait pourtant et réussissait, mais le constructeur *legacy*
+passait après lui et c'était son résultat qui était servi.
 
-Le dépôt est réglé en mode *legacy* : `Source = branche main, dossier /`.
-C'est donc **la racine du dépôt entier** qui est publiée, et non le dossier
-`web/` empaqueté par `.github/workflows/pages.yml`. Trois conséquences :
+Le symptôme : le bouton « Visit site » de GitHub ouvrait
+`https://charleszogoue.ci/TriCV/`, qui affichait le `README.md` converti en
+page web par Jekyll — pas l'application. Celle-ci n'était atteignable qu'à
+`…/TriCV/web/index.html`.
 
-| | Aujourd'hui | Ce qui est prévu |
+**Ce qui a été fait.** Le réglage est passé à `build_type: workflow`, soit
+*Settings → Pages → Build and deployment → Source : GitHub Actions*, puis la
+publication a été relancée par le bouton **Run workflow**.
+
+**Ce qui est servi maintenant**, vérifié adresse par adresse :
+
+| Adresse | Avant | Après |
 |---|---|---|
-| Adresse de l'application | `…/TriCV/web/index.html` | `…/TriCV/` |
-| Racine du site | le README, rendu par Jekyll | l'application |
-| Ce qui est en ligne | **tout le dépôt** : `docs/`, `app.py`, `tests/corpus/`, `web/tests/` | `web/` seulement, sans la page de tests |
+| `/TriCV/` | le README, 16 172 o | **l'application**, 13 470 o |
+| `/TriCV/manuel.md` | 404 | 200 |
+| `/TriCV/web/index.html` | 200 | **404** |
+| `/TriCV/web/tests/tests.html` | 200 | **404** |
+| `/TriCV/tests/corpus/CVBR.pdf` | 200 | **404** |
+| `/TriCV/app.py` | 200 | **404** |
+| `/TriCV/docs/MIGRATION-JS.md` | 200 | **404** |
 
-Le workflow s'exécute pourtant, et il réussit — mais le constructeur *legacy*
-s'exécute après lui et c'est son résultat qui est servi. Le garde-fou qui
-refuse les adresses distantes tourne donc sans commander ce qui est réellement
-publié.
+Repassé sur la nouvelle adresse : titre « TriCV Facile », les deux polices
+chargées depuis `vendor/`, 22 requêtes **toutes locales**, l'appel extérieur
+provoqué **refusé** par la politique de sécurité, les six choix de modèle, et
+le manuel qui s'affiche (12 374 caractères).
 
-Rien de confidentiel n'est exposé : le corpus est fictif et le dépôt est
-public. Mais l'entrée du site est le README au lieu de l'outil, et la page de
-tests — une page de développement — est en ligne.
+> **Une conséquence à connaître pour les recettes suivantes.** Le corpus de
+> `tests/corpus/` n'est plus publié — c'était l'intention. Le parcours en
+> ligne du 17/11/2026 avait pu s'en servir parce que tout le dépôt était
+> publié ; ce ne sera plus possible. Les prochaines vérifications en ligne se
+> font en déposant des fichiers depuis sa propre machine, ce qui est de toute
+> façon plus proche de l'usage réel.
 
-**La correction tient en un réglage, à faire une fois :**
-
-> Settings → Pages → Build and deployment → **Source : GitHub Actions**
-
-Après quoi l'application sera à `https://charleszogoue.ci/TriCV/`, la page de
-tests ne sera plus publiée, et le garde-fou du workflow commandera bien ce qui
-part en ligne.
+> **Et une autre, pour qui vérifie.** Le navigateur garde en cache la page
+> `/TriCV/`. Après une bascule de ce genre, il faut forcer le rechargement —
+> sans quoi on continue de voir l'ancienne page et on croit que rien n'a
+> changé.
 
 ---
 
