@@ -38,26 +38,26 @@ Puis `http://localhost:8000/web/tests/tests.html`. Le bandeau du haut doit
 
 ## Les dix points du cadrage
 
-| # | Point de contrôle (§12) | Comment | Local — 17/11/2026 | Publié |
+| # | Point de contrôle (§12) | Comment | Local — 17/11/2026 | Publié — 17/11/2026 |
 |---|---|---|---|---|
-| 1 | Un mot-clé d'une lettre (`R`, `C`) ne correspond pas à l'intérieur d'un autre mot | Automatique — groupe 5 de la page de tests | ✅ | ☐ |
-| 2 | « développeur » dans le CV est trouvé par le mot-clé « developpeur », et réciproquement | Automatique — groupe 5 | ✅ | ☐ |
-| 3 | La somme des poids, quelle qu'elle soit, produit un score sur 100 cohérent | Automatique — groupe 5 | ✅ | ☐ |
-| 4 | Un CV scanné apparaît dans « À examiner manuellement », et non en dernière position du classement | Automatique — groupe 7 — **et** parcours au navigateur | ✅ | ☐ |
-| 5 | Un CV Word construit en tableaux est correctement extrait | Automatique — groupe 7, qui couvre aussi les zones de texte flottantes | ✅ | ☐ |
-| 6 | Un critère d'exclusion déclenché ne retire pas le candidat du classement | Automatique — groupe 5 — **et** parcours au navigateur | ✅ | ☐ |
-| 7 | **Aucune requête ne sort du site** *(remplace « aucune écriture disque »)* | Onglet Réseau, puis l'épreuve ci-dessous | ✅ | ☐ |
-| 8 | Le récapitulatif Excel se télécharge sans qu'aucun serveur soit sollicité | Parcours au navigateur, onglet Réseau | ✅ | ☐ |
-| 9 | « Effacer la session » ramène à l'écran initial, sans résidu | Manuel, au navigateur | ✅ | ☐ |
-| 10 | La notice de confidentialité est visible sans avoir à faire défiler la page | Manuel, au navigateur | ✅ | ☐ |
+| 1 | Un mot-clé d'une lettre (`R`, `C`) ne correspond pas à l'intérieur d'un autre mot | Automatique — groupe 5 de la page de tests | ✅ | ✅ |
+| 2 | « développeur » dans le CV est trouvé par le mot-clé « developpeur », et réciproquement | Automatique — groupe 5 | ✅ | ✅ |
+| 3 | La somme des poids, quelle qu'elle soit, produit un score sur 100 cohérent | Automatique — groupe 5 | ✅ | ✅ |
+| 4 | Un CV scanné apparaît dans « À examiner manuellement », et non en dernière position du classement | Automatique — groupe 7 — **et** parcours au navigateur | ✅ | ✅ |
+| 5 | Un CV Word construit en tableaux est correctement extrait | Automatique — groupe 7, qui couvre aussi les zones de texte flottantes | ✅ | ✅ |
+| 6 | Un critère d'exclusion déclenché ne retire pas le candidat du classement | Automatique — groupe 5 — **et** parcours au navigateur | ✅ | ✅ |
+| 7 | **Aucune requête ne sort du site** *(remplace « aucune écriture disque »)* | Onglet Réseau, puis l'épreuve ci-dessous | ✅ | ✅ |
+| 8 | Le récapitulatif Excel se télécharge sans qu'aucun serveur soit sollicité | Parcours au navigateur, onglet Réseau | ✅ | ✅ |
+| 9 | « Effacer la session » ramène à l'écran initial, sans résidu | Manuel, au navigateur | ✅ | ✅ |
+| 10 | La notice de confidentialité est visible sans avoir à faire défiler la page | Manuel, au navigateur | ✅ | ✅ |
 
 ## Les trois points propres à la version navigateur
 
-| # | Point de contrôle | Comment | Local — 17/11/2026 | Publié |
+| # | Point de contrôle | Comment | Local — 17/11/2026 | Publié — 17/11/2026 |
 |---|---|---|---|---|
-| 11 | L'application est utilisable sur un téléphone | Réduire la fenêtre à 375 px de large | ✅ | ☐ |
-| 12 | Tout est atteignable au clavier seul | Tabulation, de haut en bas | ✅ | ☐ |
-| 13 | Le manuel s'affiche et le bouton Retour fait ce qu'on attend | Manuel, au navigateur | ✅ | ☐ |
+| 11 | L'application est utilisable sur un téléphone | Réduire la fenêtre à 375 px de large | ✅ | ✅ |
+| 12 | Tout est atteignable au clavier seul | Tabulation, de haut en bas | ✅ | ✅ |
+| 13 | Le manuel s'affiche et le bouton Retour fait ce qu'on attend | Manuel, au navigateur | ✅ | ✅ |
 
 ---
 
@@ -176,24 +176,83 @@ Dix CV du corpus fictif, modèle « Comptable », plus une règle d'exclusion
 
 ---
 
-## Ce qui reste à faire sur le site publié
+## Le passage sur le site publié — 17/11/2026
 
-La colonne « Publié » se coche après la mise en ligne. Trois points méritent
-une attention particulière, parce qu'ils peuvent se comporter autrement en
-ligne qu'en local.
+Adresse : **https://charleszogoue.ci/TriCV/web/index.html**
 
-**Le point 7.** En local, le serveur est `python3 -m http.server`. En ligne,
-c'est GitHub Pages, qui ajoute ses propres en-têtes. Vérifier que la balise de
-politique de sécurité est bien celle qui s'applique, et refaire l'épreuve de
-l'appel extérieur **sur le site publié**.
+Les treize points ont été repassés en ligne, sur le site réellement servi par
+GitHub Pages, et non sur une copie locale.
 
-**Le chargement des polices et de PDF.js.** Ce sont les plus gros fichiers du
-site. Vérifier qu'ils arrivent bien, et que les caractères accentués
-s'affichent — une police absente se remplace en silence par celle du système.
+**Le point 7, celui qui comptait le plus.** En local le serveur est
+`python3 -m http.server` ; en ligne c'est GitHub Pages, qui ajoute ses propres
+en-têtes. La question était de savoir si la balise de politique de sécurité
+s'applique quand même. Elle s'applique : l'appel extérieur provoqué depuis la
+console est **refusé**, et l'onglet Réseau ne montre aucune requête sortante.
+Sur l'ensemble du parcours — chargement, tri de dix CV, export — **22 requêtes
+au chargement, toutes vers le site lui-même, et aucune vers l'extérieur**.
 
-**Un lot complet.** Quarante CV est le maximum prévu. À éprouver une fois en
-ligne, sur un vrai lot, pour mesurer le temps d'analyse sur une machine
-ordinaire — c'est le visiteur qui calcule, désormais, et non un serveur.
+**Les polices et PDF.js arrivent.** Bricolage Grotesque et Manrope sont
+chargées depuis `vendor/`, et les accents s'affichent — une police absente se
+serait remplacée en silence par celle du système, sans erreur visible. La
+console est vide.
+
+**Le tri donne le même résultat qu'en local et qu'en Python.** Dix CV, modèle
+« Comptable », **2,4 secondes** : neuf classés de 69 à 0 dans le même ordre,
+`03_CV_Traore_Aminata.pdf` à part avec sa raison, compteurs 10 / 9 / 1 / 0.
+L'export produit un classeur de 11 262 octets. Avec une règle d'exclusion, les
+deux candidats signalés gardent leur rang **et** leur score, et la jauge reste
+à 100 / 100.
+
+**Le reste.** « Effacer la session » ne laisse ni classement, ni critère, ni
+nom de fichier. Le manuel s'affiche (12 374 caractères) et le bouton Retour
+ramène au tri sans rien perdre. À 375 px, aucun élément ne déborde et le
+tableau devient une liste de cartes.
+
+**Les points automatiques tournent aussi en ligne** : la page de tests affiche
+1 007 cas, aucun écart. *C'est un effet de la configuration actuelle de Pages,
+décrite ci-dessous, et cela cessera quand elle sera corrigée — c'est voulu.*
+
+---
+
+## Un point de configuration à corriger
+
+**Ce que GitHub Pages sert aujourd'hui n'est pas ce que le workflow prépare.**
+
+Le dépôt est réglé en mode *legacy* : `Source = branche main, dossier /`.
+C'est donc **la racine du dépôt entier** qui est publiée, et non le dossier
+`web/` empaqueté par `.github/workflows/pages.yml`. Trois conséquences :
+
+| | Aujourd'hui | Ce qui est prévu |
+|---|---|---|
+| Adresse de l'application | `…/TriCV/web/index.html` | `…/TriCV/` |
+| Racine du site | le README, rendu par Jekyll | l'application |
+| Ce qui est en ligne | **tout le dépôt** : `docs/`, `app.py`, `tests/corpus/`, `web/tests/` | `web/` seulement, sans la page de tests |
+
+Le workflow s'exécute pourtant, et il réussit — mais le constructeur *legacy*
+s'exécute après lui et c'est son résultat qui est servi. Le garde-fou qui
+refuse les adresses distantes tourne donc sans commander ce qui est réellement
+publié.
+
+Rien de confidentiel n'est exposé : le corpus est fictif et le dépôt est
+public. Mais l'entrée du site est le README au lieu de l'outil, et la page de
+tests — une page de développement — est en ligne.
+
+**La correction tient en un réglage, à faire une fois :**
+
+> Settings → Pages → Build and deployment → **Source : GitHub Actions**
+
+Après quoi l'application sera à `https://charleszogoue.ci/TriCV/`, la page de
+tests ne sera plus publiée, et le garde-fou du workflow commandera bien ce qui
+part en ligne.
+
+---
+
+## Ce qui reste à faire
+
+**Un lot complet.** Quarante CV est le maximum prévu. À éprouver sur un vrai
+lot, pour mesurer le temps d'analyse sur une machine ordinaire — c'est le
+visiteur qui calcule, désormais, et non un serveur. Les dix CV du corpus
+fictif prennent 2,4 secondes en ligne.
 
 ---
 
