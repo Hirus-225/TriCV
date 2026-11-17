@@ -31,6 +31,55 @@ const ESPACES_MULTIPLES = /\s+/g;
 // l'expression ne cherche pas la bonne chose et ne lève aucune erreur.
 const MARQUES_COMBINANTES = /\p{Mn}/gu;
 
+// ---------------------------------------------------------------------------
+// Ligatures (correction du 17/11/2026)
+// ---------------------------------------------------------------------------
+//
+// LE « œ » N'EST PAS UNE LETTRE ACCENTUÉE, C'EST UNE LETTRE À PART ENTIÈRE. La
+// décomposition NFD ne le défait donc pas, et la règle qui remplace tout
+// non-alphanumérique par une espace l'EFFAÇAIT : « cœur » devenait « c ur ».
+//
+// Ce n'était pas un cas tiré par les cheveux : « œ » est l'orthographe
+// française normale, et c'est ce que la correction automatique de Word produit
+// quand on tape « coeur » ou « oeuvre ». Mesuré avant correction, sur un CV de
+// conducteur de travaux avec un critère de 50 points portant le mot-clé
+// « maitre d'oeuvre » : 75 points si le candidat écrivait « oeuvre », 50 s'il
+// écrivait « œuvre ».
+//
+// Les ligatures de « f » sont un cas plus rare, traité par précaution : un PDF
+// lu par pdfplumber — et par pdf-texte.js, qui le reproduit — ne les livre pas,
+// mais un .docx livre le caractère tel que l'auteur l'a tapé.
+//
+// La table est appliquée APRÈS le passage en minuscules : « Œ » est déjà devenu
+// « œ » à ce moment-là, et il n'y a donc qu'une forme à prévoir.
+//
+// Même table et même place que `_LIGATURES` dans core/normalisation.py.
+const LIGATURES = {
+  "œ": "oe",
+  "æ": "ae",
+  "ﬀ": "ff",
+  "ﬁ": "fi",
+  "ﬂ": "fl",
+  "ﬃ": "ffi",
+  "ﬄ": "ffl",
+  "ﬅ": "st",
+  "ﬆ": "st",
+};
+
+const MOTIF_LIGATURES = new RegExp(`[${Object.keys(LIGATURES).join("")}]`, "gu");
+
+/**
+ * Remplace « œ » par « oe », « æ » par « ae », et les ligatures de « f » par
+ * leurs lettres.
+ *
+ * À appliquer sur du texte DÉJÀ EN MINUSCULES, et des deux côtés de la
+ * comparaison — ce que garantit `normaliser`, seul appelant.
+ */
+export function defaireLigatures(texte) {
+  if (!texte) return "";
+  return texte.replace(MOTIF_LIGATURES, (caractere) => LIGATURES[caractere]);
+}
+
 /**
  * Recompose les caractères Unicode en forme NFC.
  *
@@ -73,11 +122,14 @@ export function supprimerAccents(texte) {
  *
  *   1. recomposition NFC (pour partir d'une base saine) ;
  *   2. passage en minuscules ;
- *   3. suppression des accents ;
- *   4. remplacement de toute ponctuation par une espace ;
- *   5. réduction des espaces multiples.
+ *   3. ligatures défaites : « œ » devient « oe » ;
+ *   4. suppression des accents ;
+ *   5. remplacement de toute ponctuation par une espace ;
+ *   6. réduction des espaces multiples.
  *
- * Le point 4 mérite une explication. On remplace la ponctuation par une
+ * L'étape 3 a été ajoutée le 17/11/2026, dans les deux langages à la fois.
+ *
+ * Le point 5 mérite une explication. On remplace la ponctuation par une
  * ESPACE et non par rien du tout. Sinon « C++/Python » deviendrait
  * « cpython », un mot qui n'existe dans aucun des deux termes recherchés. En
  * insérant une espace, on obtient « c python », où « python » reste trouvable
@@ -91,6 +143,7 @@ export function normaliser(texte) {
 
   let resultat = recomposer(texte);
   resultat = resultat.toLowerCase();
+  resultat = defaireLigatures(resultat);
   resultat = supprimerAccents(resultat);
   resultat = resultat.replace(PONCTUATION, " ");
   resultat = resultat.replace(ESPACES_MULTIPLES, " ");

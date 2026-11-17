@@ -99,7 +99,7 @@
     "entree": "Œuvre, cœur et €uro",
     "recompose": "Œuvre, cœur et €uro",
     "sansAccents": "Œuvre, cœur et €uro",
-    "normalise": "uvre c ur et uro"
+    "normalise": "oeuvre coeur et uro"
   },
   {
     "entree": "ÀÂÄÇÉÈÊËÎÏÔÖÙÛÜŸ",
@@ -111,7 +111,7 @@
     "entree": "Maître d'œuvre — 10 ans d'expérience",
     "recompose": "Maître d'œuvre — 10 ans d'expérience",
     "sansAccents": "Maitre d'œuvre — 10 ans d'experience",
-    "normalise": "maitre d uvre 10 ans d experience"
+    "normalise": "maitre d oeuvre 10 ans d experience"
   },
   {
     "entree": "SYSCOHADA / OHADA",
@@ -147,6 +147,6 @@
     "entree": "Ligature ﬁchier et ﬂux",
     "recompose": "Ligature ﬁchier et ﬂux",
     "sansAccents": "Ligature ﬁchier et ﬂux",
-    "normalise": "ligature chier et ux"
+    "normalise": "ligature fichier et flux"
   }
 ]

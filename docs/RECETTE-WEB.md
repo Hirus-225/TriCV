@@ -262,12 +262,23 @@ le manuel qui s'affiche (12 374 caractères).
 
 ---
 
-## Ce qui reste à faire
+## Le gros lot — mesuré le 17/11/2026
 
-**Un lot complet.** Quarante CV est le maximum prévu. À éprouver sur un vrai
-lot, pour mesurer le temps d'analyse sur une machine ordinaire — c'est le
-visiteur qui calcule, désormais, et non un serveur. Les dix CV du corpus
-fictif prennent 2,4 secondes en ligne.
+La décision D1 a supprimé le plafond de quarante fichiers ; restait à savoir
+ce que donne un lot qui le dépasse.
+
+**45 CV analysés en 3,6 secondes**, soit environ 80 ms par CV, pour 23 Mo de
+mémoire occupée par la page. L'export du récapitulatif prend 177 ms de plus.
+Un fichier de 6 Mo était du lot : il est accepté — c'est ce que la décision D1
+a changé — et ressort dans « À examiner manuellement », faute de texte à y
+lire.
+
+> **Ce que cette mesure ne dit pas.** Le lot était fait de copies d'un même
+> `.docx`, qui est le format le plus rapide à lire. Sur des PDF, compter
+> plutôt 150 ms par CV — c'est ce qu'ont donné les dix CV du corpus, mélange
+> de PDF et de Word, en 1,5 seconde en local et 2,4 secondes en ligne. Un lot
+> de quarante PDF devrait donc prendre de l'ordre de six secondes. Reste à
+> l'éprouver sur un vrai lot, sur une machine ordinaire.
 
 ---
 
@@ -280,6 +291,7 @@ ni confirmé ni infirmé. Il ne le sera que sur de vrais CV, ceux de
 l'échantillon conservé hors du dépôt. **C'est le contrôle à faire avant de
 considérer la lecture comme acquise.**
 
-**Le « œ ».** Le défaut n°8 du §4 de `docs/MIGRATION-JS.md` n'est pas corrigé :
-il changerait les scores, et demande de modifier aussi le moteur Python. C'est
-la décision D5.
+**Le « œ ».** Le défaut n°8 du §4 de `docs/MIGRATION-JS.md` **est corrigé**
+depuis le 17/11/2026, dans les deux versions à la fois (décision D5). Les
+scores du corpus sont inchangés, et un cas de non-régression vérifie que le
+même CV écrit « œuvre » ou « oeuvre » obtient le même score.

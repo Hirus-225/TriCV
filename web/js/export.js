@@ -25,11 +25,21 @@ import { bandeDuScore, SEUIL_AMBRE, SEUIL_VERT } from "./outils.js";
 // Palette — identique à celle de core/export.py
 // ----------------------------------------------------------------------
 //
-// L'indigo est celui de l'export RecrutPro, conservé ici alors que l'écran est
-// passé au marine du portfolio. C'est la décision D3 de docs/MIGRATION-JS.md,
-// encore ouverte : la changer, c'est changer cette seule constante.
+// LE MARINE A REMPLACÉ L'MARINE LE 17/11/2026 (décision D3). L'indigo
+// #4F46E5 venait de l'export RecrutPro, puis de la maquette ; ce n'a jamais
+// été la couleur de la famille d'outils. Le marine #123249 est celui du
+// portfolio, et donc celui de l'interface depuis la refonte.
+//
+// C'est le CLASSEUR qui justifie l'alignement plus que l'écran : il circule
+// par courriel, souvent sans la personne qui l'a produit. Autant qu'il se
+// reconnaisse.
+//
+// La couleur a été changée dans les DEUX versions à la fois : si elle ne
+// l'avait été que d'un côté, chaque cellule d'en-tête serait devenue un écart
+// dans la page de tests, et le seul écart qui compte — le défaut n°1 corrigé —
+// se serait noyé dans le bruit.
 
-const INDIGO = "4F46E5";
+const MARINE = "123249";
 const BLANC = "FFFFFF";
 const GRIS_CLAIR = "F8FAFC";
 const GRIS_HEADER = "E2E8F0";
@@ -164,7 +174,7 @@ function ecrireEntete(cahierFeuille, intitules, hauteur = 30) {
   cahierFeuille.hauteur(ligne, hauteur);
   for (let colonne = 1; colonne <= intitules.length; colonne++) {
     const cellule = cahierFeuille.cellule(ligne, colonne);
-    styler(cellule, { gras: true, couleur: BLANC, fond: INDIGO, alignement: "center" });
+    styler(cellule, { gras: true, couleur: BLANC, fond: MARINE, alignement: "center" });
     filet(cellule);
   }
   return ligne;
@@ -224,7 +234,7 @@ function feuilleResume(classeur, classes, illisibles, criteres, nomDuModele, jou
   c.ajouter(["TriCV — Récapitulatif de tri"]);
   c.hauteur(1, 50);
   feuille.mergeCells("A1:B1");
-  styler(c.cellule(1, 1), { gras: true, couleur: BLANC, fond: INDIGO, alignement: "center", taille: 16 });
+  styler(c.cellule(1, 1), { gras: true, couleur: BLANC, fond: MARINE, alignement: "center", taille: 16 });
 
   c.ajouter([`Généré le ${enFrancais(jour)}`]);
   feuille.mergeCells("A2:B2");

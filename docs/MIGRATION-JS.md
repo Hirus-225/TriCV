@@ -147,7 +147,8 @@ Indicateurs dérivés : `total_des_poids` (critères requis seulement) et
 - un volet dépliable par candidat : par critère, `points / poids`, une barre,
   la liste des **TROUVÉS** et des **ABSENTS** (termes principaux, tels que
   saisis), puis les signalements d'exclusion ;
-- export `.xlsx` en trois feuilles — **Résumé** (en-tête indigo, 6 lignes
+- export `.xlsx` en trois feuilles — **Résumé** (en-tête coloré — indigo à
+  l'époque de cet inventaire, marine depuis la décision D3 —, 6 lignes
   d'information, avertissement, bloc confidentialité), **Classement** (une
   colonne de points par critère requis, mots-clés trouvés et absents, bandes
   de couleur, lignes alternées, puis le bloc « À examiner manuellement »),
@@ -250,10 +251,10 @@ que les réécrire.
 |---|---|---|
 | `L'application est hébergée sur Streamlit Community Cloud, dont les serveurs sont situés aux États-Unis : les fichiers y transitent le temps de l'analyse.` | Faux : il n'y a plus de serveur d'application, et aucun fichier ne transite | `L'application est un site statique : votre navigateur télécharge la page, puis travaille seul. Les CV que vous déposez ne sont envoyés à aucun serveur, ni pendant l'analyse, ni après.` |
 | `Vos données disparaissent à la fin de votre session` | Vrai mais incomplet : elles n'ont jamais quitté l'appareil | `Vos données ne quittent pas votre appareil. Elles disparaissent quand vous fermez l'onglet, ou immédiatement si vous cliquez sur « Effacer la session ».` |
-| `Le maximum est de 40 par session, pour que l'application reste disponible pour les autres utilisateurs.` | Faux : il n'y a plus de mémoire partagée entre utilisateurs | voir la décision D1 ci-dessous |
+| `Le maximum est de 40 par session, pour que l'application reste disponible pour les autres utilisateurs.` | Faux : il n'y a plus de mémoire partagée entre utilisateurs | **supprimé** (décision D1) : le plafond ne bloque plus, un avertissement le remplace |
 | `Le fichier `docs/MANUEL-PROCEDURE.md` doit être livré avec l'application.` | Le chemin change (`web/manuel.md`) | adapter le chemin |
 
-**Décision D1 à trancher — les plafonds.** Les limites « 40 fichiers » et
+**Décision D1, tranchée — les plafonds.** Les limites « 40 fichiers » et
 « 5 Mo par fichier » venaient du gigaoctet de RAM partagé de Streamlit. Sur un
 site statique, la limite est celle de l'ordinateur du visiteur, et elle est
 bien plus haute. Trois options :
@@ -262,9 +263,9 @@ bien plus haute. Trois options :
   justification ; on bride l'outil sans raison technique ;
 - **(b) les relever** (par exemple 100 fichiers / 15 Mo) : plus honnête, mais
   il faut avoir essayé un gros lot avant de l'annoncer ;
-- **(c) les transformer en avertissement, sans blocage** : « au-delà de 40 CV,
-  l'analyse peut prendre plus d'une minute ». *Recommandé* — c'est la vérité,
-  et plus rien ne justifie un refus.
+- **(c) les transformer en avertissement, sans blocage** — **c'est l'option
+  retenue.** Voir la table des décisions en fin de document pour la mesure qui
+  la fonde.
 
 **Décision D2 — l'avertissement « Ne fermez pas cet onglet »** reste vrai, et
 même davantage : fermer l'onglet interrompt le calcul lui-même.
@@ -302,7 +303,7 @@ la traduction ligne pour ligne de `_collecter_paragraphes`.
 
 **Pourquoi pas SheetJS pour l'export.** SheetJS Community Edition **n'écrit
 pas les styles de cellule** (c'est réservé à sa version payante). Or l'export
-de TriCV est entièrement mis en forme : en-têtes indigo, bandes de couleur sur
+de TriCV est entièrement mis en forme : en-têtes colorés, bandes de couleur sur
 les scores, lignes alternées, cellules fusionnées, hauteurs de ligne, filets.
 Avec SheetJS on obtiendrait trois feuilles de données brutes — pas le même
 livrable. ExcelJS écrit tout cela (`fill`, `font`, `border`, `alignment`,
@@ -608,7 +609,7 @@ ensuite, sauf celles que la refonte de l'interface rendait inévitables.
 | 5 | Le message d'un format non pris en charge est trompeur | **corrigé** à l'étape E5 — un `.doc` reçoit la marche à suivre | `web/js/vue-depot.js` |
 | 6 | Le classeur Excel est reconstruit à chaque interaction | **corrigé** à l'étape E6 — il est construit au clic | `web/js/vue-classement.js` |
 | 7 | Un texte extrait mais illisible passe pour du contenu valable | **non corrigé**, assumé — la piste demanderait une mesure qu'on n'a pas | — |
-| 8 | Le « œ » est détruit par la normalisation | **non corrigé** — en attente de la décision D5, voir ci-dessous | — |
+| 8 | Le « œ » est détruit par la normalisation | **corrigé** le 17/11/2026, dans les **deux** versions (décision D5) | `core/normalisation.py`, `web/js/normalisation.js` |
 | 9 | Petites choses | deux fichiers de même nom sont maintenant **signalés** ; l'étape d'analyse ne clignote plus ; le reste est sans objet | `web/js/vue-depot.js` |
 
 **Le seul écart volontaire avec Python est le défaut n°1**, et il est inscrit
@@ -619,13 +620,12 @@ se contente pas d'excuser la différence, il vérifie que la version JavaScript
 changera et ces cas redeviendront de simples conformités : c'est à cela qu'on
 verra que la correction a été reportée côté Python.
 
-**Pourquoi le défaut n°8 attend.** Les autres corrections ne touchent que
-l'affichage ou le fichier exporté : le CLASSEMENT reste identique des deux
-côtés. Corriger le « œ » changerait les SCORES — un même candidat n'aurait pas
-le même score dans l'application Streamlit encore en ligne et dans la version
-JavaScript. Les deux versions doivent donc être corrigées ensemble, et cela
-suppose de modifier `core/normalisation.py`, ce qui sort du « travail dans
-`web/` ». C'est l'objet de la décision D5.
+**Le défaut n°8 a demandé de toucher au moteur Python**, et c'est pour cela
+qu'il a attendu la décision D5. Les autres corrections ne touchent que
+l'affichage ou le fichier exporté : le CLASSEMENT restait identique des deux
+côtés. Celle-ci change les SCORES — ne la faire que dans la version JavaScript
+aurait donné à un même candidat deux scores différents selon l'application
+ouverte. Les deux versions ont donc été corrigées ensemble.
 
 ---
 
@@ -658,10 +658,9 @@ disparaît de l'interface. Il **reste** dans l'export Excel, où il est la
 couleur d'en-tête héritée de RecrutPro (`core/export.py`), sauf décision
 contraire.
 
-> **Décision D3 à trancher :** aligner aussi l'export Excel sur le marine
-> `#123249` (famille cohérente jusque dans le livrable), ou garder l'indigo
-> (continuité avec les classeurs déjà produits). Je recommande l'alignement,
-> le classeur étant ce qui circule le plus.
+> **Décision D3, tranchée :** l'export Excel est passé au marine `#123249`,
+> dans les deux versions à la fois. Le classeur est ce qui circule le plus ;
+> autant qu'il se reconnaisse. L'indigo ne subsiste nulle part.
 
 **Polices** : `Bricolage Grotesque` pour les titres, `Manrope` pour le texte,
 en woff2 local — jamais Google Fonts. Les chiffres en `tabular-nums`, ce qui
@@ -904,12 +903,50 @@ comme `data_entree/` chez Rapprochement.
 
 ---
 
-## Ce qui attend votre arbitrage
+## Les cinq décisions, tranchées le 17/11/2026
 
-| | Décision | Ma recommandation |
-|---|---|---|
-| **D1** | les plafonds (40 fichiers, 5 Mo) : garder, relever, ou transformer en simple avertissement | **avertissement sans blocage** — plus rien ne justifie un refus, et le texte actuel donne une raison devenue fausse |
-| **D2** | la notice de confidentialité réécrite (§1.5) | adopter les deux formulations proposées |
-| **D3** | l'export Excel : marine `#123249` ou indigo `#4F46E5` | **marine**, pour que le classeur qui circule porte la même identité que le reste |
-| **D4** | corriger les défauts 1 à 5 en E7, ou les laisser | **corriger en E7**, après validation du socle |
-| **D5** | le « œ » (défaut 8) : corriger, et des deux côtés ? | **oui, des deux côtés** — l'écart mesuré est de 25 points sur un cas ordinaire, et « œ » est ce que Word écrit tout seul |
+| | Décision | Tranchée | Ce qui a été fait |
+|---|---|---|---|
+| **D1** | les plafonds (40 fichiers, 5 Mo) | **avertissement, sans blocage** | Le plafond de taille disparaît ; celui du nombre devient un message au-delà de 40 CV, et le bouton reste actif. `web/js/vue-depot.js` |
+| **D2** | la notice de confidentialité réécrite | **adoptée** | Appliquée dès l'étape E5, dans `web/index.html` et `web/manuel.md` |
+| **D3** | l'export Excel : marine ou indigo | **marine `#123249`** | Changé **des deux côtés**, `core/export.py` et `web/js/export.js` |
+| **D4** | corriger les défauts 1 à 5 | **corrigés** | Étapes E5 et E7 ; voir le tableau du §4 |
+| **D5** | le « œ » (défaut 8) | **corrigé des deux côtés** | `core/normalisation.py` et `web/js/normalisation.js` |
+
+### D1 — pourquoi l'avertissement plutôt que le refus
+
+Les deux chiffres venaient du gigaoctet de mémoire **partagé** de Streamlit :
+un utilisateur qui déposait un gros lot pouvait faire redémarrer
+l'application pour tout le monde. C'est ce que disait le message de refus —
+« pour que l'application reste disponible pour les autres utilisateurs ».
+
+Il n'y a plus d'autres utilisateurs. Chacun fait tourner l'outil sur son
+propre appareil, et refuser un CV de 6 Mo revient à écarter un candidat pour
+une raison qui n'existe plus. **Mesuré après correction : 45 CV analysés en
+3,6 secondes, soit 80 ms par CV, pour 23 Mo de mémoire.** Le plafond de taille
+disparaît donc, et celui du nombre devient un avertissement : on dit ce qui va
+se passer, on ne décide pas à la place de l'utilisateur.
+
+Ce qui reste refusé : les formats que l'outil ne sait pas lire. Ce n'est pas
+un plafond, c'est une impossibilité — et le message dit quoi faire.
+
+### D3 — pourquoi changer la couleur des DEUX côtés
+
+Le changer d'un seul côté aurait fait de **chaque cellule d'en-tête** un écart
+dans la page de tests. Le seul écart qui compte — le défaut n°1 corrigé — s'y
+serait noyé, et une page qui affiche des centaines d'écarts « normaux » ne se
+lit plus. Les deux versions produisent donc le même fichier.
+
+### D5 — pourquoi celle-là demandait les deux côtés aussi
+
+Les autres corrections ne touchaient que l'affichage ou le fichier exporté :
+le classement restait identique des deux côtés. Celle-ci change les **scores**.
+Ne la faire que dans la version JavaScript aurait donné à un même candidat
+deux scores différents selon l'application ouverte — exactement ce qu'une
+migration vérifiée doit éviter.
+
+Vérifié après correction : les scores du corpus sont **inchangés** (il ne
+contient aucun « œ »), le moteur Python passe toujours ses 101 vérifications,
+et un cas de non-régression a été ajouté — le même CV écrit « œuvre » ou
+« oeuvre » obtient désormais le même score.
+

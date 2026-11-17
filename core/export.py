@@ -28,10 +28,23 @@ from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
 from openpyxl.utils import get_column_letter
 
 # ----------------------------------------------------------------------
-# Palette — identique à celle de l'export RecrutPro
+# Palette
 # ----------------------------------------------------------------------
+#
+# LE MARINE A REMPLACÉ L'MARINE LE 17/11/2026 (décision D3 de
+# docs/MIGRATION-JS.md). L'indigo #4F46E5 venait de l'export RecrutPro, puis
+# de la maquette ; ce n'a jamais été la couleur de la famille d'outils. Le
+# marine #123249 est celui du portfolio charleszogoue.ci, et donc celui de
+# l'interface depuis la refonte.
+#
+# C'est le CLASSEUR qui justifie l'alignement plus que l'écran : il circule
+# par courriel, souvent sans la personne qui l'a produit, et c'est lui qu'on
+# retrouve des mois plus tard dans un dossier. Autant qu'il se reconnaisse.
+#
+# La couleur est changée DANS LES DEUX VERSIONS à la fois — ici et dans
+# web/js/export.js — pour qu'un même lot donne le même fichier des deux côtés.
 
-INDIGO = "4F46E5"
+MARINE = "123249"
 BLANC = "FFFFFF"
 GRIS_CLAIR = "F8FAFC"
 GRIS_HEADER = "E2E8F0"
@@ -103,7 +116,7 @@ def _ecrire_entete(feuille, intitules, hauteur=30):
     feuille.row_dimensions[ligne].height = hauteur
     for colonne in range(1, len(intitules) + 1):
         cellule = feuille.cell(ligne, colonne)
-        _styler(cellule, gras=True, couleur=BLANC, fond=INDIGO, alignement="center")
+        _styler(cellule, gras=True, couleur=BLANC, fond=MARINE, alignement="center")
         _border(cellule)
     return ligne
 
@@ -164,7 +177,7 @@ def _feuille_resume(classeur, classes, illisibles, criteres, nom_du_modele, jour
     feuille.row_dimensions[1].height = 50
     feuille.merge_cells("A1:B1")
     _styler(
-        feuille["A1"], gras=True, couleur=BLANC, fond=INDIGO,
+        feuille["A1"], gras=True, couleur=BLANC, fond=MARINE,
         alignement="center", taille=16,
     )
     feuille["A1"] = "TriCV — Récapitulatif de tri"

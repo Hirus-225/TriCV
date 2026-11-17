@@ -21,8 +21,9 @@ savez utiliser TriCV.
 TriCV **met un lot de CV dans l'ordre** selon des critères que vous
 choisissez, et vous montre pourquoi chaque candidat se trouve à sa place.
 
-Il traite jusqu'à 40 CV à la fois, au format PDF ou Word, de 5 Mo maximum
-chacun.
+Il lit les CV au format PDF ou Word (`.docx`). Il n'y a pas de nombre maximum :
+au-delà d'une quarantaine de CV, l'analyse prend simplement un peu plus de
+temps, puisque c'est votre appareil qui calcule.
 
 ### Ce qu'il ne fait pas
 

@@ -1180,6 +1180,126 @@
     }
   },
   {
+    "intitule": "ligature œ — le CV écrit « œuvre »",
+    "texte": "Maître d'œuvre sur dix chantiers. Suivi des vœux de mutation. Cœur de métier : la coordination.",
+    "criteres": [
+      {
+        "nom": "Chantier",
+        "poids": 50,
+        "type": "requis",
+        "groupes": [
+          [
+            "maitre d'oeuvre"
+          ],
+          [
+            "chantiers"
+          ]
+        ]
+      },
+      {
+        "nom": "Divers",
+        "poids": 50,
+        "type": "requis",
+        "groupes": [
+          [
+            "coordination"
+          ],
+          [
+            "mutation"
+          ]
+        ]
+      }
+    ],
+    "resultat": {
+      "score": 100,
+      "signalements": [],
+      "detail": [
+        {
+          "critere": "Chantier",
+          "poids": 50,
+          "points": 50,
+          "points_exacts": 50.0,
+          "trouves": [
+            "maitre d'oeuvre",
+            "chantiers"
+          ],
+          "absents": []
+        },
+        {
+          "critere": "Divers",
+          "poids": 50,
+          "points": 50,
+          "points_exacts": 50.0,
+          "trouves": [
+            "coordination",
+            "mutation"
+          ],
+          "absents": []
+        }
+      ]
+    }
+  },
+  {
+    "intitule": "ligature œ — le même CV écrit « oeuvre »",
+    "texte": "Maître d'oeuvre sur dix chantiers. Suivi des voeux de mutation. Coeur de métier : la coordination.",
+    "criteres": [
+      {
+        "nom": "Chantier",
+        "poids": 50,
+        "type": "requis",
+        "groupes": [
+          [
+            "maitre d'oeuvre"
+          ],
+          [
+            "chantiers"
+          ]
+        ]
+      },
+      {
+        "nom": "Divers",
+        "poids": 50,
+        "type": "requis",
+        "groupes": [
+          [
+            "coordination"
+          ],
+          [
+            "mutation"
+          ]
+        ]
+      }
+    ],
+    "resultat": {
+      "score": 100,
+      "signalements": [],
+      "detail": [
+        {
+          "critere": "Chantier",
+          "poids": 50,
+          "points": 50,
+          "points_exacts": 50.0,
+          "trouves": [
+            "maitre d'oeuvre",
+            "chantiers"
+          ],
+          "absents": []
+        },
+        {
+          "critere": "Divers",
+          "poids": 50,
+          "points": 50,
+          "points_exacts": 50.0,
+          "trouves": [
+            "coordination",
+            "mutation"
+          ],
+          "absents": []
+        }
+      ]
+    }
+  },
+  {
     "intitule": "modèle Comptable sur un profil de comptable",
     "texte": "Chef comptable. Comptabilite generale et analytique, ecritures comptables. Rapprochement bancaire mensuel. Etats financiers et bilan. SYSCOHADA. Procedures comptables. Fiscalite, TVA, declarations fiscales, CNPS. Sage 100 et Excel. Cabinet d'expertise, controle interne.",
     "criteres": [

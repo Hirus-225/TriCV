@@ -8,13 +8,26 @@ import { accorder, formaterTaille, nombreFrancais } from "./outils.js";
 import { parserCv } from "./parser.js";
 import { scorerCandidat } from "./scorer.js";
 
-// §3 du cadrage. Ces deux plafonds venaient du gigaoctet de mémoire partagé de
-// Streamlit ; sur un site statique, la limite est celle de l'appareil du
-// visiteur. Ils sont conservés en l'état pour l'instant — c'est la décision D1
-// de docs/MIGRATION-JS.md — et rassemblés ici pour qu'en changer tienne en
-// deux lignes.
-export const MAX_FICHIERS = 40;
-export const MAX_OCTETS_PAR_FICHIER = 5 * 1024 * 1024;
+// DÉCISION D1, TRANCHÉE LE 17/11/2026 : LES PLAFONDS NE BLOQUENT PLUS.
+//
+// Le §3 du cadrage fixait 40 fichiers et 5 Mo par fichier. Ces deux chiffres
+// venaient du gigaoctet de mémoire PARTAGÉ de Streamlit : un utilisateur qui
+// déposait un gros lot pouvait faire redémarrer l'application pour tout le
+// monde. C'est ce que disait le message de refus — « pour que l'application
+// reste disponible pour les autres utilisateurs ».
+//
+// Il n'y a plus d'autres utilisateurs. Chacun fait tourner l'outil sur son
+// propre appareil, avec sa propre mémoire, et refuser un CV de 6 Mo revient à
+// écarter un candidat pour une raison qui n'existe plus. Le plafond de taille
+// disparaît donc, et celui du nombre devient un simple avertissement : on dit
+// ce qui va se passer, on ne décide pas à la place de l'utilisateur.
+//
+// CE QUI RESTE REFUSÉ : les formats que l'outil ne sait pas lire. Ce n'est pas
+// un plafond, c'est une impossibilité — et le message dit quoi faire.
+//
+// Mesure qui fonde l'avertissement : dix CV prennent 1,5 seconde en local et
+// 2,4 secondes en ligne, soit environ un quart de seconde par CV.
+export const SEUIL_AVERTISSEMENT_LOT = 40;
 const FORMATS_ACCEPTES = [".pdf", ".docx"];
 
 let auChangement = () => {};
@@ -39,18 +52,15 @@ const extension = (nom) => {
 /**
  * Contrôle un fichier au moment du dépôt, et rend la raison du refus, ou null.
  *
- * DEUX CONTRÔLES QUE LA VERSION PYTHON NE FAISAIT PAS ELLE-MÊME.
+ * UN SEUL MOTIF DE REFUS : le format. `st.file_uploader` filtrait en amont, et
+ * le code Python n'avait donc jamais à traiter un .doc. Dans un navigateur,
+ * l'attribut `accept` n'est qu'une suggestion pour la fenêtre de sélection —
+ * un glisser-déposer passe outre. Sans ce contrôle, l'utilisateur qui dépose
+ * un .doc lirait « Fichier illisible ou endommagé » et croirait son document
+ * abîmé, alors qu'il suffit de l'enregistrer en .docx.
  *
- * Le format : `st.file_uploader` filtrait en amont, et le code n'avait donc
- * jamais à traiter un .doc. Dans un navigateur, l'attribut `accept` n'est
- * qu'une suggestion pour la fenêtre de sélection — un glisser-déposer passe
- * outre. Sans ce contrôle, l'utilisateur qui dépose un .doc lirait
- * « Fichier illisible ou endommagé » et croirait son document abîmé, alors
- * qu'il suffit de l'enregistrer en .docx.
- *
- * La taille : le plafond de 5 Mo était appliqué par `server.maxUploadSize`,
- * c'est-à-dire par l'hébergeur. Il n'y a plus d'hébergeur ; si l'on garde le
- * plafond, c'est ici qu'il se programme.
+ * La taille, elle, ne fait plus refuser : voir la décision D1 en tête de
+ * fichier.
  */
 function refuser(fichier) {
   const suffixe = extension(fichier.name);
@@ -59,9 +69,6 @@ function refuser(fichier) {
       `Format non pris en charge : ${suffixe || "inconnu"}. ` +
       "Enregistrez le document en .docx depuis Word, ou exportez-le en PDF."
     );
-  }
-  if (fichier.size > MAX_OCTETS_PAR_FICHIER) {
-    return `Fichier trop volumineux : ${formaterTaille(fichier.size)}. Le maximum est de 5 Mo.`;
   }
   return null;
 }
@@ -132,19 +139,22 @@ export function rafraichir() {
   const criteres = criteresPrets();
   const poidsTotal = totalDesPoids(criteres);
   const manquants = criteresIncomplets(criteres);
-  const tropDeFichiers = valides.length > MAX_FICHIERS;
+  const grosLot = valides.length > SEUIL_AVERTISSEMENT_LOT;
 
   const messages = document.getElementById("messages-depot");
   messages.replaceChildren();
 
-  if (tropDeFichiers) {
+  // Un avertissement, pas un refus : on dit ce qui va se passer, et
+  // l'utilisateur décide. Le bouton reste actif.
+  if (grosLot) {
     messages.append(
       element(
         "p",
-        "alerte alerte--erreur",
-        `${valides.length} fichiers déposés. Le maximum est de ${MAX_FICHIERS} par ` +
-          "session : au-delà, l'analyse devient longue dans votre navigateur. " +
-          `Retirez-en ${valides.length - MAX_FICHIERS} et relancez.`,
+        "alerte",
+        `${valides.length} CV déposés. Au-delà de ${SEUIL_AVERTISSEMENT_LOT}, ` +
+          "l'analyse prend plus longtemps : c'est votre appareil qui calcule, " +
+          "comptez quelques secondes pour quarante CV. Ne fermez pas l'onglet " +
+          "pendant ce temps.",
       ),
     );
   }
@@ -199,7 +209,7 @@ export function rafraichir() {
   }
 
   const bouton = document.getElementById("lancer");
-  const pret = valides.length > 0 && poidsTotal > 0 && !tropDeFichiers && !etat.analyseEnCours;
+  const pret = valides.length > 0 && poidsTotal > 0 && !etat.analyseEnCours;
   bouton.disabled = !pret;
   bouton.textContent = valides.length
     ? `Lancer l'analyse des ${valides.length} CV`

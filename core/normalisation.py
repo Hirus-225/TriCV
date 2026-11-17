@@ -22,6 +22,60 @@ _PONCTUATION = re.compile(r"[^a-z0-9\s]")
 _ESPACES_MULTIPLES = re.compile(r"\s+")
 
 
+# ----------------------------------------------------------------------
+# Ligatures (correction du 17/11/2026)
+# ----------------------------------------------------------------------
+
+# LE « œ » N'EST PAS UNE LETTRE ACCENTUÉE, C'EST UNE LETTRE À PART ENTIÈRE.
+# La décomposition NFD ne le défait donc pas, et la règle qui remplace tout
+# non-alphanumérique par une espace l'EFFAÇAIT : « cœur » devenait « c ur » et
+# « maître d'œuvre » devenait « maitre d uvre ».
+#
+# Ce n'était pas un cas tiré par les cheveux : « œ » est l'orthographe
+# française normale, et c'est ce que la correction automatique de Word produit
+# quand on tape « coeur » ou « oeuvre ». Mesuré avant correction, sur un CV de
+# conducteur de travaux avec un critère de 50 points portant le mot-clé
+# « maitre d'oeuvre » : 75 points si le candidat écrivait « oeuvre », 50 s'il
+# écrivait « œuvre ». Vingt-cinq points pour la même phrase, selon que Word
+# avait corrigé son orthographe ou non. Et rien à l'écran ne distinguait « le
+# mot est absent » de « le mot a été détruit ».
+#
+# LES LIGATURES DE « f » SONT UN CAS PLUS RARE, ET TRAITÉES PAR PRÉCAUTION.
+# Un PDF lu par pdfplumber ne les livre pas : pdfminer décompose « ﬁ » en
+# « fi » avant même que ce module ne voie le texte (vérifié sur un PDF d'essai
+# employant les glyphes /fi, /fl, /ff et /oe sans table Unicode). Un .docx,
+# lui, livre le caractère tel que l'auteur l'a tapé — d'où leur présence ici.
+#
+# La table est appliquée APRÈS le passage en minuscules : « Œ » est déjà
+# devenu « œ » à ce moment-là, et il n'y a donc qu'une forme à prévoir.
+_LIGATURES = {
+    "œ": "oe",
+    "æ": "ae",
+    "ﬀ": "ff",
+    "ﬁ": "fi",
+    "ﬂ": "fl",
+    "ﬃ": "ffi",
+    "ﬄ": "ffl",
+    "ﬅ": "st",
+    "ﬆ": "st",
+}
+
+_TABLE_LIGATURES = str.maketrans(_LIGATURES)
+
+
+def defaire_ligatures(texte):
+    """
+    Remplace « œ » par « oe », « æ » par « ae », et les ligatures de « f » par
+    leurs lettres.
+
+    À appliquer sur du texte DÉJÀ EN MINUSCULES, et des deux côtés de la
+    comparaison — ce que garantit `normaliser`, seul appelant.
+    """
+    if not texte:
+        return ""
+    return texte.translate(_TABLE_LIGATURES)
+
+
 def recomposer(texte):
     """
     Recompose les caractères Unicode en forme NFC.
@@ -69,11 +123,17 @@ def normaliser(texte):
 
     1. recomposition NFC (pour partir d'une base saine) ;
     2. passage en minuscules ;
-    3. suppression des accents ;
-    4. remplacement de toute ponctuation par une espace ;
-    5. réduction des espaces multiples.
+    3. ligatures défaites : « œ » devient « oe » ;
+    4. suppression des accents ;
+    5. remplacement de toute ponctuation par une espace ;
+    6. réduction des espaces multiples.
 
-    Le point 4 mérite une explication. On remplace la ponctuation par une
+    L'étape 3 a été ajoutée le 17/11/2026. Sans elle, « cœur » devenait
+    « c ur » : le « œ » n'est pas une lettre accentuée, la décomposition NFD
+    ne le défait pas, et la règle de l'étape 5 l'effaçait. Voir le commentaire
+    de `_LIGATURES` pour la mesure qui a motivé la correction.
+
+    Le point 5 mérite une explication. On remplace la ponctuation par une
     ESPACE et non par rien du tout. Sinon « C++/Python » deviendrait
     « cpython », un mot qui n'existe dans aucun des deux termes recherchés.
     En insérant une espace, on obtient « c python », où « python » reste
@@ -87,6 +147,7 @@ def normaliser(texte):
 
     texte = recomposer(texte)
     texte = texte.lower()
+    texte = defaire_ligatures(texte)
     texte = supprimer_accents(texte)
     texte = _PONCTUATION.sub(" ", texte)
     texte = _ESPACES_MULTIPLES.sub(" ", texte)

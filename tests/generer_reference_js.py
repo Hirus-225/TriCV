@@ -411,6 +411,38 @@ CAS_SCORING = [
             {"nom": "Intérim", "poids": 0, "type": "exclusion", "groupes": [["interim"]]},
         ],
     },
+    # LE « œ », corrigé le 17/11/2026 (décision D5). Avant correction, ce cas
+    # donnait 50 au lieu de 75 : « œuvre » se normalisait en « uvre » et le
+    # mot-clé « maitre d'oeuvre » ne le trouvait pas. Le second cas vérifie que
+    # les deux orthographes donnent maintenant le même score — c'est la
+    # propriété qui compte, et c'est elle qui se dégraderait en silence si la
+    # table des ligatures disparaissait.
+    {
+        "intitule": "ligature œ — le CV écrit « œuvre »",
+        "texte": (
+            "Maître d'œuvre sur dix chantiers. Suivi des vœux de mutation. "
+            "Cœur de métier : la coordination."
+        ),
+        "criteres": [
+            {"nom": "Chantier", "poids": 50, "type": "requis",
+             "groupes": [["maitre d'oeuvre"], ["chantiers"]]},
+            {"nom": "Divers", "poids": 50, "type": "requis",
+             "groupes": [["coordination"], ["mutation"]]},
+        ],
+    },
+    {
+        "intitule": "ligature œ — le même CV écrit « oeuvre »",
+        "texte": (
+            "Maître d'oeuvre sur dix chantiers. Suivi des voeux de mutation. "
+            "Coeur de métier : la coordination."
+        ),
+        "criteres": [
+            {"nom": "Chantier", "poids": 50, "type": "requis",
+             "groupes": [["maitre d'oeuvre"], ["chantiers"]]},
+            {"nom": "Divers", "poids": 50, "type": "requis",
+             "groupes": [["coordination"], ["mutation"]]},
+        ],
+    },
     {
         "intitule": "modèle Comptable sur un profil de comptable",
         "texte": (
