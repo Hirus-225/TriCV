@@ -1,0 +1,260 @@
+/* Design system du portfolio charleszogoue.ci, appliqué à TriCV.
+
+   Seul fichier de style du site : jetons (couleurs, polices), fondations,
+   puis composants dans l'ordre de la page (bandeau, notice, sections,
+   critères, dépôt, classement, pied, manuel), et enfin l'écran étroit.
+
+   Signature visuelle, identique à Rapprochement Facile : bandeau marine
+   quadrillé fermé par un filet ambre de 8 px, filets marine de 3 px au-dessus
+   des blocs, liens d'action soulignés d'ambre (.go), bande brume, puces à
+   coins de 8 px, AUCUNE OMBRE, pied marine.
+
+   ÉTAPE E2 : jetons, fondations, bandeau, notice, en-têtes de section, pied.
+   Les composants des critères, du dépôt et du classement arrivent à l'étape
+   E5, à la place marquée plus bas. */
+
+@import url("../vendor/fonts/polices.css");
+
+/* ── Jetons ──────────────────────────────────────────────────────────── */
+/* Une VARIABLE CSS se déclare avec deux tirets et se lit avec var(). C'est
+   l'équivalent d'une constante de module en Python : la couleur est écrite
+   une fois ici, et toute la feuille s'y réfère. Changer le marine se fait
+   donc en un seul endroit. */
+:root {
+  /* Repris tels quels du portfolio. L'indigo #4F46E5 de la maquette Streamlit
+     n'en fait pas partie : ce n'était pas la couleur de la famille. */
+  --navy: #123249;
+  --navy-deep: #0b2233;
+  --sky: #2c668f;
+  --amber: #f2a31b;
+  --amber-pale: #fbe3b3;
+  --paper: #ffffff;
+  --mist: #edf2f6;
+  --rule: #d3dde6;
+  --ink: #14222d;
+  --muted: #566776;
+  --on-navy: #d5e2ec;
+  --display: "Bricolage Grotesque", "Manrope", system-ui, sans-serif;
+  --body: "Manrope", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  /* États et fonds pâles des messages, lisibles sur blanc. */
+  --ok: #1d7a4f;
+  --alert: #b23a2e;
+  --amber-wash: #fdf3df;   /* fond d'avertissement, dérivé de l'ambre */
+  --alert-wash: #f9e7e4;   /* fond d'erreur, dérivé de --alert */
+  --ok-wash: #e7f3ec;      /* fond de confirmation, dérivé de --ok */
+
+  /* Bandes de score du classement. Les valeurs de seuil (70 et 40) sont dans
+     le JavaScript ; ici, seulement les teintes. Elles qualifient la
+     correspondance aux mots-clés, pas le candidat. */
+  --score-haut: #e7f3ec;
+  --score-haut-texte: #14603c;
+  --score-moyen: #fdf3df;
+  --score-moyen-texte: #8a5a08;
+  --score-bas: #f9e7e4;
+  --score-bas-texte: #8e2c22;
+
+  /* Thème clair imposé : le site n'a qu'un rendu, même si le système est en
+     sombre. Un outil qui affiche des couleurs de score n'a pas deux palettes. */
+  color-scheme: light;
+}
+
+/* ── Fondations ──────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--body);
+  font-size: 1.02rem;
+  line-height: 1.6;
+  /* Chiffres de largeur fixe : indispensable pour que les scores d'une
+     colonne s'alignent. */
+  font-variant-numeric: tabular-nums;
+}
+h1, h2, h3 { font-family: var(--display); margin: 0; text-wrap: balance; }
+p { margin: 0; }
+a { color: inherit; }
+button, input, textarea, select { font: inherit; color: inherit; }
+code, pre { font-family: var(--mono); font-size: .9em; }
+
+/* Focus clavier : contour ambre de 3 px, comme le portfolio. Ne jamais le
+   retirer — c'est le seul repère de qui navigue au clavier. */
+:focus-visible { outline: 3px solid var(--amber); outline-offset: 3px; border-radius: 3px; }
+
+[hidden] { display: none !important; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; animation: none !important; }
+  html { scroll-behavior: auto; }
+}
+
+/* Masqué à l'écran, mais lu par les lecteurs d'écran et utilisable au clavier. */
+.visuellement-masque {
+  position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+/* Colonne centrée, commune à toutes les sections. */
+.cadre { max-width: 1160px; margin: 0 auto; padding: 0 28px; }
+
+/* ── Bandeau marine ──────────────────────────────────────────────────── */
+.bandeau {
+  background-color: var(--navy);
+  /* Quadrillage : deux dégradés d'un pixel, répétés en lignes et en colonnes. */
+  background-image:
+    linear-gradient(rgba(255, 255, 255, .045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, .045) 1px, transparent 1px);
+  background-size: 100% 44px, 116px 100%;
+  color: var(--paper);
+  border-bottom: 8px solid var(--amber);
+}
+.barre-haut {
+  display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline;
+  gap: 8px 28px; padding: 22px 0;
+}
+.marque {
+  font-family: var(--display); font-weight: 800; font-size: 1.15rem;
+  text-decoration: none;
+}
+.marque b { color: var(--amber); }
+.navigation {
+  display: flex; flex-wrap: wrap; gap: 4px 26px;
+  font-size: .94rem; font-weight: 600;
+}
+.navigation a {
+  color: var(--on-navy); text-decoration: none; padding: 4px 0;
+  border-bottom: 2px solid transparent;
+}
+.navigation a:hover,
+.navigation a[aria-current="page"] { color: var(--paper); border-bottom-color: var(--amber); }
+
+.surtitre {
+  font-family: var(--display); font-weight: 700; font-size: .82rem;
+  letter-spacing: .14em; text-transform: uppercase; color: var(--amber);
+  margin-top: 18px;
+}
+.bandeau h1 {
+  /* clamp(min, souhaité, max) : le titre grandit avec la largeur de l'écran,
+     sans jamais sortir de ces bornes. Évite une règle par taille d'écran. */
+  font-size: clamp(2.9rem, 8vw, 5.6rem); font-weight: 800; line-height: .88;
+  letter-spacing: -0.045em; margin: 10px 0 0 -0.04em;
+}
+.accroche {
+  display: grid; grid-template-columns: 1.35fr 1fr; gap: 24px 56px; align-items: end;
+  padding: 28px 0 44px;
+}
+.accroche__phrase {
+  font-family: var(--display); font-size: clamp(1.35rem, 2.8vw, 1.9rem); font-weight: 700;
+  line-height: 1.15; letter-spacing: -0.02em; color: var(--amber);
+  margin-bottom: 12px; max-width: 24ch;
+}
+.accroche__texte { max-width: 54ch; color: var(--on-navy); }
+
+/* La notice courte de confidentialité, dans le bandeau. */
+.prive {
+  border-left: 3px solid var(--amber); padding-left: 16px; color: var(--on-navy);
+  font-size: .95rem; max-width: 42ch;
+}
+.prive strong { display: block; color: var(--paper); font-weight: 800; }
+
+/* Page du manuel : bandeau réduit (titre plus petit, ni surtitre ni accroche). */
+body[data-page="manuel"] .bandeau h1 { font-size: clamp(2.4rem, 6vw, 4rem); margin-bottom: 44px; }
+
+/* ── Notice intégrale, dépliable ─────────────────────────────────────── */
+.notice { padding-top: 32px; }
+.notice details {
+  border: 1px solid var(--rule); border-top: 3px solid var(--navy);
+  background: var(--mist);
+}
+.notice summary {
+  font-family: var(--display); font-weight: 800; padding: 14px 20px; cursor: pointer;
+}
+.notice summary:hover { color: var(--navy); }
+.notice__corps {
+  display: grid; gap: 12px; padding: 4px 20px 20px; max-width: 76ch;
+  color: var(--muted);
+}
+
+/* ── Sections, liens d'action, puces, messages ───────────────────────── */
+.section { padding-top: 72px; }
+.section__tete {
+  display: flex; flex-wrap: wrap; justify-content: space-between; align-items: end;
+  gap: 12px 40px; margin-bottom: 36px;
+}
+.section__tete h2 {
+  font-size: clamp(2rem, 5vw, 3.1rem); font-weight: 800; line-height: 1;
+  letter-spacing: -0.03em;
+}
+.section__tete p { max-width: 52ch; color: var(--muted); }
+
+/* Lien d'action souligné d'ambre (bouton ou lien, même allure). */
+.go {
+  display: inline-block; font-weight: 800; color: var(--navy); background: none;
+  border: 0; padding: 0 0 2px; border-bottom: 3px solid var(--amber);
+  cursor: pointer; text-decoration: none;
+}
+.go:hover { background: var(--amber-pale); }
+
+/* Puce à coins de 8 px : modèle de poste, état d'un fichier, signalement. */
+.puce {
+  display: inline-block; background: var(--paper); border: 1px solid var(--rule);
+  border-radius: 8px; padding: 3px 10px; font-weight: 700; font-size: .86rem;
+  line-height: 1.4; white-space: nowrap;
+}
+.puce--marine { background: var(--navy); border-color: var(--navy); color: var(--paper); }
+.puce--ambre { background: var(--amber-wash); border-color: var(--amber); color: #8a5a08; }
+.puce--ciel { background: var(--mist); border-color: var(--sky); color: var(--sky); }
+
+/* Messages. L'avertissement méthodologique du classement en est un, et il
+   n'est jamais repliable ni masquable (garde-fou n°3 du §4 du cadrage). */
+.alerte {
+  border-left: 4px solid var(--sky); background: var(--mist);
+  padding: 14px 18px; margin: 0;
+}
+.alerte--avertissement { border-left-color: var(--amber); background: var(--amber-wash); }
+.alerte--erreur { border-left-color: var(--alert); background: var(--alert-wash); }
+.alerte--succes { border-left-color: var(--ok); background: var(--ok-wash); }
+
+/* Texte d'attente des zones encore vides (étape E2 uniquement). */
+.vide {
+  border: 1px dashed var(--rule); color: var(--muted); padding: 22px;
+  text-align: center; font-size: .95rem;
+}
+
+/* ====================================================================
+   ÉTAPE E5 — critères, dépôt, classement.
+   ÉTAPE E8 — manuel.
+   Les composants viendront ici, dans l'ordre de la page.
+   ==================================================================== */
+
+/* ── Pied marine ─────────────────────────────────────────────────────── */
+.pied {
+  margin-top: 96px; background: var(--navy-deep); color: var(--on-navy);
+  border-top: 8px solid var(--amber); padding: 44px 0 52px;
+}
+.pied__marque {
+  font-family: var(--display); font-weight: 800; font-size: 1.15rem; color: var(--paper);
+}
+.pied__marque b { color: var(--amber); }
+.pied__texte { max-width: 62ch; margin-top: 12px; font-size: .95rem; }
+.pied__liens { margin-top: 18px; font-weight: 700; }
+.pied__liens a { color: var(--amber); text-decoration: none; border-bottom: 2px solid transparent; }
+.pied__liens a:hover { border-bottom-color: var(--amber); }
+
+/* ── Écran étroit ────────────────────────────────────────────────────── */
+/* Une REQUÊTE DE MÉDIA applique des règles sous une certaine largeur. C'est
+   ce que Streamlit ne faisait pas : l'application actuelle est inutilisable
+   au téléphone. */
+@media (max-width: 700px) {
+  .cadre { padding: 0 16px; }
+  .barre-haut { padding: 16px 0; gap: 10px 18px; }
+  .navigation { gap: 2px 18px; font-size: .9rem; }
+  .accroche { grid-template-columns: 1fr; gap: 20px; padding: 22px 0 34px; }
+  .prive { max-width: none; }
+  .section { padding-top: 48px; }
+  .section__tete { margin-bottom: 24px; }
+  .pied { margin-top: 64px; padding: 32px 0 40px; }
+}

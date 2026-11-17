@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <!-- Politique de sécurité : la page ne charge et ne contacte QUE son propre site
+       ('self') — aucun script, style, police, image ni envoi de données vers un
+       autre domaine, même en cas de bug ou de bibliothèque compromise. Pas de
+       script ni de style écrits dans la page, pas d'eval. GitHub Pages ne permet
+       pas de régler les en-têtes HTTP : d'où cette balise, placée en premier.
+
+       C'est elle qui rend la promesse vérifiable : même si quelqu'un ajoutait par
+       erreur un appel à un service tiers, le navigateur le refuserait. La preuve
+       ne tient donc pas à la relecture du code, mais à une règle que le
+       navigateur applique. -->
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <meta name="referrer" content="no-referrer">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TriCV Facile</title>
+  <meta name="description" content="Classe un lot de CV selon vos critères pondérés, entièrement dans le navigateur.">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/style.css">
+  <!-- type="module" : les fichiers de js/ utilisent `import`. À servir par HTTP
+       (python3 -m http.server), pas en ouvrant ce fichier par double-clic. -->
+  <script type="module" src="js/main.js"></script>
+</head>
+<body data-page="tri">
+
+  <!-- ================================================================
+       Bandeau marine : marque, navigation, titre, accroche, et la notice
+       courte de confidentialité.
+
+       La notice est DANS le bandeau, et non plus bas dans la page : le
+       point 10 de la recette demande qu'elle soit visible sans faire
+       défiler. Ici c'est la structure de la page qui le garantit, pas un
+       réglage de hauteur.
+       ================================================================ -->
+  <header class="bandeau">
+    <div class="cadre">
+      <div class="barre-haut">
+        <a class="marque" href="#tri">TriCV <b>Facile</b></a>
+        <nav class="navigation" aria-label="Navigation">
+          <a href="#tri" data-page="tri" aria-current="page">Tri des CV</a>
+          <a href="#manuel" data-page="manuel">Manuel de procédure</a>
+          <a href="https://charleszogoue.ci" rel="noopener">charleszogoue.ci</a>
+        </nav>
+      </div>
+
+      <p class="surtitre">Outil interne RH</p>
+      <h1 id="titre-tri">Tri de CV</h1>
+      <h1 id="titre-manuel" hidden>Manuel de procédure</h1>
+
+      <div class="accroche" id="accroche">
+        <div>
+          <p class="accroche__phrase">Vos critères d'un côté, le lot de CV de l'autre.</p>
+          <p class="accroche__texte">
+            Déposez un lot de CV, définissez vos critères pondérés, obtenez un
+            classement expliqué que vous pouvez exporter en Excel.
+          </p>
+        </div>
+        <p class="prive">
+          <strong>Aucune donnée conservée.</strong>
+          Les CV sont analysés en mémoire vive pendant la session, puis effacés.
+          Aucun fichier, aucun nom et aucun score n'est enregistré sur un serveur.
+        </p>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- ============================================================
+         Page « Tri des CV »
+         ============================================================ -->
+    <div id="page-tri">
+
+      <!-- La notice intégrale, dépliable. Texte du §5 du cadrage, dont les
+           deux paragraphes réécrits pour le site statique (décision D2 de
+           docs/MIGRATION-JS.md) : il n'y a plus de serveur d'application,
+           donc plus rien qui transite. -->
+      <section class="section cadre notice">
+        <details>
+          <summary>Traitement éphémère — aucune conservation</summary>
+          <div class="notice__corps">
+            <p>
+              Les CV déposés sont analysés en mémoire vive. Ils ne sont jamais
+              enregistrés sur un disque, ni transmis à un tiers, ni utilisés pour
+              entraîner un modèle. Aucun compte, aucune base de données, aucun
+              historique.
+            </p>
+            <p>
+              Vos données ne quittent pas votre appareil. Elles disparaissent quand
+              vous fermez l'onglet, ou immédiatement si vous cliquez sur
+              « Effacer la session ».
+            </p>
+            <p>
+              L'application est un site statique : votre navigateur télécharge la
+              page, puis travaille seul. Les CV que vous déposez ne sont envoyés à
+              aucun serveur, ni pendant l'analyse, ni après.
+            </p>
+            <p>
+              Le score est une aide à la lecture, pas une décision : il classe, il
+              n'élimine pas.
+            </p>
+          </div>
+        </details>
+      </section>
+
+      <!-- Les trois sections de travail. Leur contenu est posé à l'étape E5 ;
+           seuls les titres et les repères de navigation existent ici. -->
+      <section class="section cadre" id="criteres" aria-labelledby="titre-criteres">
+        <div class="section__tete">
+          <h2 id="titre-criteres">Critères</h2>
+          <p>
+            Partez d'un modèle de poste, puis ajustez. Un critère porte un nom, des
+            mots-clés et un poids ; le signe « = » réunit des synonymes.
+          </p>
+        </div>
+        <p class="vide" data-socle>Formulaire des critères — étape E5.</p>
+      </section>
+
+      <section class="section cadre" id="cv" aria-labelledby="titre-cv">
+        <div class="section__tete">
+          <h2 id="titre-cv">CV</h2>
+          <p>
+            Déposez les CV du lot. Ils sont lus dans ce navigateur et ne sont envoyés
+            nulle part.
+          </p>
+        </div>
+        <p class="vide" data-socle>Zone de dépôt et lancement de l'analyse — étape E5.</p>
+      </section>
+
+      <section class="section cadre" id="classement" aria-labelledby="titre-classement">
+        <div class="section__tete">
+          <h2 id="titre-classement">Classement</h2>
+          <p>
+            Les candidats par score décroissant, avec le détail critère par critère,
+            et à part ceux dont le texte n'a pas pu être lu.
+          </p>
+        </div>
+        <p class="vide" data-socle>Tableau de classement et exports — étapes E5 et E6.</p>
+      </section>
+    </div>
+
+    <!-- ============================================================
+         Page « Manuel de procédure » — remplie à l'étape E8.
+         ============================================================ -->
+    <div id="page-manuel" hidden>
+      <section class="section cadre">
+        <p class="vide" data-socle>Manuel de procédure — étape E8.</p>
+      </section>
+    </div>
+  </main>
+
+  <footer class="pied">
+    <div class="cadre">
+      <p class="pied__marque">TriCV <b>Facile</b></p>
+      <p class="pied__texte">
+        Outil interne RH. Le score mesure la correspondance aux mots-clés que vous
+        avez définis. Il ne mesure ni la qualité d'un candidat ni son adéquation au
+        poste.
+      </p>
+      <p class="pied__liens">
+        <a href="https://charleszogoue.ci" rel="noopener">charleszogoue.ci</a>
+      </p>
+    </div>
+  </footer>
+
+</body>
+</html>

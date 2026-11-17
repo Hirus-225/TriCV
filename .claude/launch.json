@@ -6,6 +6,12 @@
       "runtimeExecutable": "./venv/bin/streamlit",
       "runtimeArgs": ["run", "app.py", "--server.port", "8501", "--server.headless", "true"],
       "port": 8501
+    },
+    {
+      "name": "tricv-web",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["-m", "http.server", "8000"],
+      "port": 8000
     }
   ]
 }

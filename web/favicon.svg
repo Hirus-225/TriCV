@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="TriCV">
+  <!-- Fond marine du portfolio, coins arrondis comme les puces de l'interface. -->
+  <rect width="32" height="32" rx="7" fill="#123249"/>
+  <!-- Trois barres décroissantes : un classement. Ambre pour la première,
+       comme le filet du bandeau ; les suivantes en bleu clair, plus discrètes. -->
+  <rect x="7" y="8"  width="18" height="4" rx="2" fill="#f2a31b"/>
+  <rect x="7" y="14" width="13" height="4" rx="2" fill="#d5e2ec"/>
+  <rect x="7" y="20" width="8"  height="4" rx="2" fill="#8aa0b2"/>
+</svg>

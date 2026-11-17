@@ -1,0 +1,19 @@
+/* Polices du portfolio charleszogoue.ci, servies par le site lui-même
+   (aucun appel à Google Fonts, interdit par la politique de sécurité).
+   Versions variables, sous-ensemble latin. */
+
+@font-face {
+  font-family: "Bricolage Grotesque";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 200 800;   /* police variable : axes opsz (12 à 96) et wght */
+  src: url("bricolage-grotesque-latin-opsz-normal.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Manrope";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 200 800;   /* police variable : axe wght */
+  src: url("manrope-latin-wght-normal.woff2") format("woff2");
+}
