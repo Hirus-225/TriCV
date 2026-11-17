@@ -1,0 +1,40 @@
+/* Page de tests : bilan, groupes de cas, détail des écarts.
+   Reprend les jetons de ../css/style.css — aucune couleur écrite en dur. */
+
+.intro { max-width: 76ch; color: var(--muted); margin-bottom: 12px; }
+.intro code { background: var(--mist); padding: 1px 5px; border-radius: 4px; }
+
+.bilan {
+  margin-top: 28px; padding: 14px 18px; font-weight: 700;
+  font-family: var(--display); background: var(--mist);
+  border-left: 4px solid var(--sky);
+}
+.bilan.ok { background: var(--ok-wash); color: var(--ok); border-left-color: var(--ok); }
+.bilan.echec { background: var(--alert-wash); color: var(--alert); border-left-color: var(--alert); }
+
+.groupe { margin-top: 36px; }
+.groupe h2 {
+  font-size: 1.4rem; font-weight: 800; padding-bottom: 8px;
+  border-bottom: 3px solid var(--navy);
+}
+.groupe__compte { font-family: var(--body); font-weight: 600; font-size: .9rem; color: var(--muted); }
+
+table.cas { width: 100%; border-collapse: collapse; font-size: .9rem; margin-top: 12px; }
+table.cas th, table.cas td {
+  text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--rule);
+  vertical-align: top;
+}
+table.cas th { background: var(--mist); font-weight: 700; }
+table.cas td.statut { white-space: nowrap; font-weight: 700; width: 1%; }
+
+.statut-conforme { color: var(--ok); }
+.statut-ecart { color: var(--alert); }
+.statut-tolere { color: #8a5a08; }
+
+table.cas details { margin-top: 6px; }
+table.cas summary { cursor: pointer; color: var(--muted); font-size: .85rem; }
+table.cas pre {
+  font-family: var(--mono); font-size: .78rem; white-space: pre-wrap;
+  word-break: break-word; background: var(--mist); padding: 8px;
+  margin: 6px 0 0; max-height: 320px; overflow: auto;
+}

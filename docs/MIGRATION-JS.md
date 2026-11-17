@@ -493,7 +493,47 @@ du texte normalisé qui font 2 lettres ou moins, ou qui n'apparaissent dans
 aucun dictionnaire sommaire. À noter comme limite connue plutôt qu'à corriger
 à l'aveugle.
 
-### 8. Petites choses
+### 8. Les ligatures et le « œ » sont détruits par la normalisation — *vérifié*
+
+Découvert en écrivant les cas de référence de l'étape E3. `normaliser`
+remplace par une espace tout ce qui n'est ni `a-z`, ni `0-9`, ni une espace.
+Or la décomposition NFD ne défait **pas** les ligatures typographiques ni le
+« œ » : ce sont des caractères à part entière, pas des lettres accentuées.
+
+| Écriture | Après normalisation |
+|---|---|
+| `fiscalite` | `fiscalite` |
+| `ﬁscalite` (ligature U+FB01) | **`scalite`** |
+| `ﬂux financier` | **`ux financier`** |
+| `cœur de métier` | **`c ur de metier`** |
+| `Œuvre` | **`uvre`** |
+
+Ce n'est pas une curiosité d'affichage : les extracteurs de PDF rendent
+parfois ces ligatures telles quelles, selon la police du document. Mesuré sur
+le modèle Comptable, avec le seul mot « fiscalité » écrit en ligature :
+
+| | Score | Critère « Fiscalité & déclarations » |
+|---|---|---|
+| texte ordinaire | 30 | 25 / 25 — trouvés : fiscalite, tva, declaration fiscale, cnps |
+| même texte, ligature `ﬁ` | **18** | **12 / 25** — trouvés : tva, cnps |
+
+Douze points de moins sur cent, et deux mots-clés qui disparaissent, pour un
+candidat qui a écrit exactement la même chose. Le défaut est invisible : rien
+dans l'interface ne distingue « le mot est absent » de « le mot a été détruit
+par la normalisation ».
+
+Le corpus de `tests/corpus/` n'en contient aucune — il est fabriqué. **La
+fréquence réelle sur des CV véritables n'est donc pas connue**, et c'est à
+mesurer à l'étape E4, sur les fichiers réels, avant de décider de l'ampleur de
+la correction.
+
+*Correction, quand elle sera décidée :* appliquer une table de conversion des
+ligatures (`ﬁ` → `fi`, `ﬂ` → `fl`, `œ` → `oe`, `æ` → `ae`…) avant la
+suppression des accents. C'est ce que fait déjà `pdf-mots.js` du projet
+Rapprochement Bancaire, qui porte une table `LIGATURES` pour cette raison.
+La correction vaut **pour les deux versions**, Python comprise.
+
+### 9. Petites choses
 
 - **`afficher_un_critere(critere, indice)`** : le paramètre `indice` n'est
   jamais utilisé.
@@ -515,6 +555,12 @@ les tests de référence puissent être verts. Les défauts 1 à 5 sont corrigé
 **dans une étape séparée** (E7), après validation du socle — un défaut corrigé
 pendant le portage, c'est un écart dont on ne sait plus dire s'il est une
 correction ou une erreur de traduction.
+
+Le défaut 8, les ligatures, est d'une autre nature : il ne vient pas de
+l'interface mais du moteur, il touche **aussi la version Python en
+production**, et son ampleur dépend de CV réels qu'on n'a pas encore lus. Il
+se traite donc après la mesure de l'étape E4, et la correction s'applique des
+deux côtés.
 
 Seule exception : **l'arrondi (§2.3)**. Il ne s'agit pas d'un défaut mais d'une
 différence entre les deux langages, et il faut le régler dès le portage du
@@ -728,7 +774,8 @@ TriCV/
     ├── tests/
     │   ├── tests.html
     │   ├── tests.js            ← compare le JS aux JSON de référence
-    │   └── tests.css
+    │   ├── tests.css
+    │   └── reference/          ← les JSON écrits par le script Python
     └── vendor/
         ├── LISEZMOI.md         ← tableau des versions et des licences
         ├── pdfjs/              (+ cmaps/, standard_fonts/, LICENSE)
@@ -800,3 +847,4 @@ comme `data_entree/` chez Rapprochement.
 | **D2** | la notice de confidentialité réécrite (§1.5) | adopter les deux formulations proposées |
 | **D3** | l'export Excel : marine `#123249` ou indigo `#4F46E5` | **marine**, pour que le classeur qui circule porte la même identité que le reste |
 | **D4** | corriger les défauts 1 à 5 en E7, ou les laisser | **corriger en E7**, après validation du socle |
+| **D5** | les ligatures (défaut 8) : corriger, et des deux côtés ? | **mesurer d'abord à l'étape E4** sur des CV réels, décider ensuite |

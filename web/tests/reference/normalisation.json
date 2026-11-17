@@ -1,0 +1,152 @@
+[
+  {
+    "entree": "",
+    "recompose": "",
+    "sansAccents": "",
+    "normalise": ""
+  },
+  {
+    "entree": "python",
+    "recompose": "python",
+    "sansAccents": "python",
+    "normalise": "python"
+  },
+  {
+    "entree": "PYTHON",
+    "recompose": "PYTHON",
+    "sansAccents": "PYTHON",
+    "normalise": "python"
+  },
+  {
+    "entree": "Développeur",
+    "recompose": "Développeur",
+    "sansAccents": "Developpeur",
+    "normalise": "developpeur"
+  },
+  {
+    "entree": "Developpeur",
+    "recompose": "Developpeur",
+    "sansAccents": "Developpeur",
+    "normalise": "developpeur"
+  },
+  {
+    "entree": "Développeur",
+    "recompose": "Développeur",
+    "sansAccents": "Developpeur",
+    "normalise": "developpeur"
+  },
+  {
+    "entree": "Kouassi Guy-Désiré",
+    "recompose": "Kouassi Guy-Désiré",
+    "sansAccents": "Kouassi Guy-Desire",
+    "normalise": "kouassi guy desire"
+  },
+  {
+    "entree": "C++/Python",
+    "recompose": "C++/Python",
+    "sansAccents": "C++/Python",
+    "normalise": "c python"
+  },
+  {
+    "entree": "C#, .NET et F#",
+    "recompose": "C#, .NET et F#",
+    "sansAccents": "C#, .NET et F#",
+    "normalise": "c net et f"
+  },
+  {
+    "entree": "Node.js / React.js",
+    "recompose": "Node.js / React.js",
+    "sansAccents": "Node.js / React.js",
+    "normalise": "node js react js"
+  },
+  {
+    "entree": "  espaces   multiples  ",
+    "recompose": "  espaces   multiples  ",
+    "sansAccents": "  espaces   multiples  ",
+    "normalise": "espaces multiples"
+  },
+  {
+    "entree": "espace insecable",
+    "recompose": "espace insecable",
+    "sansAccents": "espace insecable",
+    "normalise": "espace insecable"
+  },
+  {
+    "entree": "tabulation\tet\nretour",
+    "recompose": "tabulation\tet\nretour",
+    "sansAccents": "tabulation\tet\nretour",
+    "normalise": "tabulation et retour"
+  },
+  {
+    "entree": "separateur\u001fde\u001funite",
+    "recompose": "separateur\u001fde\u001funite",
+    "sansAccents": "separateur\u001fde\u001funite",
+    "normalise": "separateur de unite"
+  },
+  {
+    "entree": "lignesuivante",
+    "recompose": "lignesuivante",
+    "sansAccents": "lignesuivante",
+    "normalise": "ligne suivante"
+  },
+  {
+    "entree": "﻿marque d'ordre des octets",
+    "recompose": "﻿marque d'ordre des octets",
+    "sansAccents": "﻿marque d'ordre des octets",
+    "normalise": "marque d ordre des octets"
+  },
+  {
+    "entree": "Œuvre, cœur et €uro",
+    "recompose": "Œuvre, cœur et €uro",
+    "sansAccents": "Œuvre, cœur et €uro",
+    "normalise": "uvre c ur et uro"
+  },
+  {
+    "entree": "ÀÂÄÇÉÈÊËÎÏÔÖÙÛÜŸ",
+    "recompose": "ÀÂÄÇÉÈÊËÎÏÔÖÙÛÜŸ",
+    "sansAccents": "AAACEEEEIIOOUUUY",
+    "normalise": "aaaceeeeiioouuuy"
+  },
+  {
+    "entree": "Maître d'œuvre — 10 ans d'expérience",
+    "recompose": "Maître d'œuvre — 10 ans d'expérience",
+    "sansAccents": "Maitre d'œuvre — 10 ans d'experience",
+    "normalise": "maitre d uvre 10 ans d experience"
+  },
+  {
+    "entree": "SYSCOHADA / OHADA",
+    "recompose": "SYSCOHADA / OHADA",
+    "sansAccents": "SYSCOHADA / OHADA",
+    "normalise": "syscohada ohada"
+  },
+  {
+    "entree": "l'entreprise",
+    "recompose": "l'entreprise",
+    "sansAccents": "l'entreprise",
+    "normalise": "l entreprise"
+  },
+  {
+    "entree": "N'Guessan Kouamé",
+    "recompose": "N'Guessan Kouamé",
+    "sansAccents": "N'Guessan Kouame",
+    "normalise": "n guessan kouame"
+  },
+  {
+    "entree": "comptabilité générale",
+    "recompose": "comptabilité générale",
+    "sansAccents": "comptabilite generale",
+    "normalise": "comptabilite generale"
+  },
+  {
+    "entree": "100 % · 5 Mo · 40 fichiers",
+    "recompose": "100 % · 5 Mo · 40 fichiers",
+    "sansAccents": "100 % · 5 Mo · 40 fichiers",
+    "normalise": "100 5 mo 40 fichiers"
+  },
+  {
+    "entree": "Ligature ﬁchier et ﬂux",
+    "recompose": "Ligature ﬁchier et ﬂux",
+    "sansAccents": "Ligature ﬁchier et ﬂux",
+    "normalise": "ligature chier et ux"
+  }
+]

@@ -1,0 +1,419 @@
+// Tests de non-régression : la version JavaScript doit reproduire exactement
+// les résultats du moteur Python de core/, enregistrés par
+// tests/generer_reference_js.py dans web/tests/reference/.
+//
+// Chaque cas rend { statut, intitule, detail } :
+//   "conforme" — identique à Python ;
+//   "ecart"    — différent : à corriger ;
+//   "tolere"   — différent pour une raison connue, écrite dans le cas même.
+//
+// Aucun cas n'est « tolere » à l'étape E3 : le moteur pur doit être au
+// caractère près. La catégorie existe pour les étapes suivantes, où la lecture
+// des PDF introduira des écarts légitimes (découpage en lignes).
+
+import { arrondirCommePython, accorder, nombreFrancais, formaterTaille } from "../js/outils.js";
+import { normaliser, recomposer, supprimerAccents } from "../js/normalisation.js";
+import {
+  analyserMotsCles,
+  construireCritere,
+  criteresIncomplets,
+  formaterMotsCles,
+  totalDesPoids,
+} from "../js/criteres.js";
+import { MODELES, chargerModele, nomsDesModeles } from "../js/modeles.js";
+import { scorerCandidat } from "../js/scorer.js";
+
+const DOSSIER_REFERENCE = new URL("reference/", import.meta.url);
+
+async function lireJson(nom) {
+  const reponse = await fetch(new URL(nom, DOSSIER_REFERENCE));
+  // fetch ne lève pas d'erreur sur un 404 : il faut tester `ok` soi-même.
+  if (!reponse.ok) throw new Error(`${nom} : HTTP ${reponse.status}`);
+  return reponse.json();
+}
+
+// ---------------------------------------------------------------------------
+// Comparaison
+// ---------------------------------------------------------------------------
+
+/**
+ * Égalité en profondeur. `===` ne compare que l'identité pour les tableaux et
+ * les objets : deux tableaux de même contenu sont deux objets distincts, donc
+ * « différents ». C'est le piège classique quand on vient de Python, où
+ * `[1, 2] == [1, 2]` est vrai.
+ *
+ * L'ordre des clés d'un objet n'est pas significatif ; celui d'un tableau
+ * l'est — et il compte ici, puisque l'ordre des groupes et des critères fait
+ * partie de ce qu'on vérifie.
+ */
+function memeValeur(a, b) {
+  if (a === b) return true;
+  if (Array.isArray(a) !== Array.isArray(b)) return false;
+  if (Array.isArray(a)) {
+    return a.length === b.length && a.every((valeur, i) => memeValeur(valeur, b[i]));
+  }
+  if (a && b && typeof a === "object" && typeof b === "object") {
+    const clesA = Object.keys(a);
+    const clesB = Object.keys(b);
+    return (
+      clesA.length === clesB.length &&
+      clesA.every((cle) => Object.hasOwn(b, cle) && memeValeur(a[cle], b[cle]))
+    );
+  }
+  return false;
+}
+
+/** Cas de test : compare une valeur obtenue à la valeur attendue. */
+function comparer(intitule, obtenu, attendu, contexte = {}) {
+  return {
+    statut: memeValeur(obtenu, attendu) ? "conforme" : "ecart",
+    intitule,
+    detail: { ...contexte, obtenu, attendu },
+  };
+}
+
+// ---------------------------------------------------------------------------
+// Groupe 1 — l'arrondi
+// ---------------------------------------------------------------------------
+
+function groupeArrondi(reference) {
+  const cas = reference.map((c) =>
+    comparer(`round(${c.valeur})`, arrondirCommePython(c.valeur), c.attendu),
+  );
+
+  // Contrôle supplémentaire : on montre que Math.round NE convient PAS. Si ce
+  // cas devenait conforme, c'est que les valeurs de référence ne distinguent
+  // plus les deux comportements — et le garde-fou serait devenu inutile sans
+  // que rien ne le signale.
+  const divergences = reference.filter((c) => Math.round(c.valeur) !== c.attendu);
+  cas.push({
+    statut: divergences.length > 0 ? "conforme" : "ecart",
+    intitule: "les valeurs de référence distinguent bien Math.round de round()",
+    detail: {
+      obtenu: `${divergences.length} valeur(s) où Math.round diffère de Python`,
+      attendu: "au moins une",
+      exemples: divergences
+        .slice(0, 5)
+        .map((c) => `${c.valeur} : Python ${c.attendu}, Math.round ${Math.round(c.valeur)}`),
+    },
+  });
+
+  return cas;
+}
+
+// ---------------------------------------------------------------------------
+// Groupe 2 — la normalisation
+// ---------------------------------------------------------------------------
+
+function groupeNormalisation(reference) {
+  const cas = [];
+  for (const c of reference) {
+    const apercu = JSON.stringify(c.entree);
+    cas.push(comparer(`recomposer ${apercu}`, recomposer(c.entree), c.recompose));
+    cas.push(
+      comparer(`supprimerAccents ${apercu}`, supprimerAccents(c.entree), c.sansAccents),
+    );
+    cas.push(comparer(`normaliser ${apercu}`, normaliser(c.entree), c.normalise));
+  }
+  return cas;
+}
+
+// ---------------------------------------------------------------------------
+// Groupe 3 — la syntaxe des mots-clés
+// ---------------------------------------------------------------------------
+
+function groupeCriteres(reference) {
+  const cas = [];
+
+  for (const c of reference.analyse) {
+    cas.push(
+      comparer(`analyserMotsCles ${JSON.stringify(c.saisie)}`, analyserMotsCles(c.saisie), c.groupes),
+    );
+  }
+
+  for (const c of reference.allerRetour) {
+    const intitule = `${c.modele} / ${c.critere}`;
+    cas.push(comparer(`formaterMotsCles — ${intitule}`, formaterMotsCles(c.groupes), c.formate));
+    // La propriété qui compte vraiment : le texte reformaté a le même SENS que
+    // l'original. C'est ce qui garantit qu'un modèle affiché dans la zone de
+    // saisie score bien ce qu'il montre.
+    cas.push(
+      comparer(
+        `aller-retour stable — ${intitule}`,
+        analyserMotsCles(formaterMotsCles(c.groupes)),
+        c.groupesApresRetour,
+      ),
+    );
+  }
+
+  for (const c of reference.construction) {
+    const { nom, poids, motsCles, type } = c.entree;
+    cas.push(
+      comparer(
+        `construireCritere ${JSON.stringify(nom)} / ${JSON.stringify(motsCles)}`,
+        construireCritere(nom, poids, motsCles, type),
+        // Le Python rend les mêmes noms de champs : nom, poids, type, groupes.
+        c.critere,
+      ),
+    );
+  }
+
+  for (const [index, c] of reference.indicateurs.entries()) {
+    cas.push(comparer(`totalDesPoids — jeu ${index + 1}`, totalDesPoids(c.criteres), c.total));
+    cas.push(
+      comparer(`criteresIncomplets — jeu ${index + 1}`, criteresIncomplets(c.criteres), c.incomplets),
+    );
+  }
+
+  return cas;
+}
+
+// ---------------------------------------------------------------------------
+// Groupe 4 — les cinq modèles
+// ---------------------------------------------------------------------------
+
+function groupeModeles(reference) {
+  const cas = [];
+
+  cas.push(comparer("les 5 modèles du §8 sont présents", Object.keys(MODELES).length, reference.nbModeles));
+  cas.push(comparer("ordre d'affichage des modèles", nomsDesModeles(), reference.ordre));
+
+  for (const nom of reference.ordre) {
+    const attendu = reference.modeles[nom];
+    const obtenu = chargerModele(nom);
+
+    cas.push(comparer(`« ${nom} » — critères, poids, mots-clés et groupes`, obtenu, attendu.criteres));
+    cas.push(comparer(`« ${nom} » totalise exactement 100 points`, totalDesPoids(obtenu), attendu.total));
+    cas.push(
+      comparer(
+        `« ${nom} » — nombre total de groupes de recherche`,
+        obtenu.reduce((somme, critere) => somme + critere.groupes.length, 0),
+        attendu.nbGroupes,
+      ),
+    );
+    cas.push({
+      statut: obtenu.every((critere) => critere.groupes.length > 0) ? "conforme" : "ecart",
+      intitule: `« ${nom} » : aucun critère sans mot-clé`,
+      detail: { criteresVides: obtenu.filter((c) => !c.groupes.length).map((c) => c.nom) },
+    });
+  }
+
+  // chargerModele doit rendre des COPIES : modifier le résultat ne doit pas
+  // altérer la constante MODELES. En JavaScript comme en Python, une variable
+  // ne contient pas l'objet mais une référence vers lui — sans copie, le
+  // modèle suivant serait servi altéré.
+  const premier = chargerModele("Comptable");
+  premier[0].poids = 999;
+  premier[0].groupes.push(["intrus"]);
+  cas.push(
+    comparer(
+      "chargerModele rend des copies : modifier le résultat n'altère pas MODELES",
+      totalDesPoids(chargerModele("Comptable")),
+      reference.modeles["Comptable"].total,
+    ),
+  );
+
+  return cas;
+}
+
+// ---------------------------------------------------------------------------
+// Groupe 5 — le scoring
+// ---------------------------------------------------------------------------
+
+/**
+ * Le détail rendu par Python emploie la convention de nommage de Python
+ * (`points_exacts`), celle de JavaScript emploie la sienne (`pointsExacts`).
+ * Ce n'est pas un écart de comportement : on remet donc la référence dans la
+ * forme JavaScript avant de comparer, plutôt que d'aligner les noms d'un côté
+ * ou de l'autre et de trahir la convention d'un des deux langages.
+ */
+function detailEnFormeJs(detail) {
+  return detail.map((ligne) => ({
+    critere: ligne.critere,
+    poids: ligne.poids,
+    points: ligne.points,
+    pointsExacts: ligne.points_exacts,
+    trouves: ligne.trouves,
+    absents: ligne.absents,
+  }));
+}
+
+function groupeScoring(reference) {
+  const cas = [];
+
+  for (const c of reference) {
+    const obtenu = scorerCandidat(c.texte, c.criteres);
+    const contexte = { texte: c.texte, criteres: c.criteres };
+
+    cas.push(comparer(`${c.intitule} — score`, obtenu.score, c.resultat.score, contexte));
+    cas.push(
+      comparer(`${c.intitule} — détail par critère`, obtenu.detail, detailEnFormeJs(c.resultat.detail), contexte),
+    );
+    cas.push(
+      comparer(`${c.intitule} — signalements`, obtenu.signalements, c.resultat.signalements, contexte),
+    );
+  }
+
+  return cas;
+}
+
+// ---------------------------------------------------------------------------
+// Groupe 6 — les outils d'affichage
+// ---------------------------------------------------------------------------
+
+/**
+ * Les outils d'affichage : accord en français, nombre à la française, taille
+ * de fichier. Leurs valeurs attendues viennent de Python comme les autres.
+ *
+ * Deux pièges s'y cachent, et les cas de référence les visent exprès.
+ * D'abord l'accord : écrire « 1 candidat(s) classé(s) » est le réflexe qui
+ * économise cinq minutes et coûte la crédibilité de l'interface. Ensuite
+ * l'arrondi, encore : `toFixed` arrondit 2,5 vers le haut quand Python va
+ * vers le chiffre pair.
+ */
+function groupeOutils(reference) {
+  const cas = [];
+
+  for (const c of reference.accord) {
+    cas.push(
+      comparer(
+        `accorder(${c.nombre}, ${JSON.stringify(c.singulier)})`,
+        accorder(c.nombre, c.singulier, c.pluriel),
+        c.attendu,
+      ),
+    );
+  }
+
+  for (const c of reference.nombre) {
+    cas.push(
+      comparer(
+        `nombreFrancais(${c.valeur}, ${c.decimales})`,
+        nombreFrancais(c.valeur, c.decimales),
+        c.attendu,
+      ),
+    );
+  }
+
+  for (const c of reference.taille) {
+    cas.push(comparer(`formaterTaille(${c.octets})`, formaterTaille(c.octets), c.attendu));
+  }
+
+  return cas;
+}
+
+// ---------------------------------------------------------------------------
+// Affichage
+// ---------------------------------------------------------------------------
+
+const MARQUES = { conforme: "conforme", ecart: "ÉCART", tolere: "toléré" };
+
+function dessinerGroupe(titre, cas) {
+  const section = document.createElement("section");
+  section.className = "groupe";
+
+  const ecarts = cas.filter((c) => c.statut === "ecart").length;
+  const tolerés = cas.filter((c) => c.statut === "tolere").length;
+
+  const h2 = document.createElement("h2");
+  h2.textContent = titre + " ";
+  const compte = document.createElement("span");
+  compte.className = "groupe__compte";
+  compte.textContent =
+    `${cas.length} cas · ${cas.length - ecarts - tolerés} conformes` +
+    (tolerés ? ` · ${tolerés} tolérés` : "") +
+    (ecarts ? ` · ${ecarts} écarts` : "");
+  h2.append(compte);
+  section.append(h2);
+
+  // On ne dessine que les écarts et les tolérés en détail : une page de mille
+  // lignes vertes ne se lit pas. Les conformes sont comptés dans l'en-tête.
+  const aMontrer = cas.filter((c) => c.statut !== "conforme");
+  if (!aMontrer.length) {
+    section.append(Object.assign(document.createElement("p"), {
+      className: "intro",
+      textContent: "Tous les cas sont conformes à la référence Python.",
+    }));
+    document.getElementById("groupes").append(section);
+    return { total: cas.length, ecarts, tolerés };
+  }
+
+  const table = document.createElement("table");
+  table.className = "cas";
+  table.innerHTML = "<thead><tr><th>Statut</th><th>Cas</th></tr></thead>";
+  const corps = document.createElement("tbody");
+
+  for (const c of aMontrer) {
+    const ligne = document.createElement("tr");
+
+    const statut = document.createElement("td");
+    statut.className = `statut statut-${c.statut}`;
+    statut.textContent = MARQUES[c.statut];
+
+    const contenu = document.createElement("td");
+    contenu.textContent = c.intitule;
+    const details = document.createElement("details");
+    details.append(Object.assign(document.createElement("summary"), { textContent: "voir le détail" }));
+    const pre = document.createElement("pre");
+    pre.textContent = JSON.stringify(c.detail, null, 2);
+    details.append(pre);
+    contenu.append(details);
+
+    ligne.append(statut, contenu);
+    corps.append(ligne);
+  }
+
+  table.append(corps);
+  section.append(table);
+  document.getElementById("groupes").append(section);
+  return { total: cas.length, ecarts, tolerés };
+}
+
+async function lancer() {
+  const bilan = document.getElementById("bilan");
+
+  let references;
+  try {
+    const [arrondi, normalisation, criteres, modeles, scoring, formatage] = await Promise.all([
+      lireJson("arrondi.json"),
+      lireJson("normalisation.json"),
+      lireJson("criteres.json"),
+      lireJson("modeles.json"),
+      lireJson("scoring.json"),
+      lireJson("formatage.json"),
+    ]);
+    references = { arrondi, normalisation, criteres, modeles, scoring, formatage };
+  } catch (erreur) {
+    bilan.className = "bilan echec";
+    bilan.textContent =
+      `Références introuvables (${erreur.message}). Lancer d'abord : ` +
+      "./venv/bin/python tests/generer_reference_js.py";
+    return;
+  }
+
+  const groupes = [
+    ["1. Arrondi — round() de Python, pas Math.round", groupeArrondi(references.arrondi)],
+    ["2. Normalisation du texte", groupeNormalisation(references.normalisation)],
+    ["3. Syntaxe des mots-clés", groupeCriteres(references.criteres)],
+    ["4. Les cinq modèles", groupeModeles(references.modeles)],
+    ["5. Scoring", groupeScoring(references.scoring)],
+    ["6. Outils d'affichage", groupeOutils(references.formatage)],
+  ];
+
+  let total = 0;
+  let ecarts = 0;
+  let tolerés = 0;
+  for (const [titre, cas] of groupes) {
+    const compte = dessinerGroupe(titre, cas);
+    total += compte.total;
+    ecarts += compte.ecarts;
+    tolerés += compte.tolerés;
+  }
+
+  bilan.className = ecarts ? "bilan echec" : "bilan ok";
+  bilan.textContent = ecarts
+    ? `${ecarts} écart(s) sur ${total} cas — la version JavaScript ne reproduit pas le moteur Python.`
+    : `${total} cas, aucun écart` +
+      (tolerés ? ` (dont ${tolerés} tolérés et documentés).` : ". La version JavaScript reproduit le moteur Python.");
+}
+
+lancer();

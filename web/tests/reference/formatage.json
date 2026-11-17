@@ -1,0 +1,221 @@
+{
+  "accord": [
+    {
+      "nombre": 0,
+      "singulier": "fichier déposé",
+      "pluriel": "fichiers déposés",
+      "attendu": "0 fichier déposé"
+    },
+    {
+      "nombre": 1,
+      "singulier": "fichier déposé",
+      "pluriel": "fichiers déposés",
+      "attendu": "1 fichier déposé"
+    },
+    {
+      "nombre": 2,
+      "singulier": "fichier déposé",
+      "pluriel": "fichiers déposés",
+      "attendu": "2 fichiers déposés"
+    },
+    {
+      "nombre": 40,
+      "singulier": "fichier déposé",
+      "pluriel": "fichiers déposés",
+      "attendu": "40 fichiers déposés"
+    },
+    {
+      "nombre": 1,
+      "singulier": "candidat classé",
+      "pluriel": "candidats classés",
+      "attendu": "1 candidat classé"
+    },
+    {
+      "nombre": 12,
+      "singulier": "candidat classé",
+      "pluriel": "candidats classés",
+      "attendu": "12 candidats classés"
+    },
+    {
+      "nombre": 1,
+      "singulier": "groupe de recherche",
+      "pluriel": "groupes de recherche",
+      "attendu": "1 groupe de recherche"
+    },
+    {
+      "nombre": 3,
+      "singulier": "groupe de recherche",
+      "pluriel": "groupes de recherche",
+      "attendu": "3 groupes de recherche"
+    },
+    {
+      "nombre": 1,
+      "singulier": "règle",
+      "pluriel": null,
+      "attendu": "1 règle"
+    },
+    {
+      "nombre": 4,
+      "singulier": "règle",
+      "pluriel": null,
+      "attendu": "4 règles"
+    },
+    {
+      "nombre": 0,
+      "singulier": "CV",
+      "pluriel": "CV",
+      "attendu": "0 CV"
+    },
+    {
+      "nombre": 1,
+      "singulier": "CV",
+      "pluriel": "CV",
+      "attendu": "1 CV"
+    }
+  ],
+  "nombre": [
+    {
+      "valeur": 0.0,
+      "decimales": 1,
+      "attendu": "0,0"
+    },
+    {
+      "valeur": 0.3,
+      "decimales": 1,
+      "attendu": "0,3"
+    },
+    {
+      "valeur": 1.0,
+      "decimales": 1,
+      "attendu": "1,0"
+    },
+    {
+      "valeur": 12.34,
+      "decimales": 1,
+      "attendu": "12,3"
+    },
+    {
+      "valeur": 0.05,
+      "decimales": 1,
+      "attendu": "0,1"
+    },
+    {
+      "valeur": 0.15,
+      "decimales": 1,
+      "attendu": "0,1"
+    },
+    {
+      "valeur": 0.25,
+      "decimales": 1,
+      "attendu": "0,2"
+    },
+    {
+      "valeur": 0.75,
+      "decimales": 1,
+      "attendu": "0,8"
+    },
+    {
+      "valeur": 1.25,
+      "decimales": 1,
+      "attendu": "1,2"
+    },
+    {
+      "valeur": 2.675,
+      "decimales": 2,
+      "attendu": "2,67"
+    },
+    {
+      "valeur": 1.005,
+      "decimales": 2,
+      "attendu": "1,00"
+    },
+    {
+      "valeur": 0.5,
+      "decimales": 0,
+      "attendu": "0"
+    },
+    {
+      "valeur": 1.5,
+      "decimales": 0,
+      "attendu": "2"
+    },
+    {
+      "valeur": 2.5,
+      "decimales": 0,
+      "attendu": "2"
+    },
+    {
+      "valeur": 3.5,
+      "decimales": 0,
+      "attendu": "4"
+    },
+    {
+      "valeur": 12.5,
+      "decimales": 0,
+      "attendu": "12"
+    },
+    {
+      "valeur": 49.99,
+      "decimales": 2,
+      "attendu": "49,99"
+    }
+  ],
+  "taille": [
+    {
+      "octets": null,
+      "attendu": "—"
+    },
+    {
+      "octets": 0,
+      "attendu": "0 Ko"
+    },
+    {
+      "octets": 1,
+      "attendu": "0 Ko"
+    },
+    {
+      "octets": 512,
+      "attendu": "0 Ko"
+    },
+    {
+      "octets": 1024,
+      "attendu": "1 Ko"
+    },
+    {
+      "octets": 1536,
+      "attendu": "2 Ko"
+    },
+    {
+      "octets": 2560,
+      "attendu": "2 Ko"
+    },
+    {
+      "octets": 500000,
+      "attendu": "488 Ko"
+    },
+    {
+      "octets": 1048575,
+      "attendu": "1024 Ko"
+    },
+    {
+      "octets": 1048576,
+      "attendu": "1,0 Mo"
+    },
+    {
+      "octets": 1310720,
+      "attendu": "1,2 Mo"
+    },
+    {
+      "octets": 2621440,
+      "attendu": "2,5 Mo"
+    },
+    {
+      "octets": 3670016,
+      "attendu": "3,5 Mo"
+    },
+    {
+      "octets": 5242880,
+      "attendu": "5,0 Mo"
+    }
+  ]
+}

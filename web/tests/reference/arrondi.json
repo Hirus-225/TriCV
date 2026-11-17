@@ -1,0 +1,94 @@
+[
+  {
+    "valeur": 0.0,
+    "attendu": 0
+  },
+  {
+    "valeur": 0.4,
+    "attendu": 0
+  },
+  {
+    "valeur": 0.5,
+    "attendu": 0
+  },
+  {
+    "valeur": 0.6,
+    "attendu": 1
+  },
+  {
+    "valeur": 1.5,
+    "attendu": 2
+  },
+  {
+    "valeur": 2.5,
+    "attendu": 2
+  },
+  {
+    "valeur": 3.5,
+    "attendu": 4
+  },
+  {
+    "valeur": 4.5,
+    "attendu": 4
+  },
+  {
+    "valeur": 12.5,
+    "attendu": 12
+  },
+  {
+    "valeur": 17.5,
+    "attendu": 18
+  },
+  {
+    "valeur": 21.25,
+    "attendu": 21
+  },
+  {
+    "valeur": 37.5,
+    "attendu": 38
+  },
+  {
+    "valeur": 49.5,
+    "attendu": 50
+  },
+  {
+    "valeur": 50.5,
+    "attendu": 50
+  },
+  {
+    "valeur": 72.5,
+    "attendu": 72
+  },
+  {
+    "valeur": 99.5,
+    "attendu": 100
+  },
+  {
+    "valeur": -0.5,
+    "attendu": 0
+  },
+  {
+    "valeur": -1.5,
+    "attendu": -2
+  },
+  {
+    "valeur": -2.5,
+    "attendu": -2
+  },
+  {
+    "valeur": -12.5,
+    "attendu": -12
+  },
+  {
+    "valeur": 0.49999999999999994,
+    "attendu": 0
+  },
+  {
+    "valeur": 2.675,
+    "attendu": 3
+  },
+  {
+    "valeur": 100.0,
+    "attendu": 100
+  }
+]

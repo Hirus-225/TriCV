@@ -1,0 +1,497 @@
+{
+  "ordre": [
+    "Développeur web",
+    "Comptable",
+    "Assistant administratif",
+    "Commercial terrain",
+    "Logistique"
+  ],
+  "modeles": {
+    "Développeur web": {
+      "criteres": [
+        {
+          "nom": "Langages & frameworks",
+          "poids": 35,
+          "type": "requis",
+          "motsCles": "python\njavascript = js\ndjango = flask\nreact = vue, angular",
+          "groupes": [
+            [
+              "python"
+            ],
+            [
+              "javascript",
+              "js"
+            ],
+            [
+              "django",
+              "flask"
+            ],
+            [
+              "react",
+              "vue",
+              "angular"
+            ]
+          ]
+        },
+        {
+          "nom": "Bases de données",
+          "poids": 20,
+          "type": "requis",
+          "motsCles": "sql\npostgresql = postgres\nmysql\nmongodb = nosql",
+          "groupes": [
+            [
+              "sql"
+            ],
+            [
+              "postgresql",
+              "postgres"
+            ],
+            [
+              "mysql"
+            ],
+            [
+              "mongodb",
+              "nosql"
+            ]
+          ]
+        },
+        {
+          "nom": "Outils & versioning",
+          "poids": 15,
+          "type": "requis",
+          "motsCles": "git = github, gitlab\ndocker\nlinux",
+          "groupes": [
+            [
+              "git",
+              "github",
+              "gitlab"
+            ],
+            [
+              "docker"
+            ],
+            [
+              "linux"
+            ]
+          ]
+        },
+        {
+          "nom": "Expérience terrain",
+          "poids": 20,
+          "type": "requis",
+          "motsCles": "developpeur = developer, ingenieur logiciel\nfreelance\nstage",
+          "groupes": [
+            [
+              "developpeur",
+              "developer",
+              "ingenieur logiciel"
+            ],
+            [
+              "freelance"
+            ],
+            [
+              "stage"
+            ]
+          ]
+        },
+        {
+          "nom": "Formation",
+          "poids": 10,
+          "type": "requis",
+          "motsCles": "licence = bachelor\nmaster\ninformatique",
+          "groupes": [
+            [
+              "licence",
+              "bachelor"
+            ],
+            [
+              "master"
+            ],
+            [
+              "informatique"
+            ]
+          ]
+        }
+      ],
+      "total": 100,
+      "nbGroupes": 17
+    },
+    "Comptable": {
+      "criteres": [
+        {
+          "nom": "Comptabilité générale",
+          "poids": 35,
+          "type": "requis",
+          "motsCles": "comptabilite generale = comptabilite analytique, ecritures comptables, saisie comptable\nrapprochement bancaire = rapprochements bancaires\netats financiers = etat financier, bilan, compte de resultat, balance generale\nsyscohada = ohada, syscoa\nmanuel de procedure = manuel de procedures, procedures comptables, procedures de gestion, procedures, procedure",
+          "groupes": [
+            [
+              "comptabilite generale",
+              "comptabilite analytique",
+              "ecritures comptables",
+              "saisie comptable"
+            ],
+            [
+              "rapprochement bancaire",
+              "rapprochements bancaires"
+            ],
+            [
+              "etats financiers",
+              "etat financier",
+              "bilan",
+              "compte de resultat",
+              "balance generale"
+            ],
+            [
+              "syscohada",
+              "ohada",
+              "syscoa"
+            ],
+            [
+              "manuel de procedure",
+              "manuel de procedures",
+              "procedures comptables",
+              "procedures de gestion",
+              "procedures",
+              "procedure"
+            ]
+          ]
+        },
+        {
+          "nom": "Fiscalité & déclarations",
+          "poids": 25,
+          "type": "requis",
+          "motsCles": "fiscalite = fiscal, fiscale, fiscales, fiscaux\ntva\ndeclaration fiscale = declarations fiscales, declaration d'impots\ncnps = charges sociales, cotisations sociales",
+          "groupes": [
+            [
+              "fiscalite",
+              "fiscal",
+              "fiscale",
+              "fiscales",
+              "fiscaux"
+            ],
+            [
+              "tva"
+            ],
+            [
+              "declaration fiscale",
+              "declarations fiscales",
+              "declaration d'impots"
+            ],
+            [
+              "cnps",
+              "charges sociales",
+              "cotisations sociales"
+            ]
+          ]
+        },
+        {
+          "nom": "Outils",
+          "poids": 20,
+          "type": "requis",
+          "motsCles": "sage = saari, sage 100\nexcel = tableur\nerp = sap, dynamics, odoo, tompro, oracle",
+          "groupes": [
+            [
+              "sage",
+              "saari",
+              "sage 100"
+            ],
+            [
+              "excel",
+              "tableur"
+            ],
+            [
+              "erp",
+              "sap",
+              "dynamics",
+              "odoo",
+              "tompro",
+              "oracle"
+            ]
+          ]
+        },
+        {
+          "nom": "Expérience",
+          "poids": 20,
+          "type": "requis",
+          "motsCles": "comptable\nchef comptable = comptable senior, responsable comptable, directeur financier\ncabinet = cabinet comptable, cabinet d'expertise\naudit = controle de gestion, controle interne, commissariat aux comptes",
+          "groupes": [
+            [
+              "comptable"
+            ],
+            [
+              "chef comptable",
+              "comptable senior",
+              "responsable comptable",
+              "directeur financier"
+            ],
+            [
+              "cabinet",
+              "cabinet comptable",
+              "cabinet d'expertise"
+            ],
+            [
+              "audit",
+              "controle de gestion",
+              "controle interne",
+              "commissariat aux comptes"
+            ]
+          ]
+        }
+      ],
+      "total": 100,
+      "nbGroupes": 16
+    },
+    "Assistant administratif": {
+      "criteres": [
+        {
+          "nom": "Administration",
+          "poids": 30,
+          "type": "requis",
+          "motsCles": "gestion administrative\ncourrier\narchivage\nagenda = planning",
+          "groupes": [
+            [
+              "gestion administrative"
+            ],
+            [
+              "courrier"
+            ],
+            [
+              "archivage"
+            ],
+            [
+              "agenda",
+              "planning"
+            ]
+          ]
+        },
+        {
+          "nom": "Ressources humaines",
+          "poids": 30,
+          "type": "requis",
+          "motsCles": "recrutement\npaie = salaire, payroll\ncontrat de travail\ndossier du personnel",
+          "groupes": [
+            [
+              "recrutement"
+            ],
+            [
+              "paie",
+              "salaire",
+              "payroll"
+            ],
+            [
+              "contrat de travail"
+            ],
+            [
+              "dossier du personnel"
+            ]
+          ]
+        },
+        {
+          "nom": "Bureautique",
+          "poids": 20,
+          "type": "requis",
+          "motsCles": "word\nexcel\npowerpoint\noutlook",
+          "groupes": [
+            [
+              "word"
+            ],
+            [
+              "excel"
+            ],
+            [
+              "powerpoint"
+            ],
+            [
+              "outlook"
+            ]
+          ]
+        },
+        {
+          "nom": "Qualités & langues",
+          "poids": 20,
+          "type": "requis",
+          "motsCles": "anglais\nredaction\norganisation",
+          "groupes": [
+            [
+              "anglais"
+            ],
+            [
+              "redaction"
+            ],
+            [
+              "organisation"
+            ]
+          ]
+        }
+      ],
+      "total": 100,
+      "nbGroupes": 15
+    },
+    "Commercial terrain": {
+      "criteres": [
+        {
+          "nom": "Développement commercial",
+          "poids": 35,
+          "type": "requis",
+          "motsCles": "prospection\nnegociation\nportefeuille client\nchiffre d'affaires",
+          "groupes": [
+            [
+              "prospection"
+            ],
+            [
+              "negociation"
+            ],
+            [
+              "portefeuille client"
+            ],
+            [
+              "chiffre d'affaires"
+            ]
+          ]
+        },
+        {
+          "nom": "Relation client",
+          "poids": 25,
+          "type": "requis",
+          "motsCles": "relation client = service client\nfidelisation\nreclamation",
+          "groupes": [
+            [
+              "relation client",
+              "service client"
+            ],
+            [
+              "fidelisation"
+            ],
+            [
+              "reclamation"
+            ]
+          ]
+        },
+        {
+          "nom": "Outils",
+          "poids": 15,
+          "type": "requis",
+          "motsCles": "crm\nsalesforce\nexcel\nreporting",
+          "groupes": [
+            [
+              "crm"
+            ],
+            [
+              "salesforce"
+            ],
+            [
+              "excel"
+            ],
+            [
+              "reporting"
+            ]
+          ]
+        },
+        {
+          "nom": "Expérience",
+          "poids": 25,
+          "type": "requis",
+          "motsCles": "commercial\ncharge de clientele\nterrain",
+          "groupes": [
+            [
+              "commercial"
+            ],
+            [
+              "charge de clientele"
+            ],
+            [
+              "terrain"
+            ]
+          ]
+        }
+      ],
+      "total": 100,
+      "nbGroupes": 14
+    },
+    "Logistique": {
+      "criteres": [
+        {
+          "nom": "Gestion des flux",
+          "poids": 35,
+          "type": "requis",
+          "motsCles": "approvisionnement\nstock = inventaire\ntransit\ndouane",
+          "groupes": [
+            [
+              "approvisionnement"
+            ],
+            [
+              "stock",
+              "inventaire"
+            ],
+            [
+              "transit"
+            ],
+            [
+              "douane"
+            ]
+          ]
+        },
+        {
+          "nom": "Transport",
+          "poids": 25,
+          "type": "requis",
+          "motsCles": "transport\nfret\nimport = export\nincoterms",
+          "groupes": [
+            [
+              "transport"
+            ],
+            [
+              "fret"
+            ],
+            [
+              "import",
+              "export"
+            ],
+            [
+              "incoterms"
+            ]
+          ]
+        },
+        {
+          "nom": "Outils",
+          "poids": 20,
+          "type": "requis",
+          "motsCles": "erp\nsap\nexcel\nwms",
+          "groupes": [
+            [
+              "erp"
+            ],
+            [
+              "sap"
+            ],
+            [
+              "excel"
+            ],
+            [
+              "wms"
+            ]
+          ]
+        },
+        {
+          "nom": "Expérience",
+          "poids": 20,
+          "type": "requis",
+          "motsCles": "logistique\nsupply chain\nmagasinier",
+          "groupes": [
+            [
+              "logistique"
+            ],
+            [
+              "supply chain"
+            ],
+            [
+              "magasinier"
+            ]
+          ]
+        }
+      ],
+      "total": 100,
+      "nbGroupes": 15
+    }
+  },
+  "nbModeles": 5
+}

@@ -1,0 +1,1112 @@
+{
+  "analyse": [
+    {
+      "saisie": "python",
+      "groupes": [
+        [
+          "python"
+        ]
+      ]
+    },
+    {
+      "saisie": "python, javascript",
+      "groupes": [
+        [
+          "python"
+        ],
+        [
+          "javascript"
+        ]
+      ]
+    },
+    {
+      "saisie": "python\njavascript",
+      "groupes": [
+        [
+          "python"
+        ],
+        [
+          "javascript"
+        ]
+      ]
+    },
+    {
+      "saisie": "react = vue, angular",
+      "groupes": [
+        [
+          "react",
+          "vue",
+          "angular"
+        ]
+      ]
+    },
+    {
+      "saisie": "python, javascript\nreact = vue, angular",
+      "groupes": [
+        [
+          "python"
+        ],
+        [
+          "javascript"
+        ],
+        [
+          "react",
+          "vue",
+          "angular"
+        ]
+      ]
+    },
+    {
+      "saisie": "  python  ,  django  ",
+      "groupes": [
+        [
+          "python"
+        ],
+        [
+          "django"
+        ]
+      ]
+    },
+    {
+      "saisie": "python,,\n\n  \ndjango,",
+      "groupes": [
+        [
+          "python"
+        ],
+        [
+          "django"
+        ]
+      ]
+    },
+    {
+      "saisie": "python\npython",
+      "groupes": [
+        [
+          "python"
+        ]
+      ]
+    },
+    {
+      "saisie": "a = b = c",
+      "groupes": [
+        [
+          "a",
+          "b = c"
+        ]
+      ]
+    },
+    {
+      "saisie": "",
+      "groupes": []
+    },
+    {
+      "saisie": "   ",
+      "groupes": []
+    },
+    {
+      "saisie": "=",
+      "groupes": []
+    },
+    {
+      "saisie": "= vue, angular",
+      "groupes": [
+        [
+          "vue",
+          "angular"
+        ]
+      ]
+    },
+    {
+      "saisie": "react =",
+      "groupes": [
+        [
+          "react"
+        ]
+      ]
+    },
+    {
+      "saisie": "react = ",
+      "groupes": [
+        [
+          "react"
+        ]
+      ]
+    },
+    {
+      "saisie": ",,,",
+      "groupes": []
+    },
+    {
+      "saisie": "\n\n\n",
+      "groupes": []
+    },
+    {
+      "saisie": "Développeur = Developer",
+      "groupes": [
+        [
+          "Développeur",
+          "Developer"
+        ]
+      ]
+    },
+    {
+      "saisie": "chef comptable = comptable senior, responsable comptable, directeur financier",
+      "groupes": [
+        [
+          "chef comptable",
+          "comptable senior",
+          "responsable comptable",
+          "directeur financier"
+        ]
+      ]
+    },
+    {
+      "saisie": "un terme avec des espaces",
+      "groupes": [
+        [
+          "un terme avec des espaces"
+        ]
+      ]
+    },
+    {
+      "saisie": "A, B\nA, B",
+      "groupes": [
+        [
+          "A"
+        ],
+        [
+          "B"
+        ]
+      ]
+    },
+    {
+      "saisie": "python\n  python  ",
+      "groupes": [
+        [
+          "python"
+        ]
+      ]
+    }
+  ],
+  "allerRetour": [
+    {
+      "modele": "Développeur web",
+      "critere": "Langages & frameworks",
+      "groupes": [
+        [
+          "python"
+        ],
+        [
+          "javascript",
+          "js"
+        ],
+        [
+          "django",
+          "flask"
+        ],
+        [
+          "react",
+          "vue",
+          "angular"
+        ]
+      ],
+      "formate": "python\njavascript = js\ndjango = flask\nreact = vue, angular",
+      "groupesApresRetour": [
+        [
+          "python"
+        ],
+        [
+          "javascript",
+          "js"
+        ],
+        [
+          "django",
+          "flask"
+        ],
+        [
+          "react",
+          "vue",
+          "angular"
+        ]
+      ]
+    },
+    {
+      "modele": "Développeur web",
+      "critere": "Bases de données",
+      "groupes": [
+        [
+          "sql"
+        ],
+        [
+          "postgresql",
+          "postgres"
+        ],
+        [
+          "mysql"
+        ],
+        [
+          "mongodb",
+          "nosql"
+        ]
+      ],
+      "formate": "sql\npostgresql = postgres\nmysql\nmongodb = nosql",
+      "groupesApresRetour": [
+        [
+          "sql"
+        ],
+        [
+          "postgresql",
+          "postgres"
+        ],
+        [
+          "mysql"
+        ],
+        [
+          "mongodb",
+          "nosql"
+        ]
+      ]
+    },
+    {
+      "modele": "Développeur web",
+      "critere": "Outils & versioning",
+      "groupes": [
+        [
+          "git",
+          "github",
+          "gitlab"
+        ],
+        [
+          "docker"
+        ],
+        [
+          "linux"
+        ]
+      ],
+      "formate": "git = github, gitlab\ndocker\nlinux",
+      "groupesApresRetour": [
+        [
+          "git",
+          "github",
+          "gitlab"
+        ],
+        [
+          "docker"
+        ],
+        [
+          "linux"
+        ]
+      ]
+    },
+    {
+      "modele": "Développeur web",
+      "critere": "Expérience terrain",
+      "groupes": [
+        [
+          "developpeur",
+          "developer",
+          "ingenieur logiciel"
+        ],
+        [
+          "freelance"
+        ],
+        [
+          "stage"
+        ]
+      ],
+      "formate": "developpeur = developer, ingenieur logiciel\nfreelance\nstage",
+      "groupesApresRetour": [
+        [
+          "developpeur",
+          "developer",
+          "ingenieur logiciel"
+        ],
+        [
+          "freelance"
+        ],
+        [
+          "stage"
+        ]
+      ]
+    },
+    {
+      "modele": "Développeur web",
+      "critere": "Formation",
+      "groupes": [
+        [
+          "licence",
+          "bachelor"
+        ],
+        [
+          "master"
+        ],
+        [
+          "informatique"
+        ]
+      ],
+      "formate": "licence = bachelor\nmaster\ninformatique",
+      "groupesApresRetour": [
+        [
+          "licence",
+          "bachelor"
+        ],
+        [
+          "master"
+        ],
+        [
+          "informatique"
+        ]
+      ]
+    },
+    {
+      "modele": "Comptable",
+      "critere": "Comptabilité générale",
+      "groupes": [
+        [
+          "comptabilite generale",
+          "comptabilite analytique",
+          "ecritures comptables",
+          "saisie comptable"
+        ],
+        [
+          "rapprochement bancaire",
+          "rapprochements bancaires"
+        ],
+        [
+          "etats financiers",
+          "etat financier",
+          "bilan",
+          "compte de resultat",
+          "balance generale"
+        ],
+        [
+          "syscohada",
+          "ohada",
+          "syscoa"
+        ],
+        [
+          "manuel de procedure",
+          "manuel de procedures",
+          "procedures comptables",
+          "procedures de gestion",
+          "procedures",
+          "procedure"
+        ]
+      ],
+      "formate": "comptabilite generale = comptabilite analytique, ecritures comptables, saisie comptable\nrapprochement bancaire = rapprochements bancaires\netats financiers = etat financier, bilan, compte de resultat, balance generale\nsyscohada = ohada, syscoa\nmanuel de procedure = manuel de procedures, procedures comptables, procedures de gestion, procedures, procedure",
+      "groupesApresRetour": [
+        [
+          "comptabilite generale",
+          "comptabilite analytique",
+          "ecritures comptables",
+          "saisie comptable"
+        ],
+        [
+          "rapprochement bancaire",
+          "rapprochements bancaires"
+        ],
+        [
+          "etats financiers",
+          "etat financier",
+          "bilan",
+          "compte de resultat",
+          "balance generale"
+        ],
+        [
+          "syscohada",
+          "ohada",
+          "syscoa"
+        ],
+        [
+          "manuel de procedure",
+          "manuel de procedures",
+          "procedures comptables",
+          "procedures de gestion",
+          "procedures",
+          "procedure"
+        ]
+      ]
+    },
+    {
+      "modele": "Comptable",
+      "critere": "Fiscalité & déclarations",
+      "groupes": [
+        [
+          "fiscalite",
+          "fiscal",
+          "fiscale",
+          "fiscales",
+          "fiscaux"
+        ],
+        [
+          "tva"
+        ],
+        [
+          "declaration fiscale",
+          "declarations fiscales",
+          "declaration d'impots"
+        ],
+        [
+          "cnps",
+          "charges sociales",
+          "cotisations sociales"
+        ]
+      ],
+      "formate": "fiscalite = fiscal, fiscale, fiscales, fiscaux\ntva\ndeclaration fiscale = declarations fiscales, declaration d'impots\ncnps = charges sociales, cotisations sociales",
+      "groupesApresRetour": [
+        [
+          "fiscalite",
+          "fiscal",
+          "fiscale",
+          "fiscales",
+          "fiscaux"
+        ],
+        [
+          "tva"
+        ],
+        [
+          "declaration fiscale",
+          "declarations fiscales",
+          "declaration d'impots"
+        ],
+        [
+          "cnps",
+          "charges sociales",
+          "cotisations sociales"
+        ]
+      ]
+    },
+    {
+      "modele": "Comptable",
+      "critere": "Outils",
+      "groupes": [
+        [
+          "sage",
+          "saari",
+          "sage 100"
+        ],
+        [
+          "excel",
+          "tableur"
+        ],
+        [
+          "erp",
+          "sap",
+          "dynamics",
+          "odoo",
+          "tompro",
+          "oracle"
+        ]
+      ],
+      "formate": "sage = saari, sage 100\nexcel = tableur\nerp = sap, dynamics, odoo, tompro, oracle",
+      "groupesApresRetour": [
+        [
+          "sage",
+          "saari",
+          "sage 100"
+        ],
+        [
+          "excel",
+          "tableur"
+        ],
+        [
+          "erp",
+          "sap",
+          "dynamics",
+          "odoo",
+          "tompro",
+          "oracle"
+        ]
+      ]
+    },
+    {
+      "modele": "Comptable",
+      "critere": "Expérience",
+      "groupes": [
+        [
+          "comptable"
+        ],
+        [
+          "chef comptable",
+          "comptable senior",
+          "responsable comptable",
+          "directeur financier"
+        ],
+        [
+          "cabinet",
+          "cabinet comptable",
+          "cabinet d'expertise"
+        ],
+        [
+          "audit",
+          "controle de gestion",
+          "controle interne",
+          "commissariat aux comptes"
+        ]
+      ],
+      "formate": "comptable\nchef comptable = comptable senior, responsable comptable, directeur financier\ncabinet = cabinet comptable, cabinet d'expertise\naudit = controle de gestion, controle interne, commissariat aux comptes",
+      "groupesApresRetour": [
+        [
+          "comptable"
+        ],
+        [
+          "chef comptable",
+          "comptable senior",
+          "responsable comptable",
+          "directeur financier"
+        ],
+        [
+          "cabinet",
+          "cabinet comptable",
+          "cabinet d'expertise"
+        ],
+        [
+          "audit",
+          "controle de gestion",
+          "controle interne",
+          "commissariat aux comptes"
+        ]
+      ]
+    },
+    {
+      "modele": "Assistant administratif",
+      "critere": "Administration",
+      "groupes": [
+        [
+          "gestion administrative"
+        ],
+        [
+          "courrier"
+        ],
+        [
+          "archivage"
+        ],
+        [
+          "agenda",
+          "planning"
+        ]
+      ],
+      "formate": "gestion administrative\ncourrier\narchivage\nagenda = planning",
+      "groupesApresRetour": [
+        [
+          "gestion administrative"
+        ],
+        [
+          "courrier"
+        ],
+        [
+          "archivage"
+        ],
+        [
+          "agenda",
+          "planning"
+        ]
+      ]
+    },
+    {
+      "modele": "Assistant administratif",
+      "critere": "Ressources humaines",
+      "groupes": [
+        [
+          "recrutement"
+        ],
+        [
+          "paie",
+          "salaire",
+          "payroll"
+        ],
+        [
+          "contrat de travail"
+        ],
+        [
+          "dossier du personnel"
+        ]
+      ],
+      "formate": "recrutement\npaie = salaire, payroll\ncontrat de travail\ndossier du personnel",
+      "groupesApresRetour": [
+        [
+          "recrutement"
+        ],
+        [
+          "paie",
+          "salaire",
+          "payroll"
+        ],
+        [
+          "contrat de travail"
+        ],
+        [
+          "dossier du personnel"
+        ]
+      ]
+    },
+    {
+      "modele": "Assistant administratif",
+      "critere": "Bureautique",
+      "groupes": [
+        [
+          "word"
+        ],
+        [
+          "excel"
+        ],
+        [
+          "powerpoint"
+        ],
+        [
+          "outlook"
+        ]
+      ],
+      "formate": "word\nexcel\npowerpoint\noutlook",
+      "groupesApresRetour": [
+        [
+          "word"
+        ],
+        [
+          "excel"
+        ],
+        [
+          "powerpoint"
+        ],
+        [
+          "outlook"
+        ]
+      ]
+    },
+    {
+      "modele": "Assistant administratif",
+      "critere": "Qualités & langues",
+      "groupes": [
+        [
+          "anglais"
+        ],
+        [
+          "redaction"
+        ],
+        [
+          "organisation"
+        ]
+      ],
+      "formate": "anglais\nredaction\norganisation",
+      "groupesApresRetour": [
+        [
+          "anglais"
+        ],
+        [
+          "redaction"
+        ],
+        [
+          "organisation"
+        ]
+      ]
+    },
+    {
+      "modele": "Commercial terrain",
+      "critere": "Développement commercial",
+      "groupes": [
+        [
+          "prospection"
+        ],
+        [
+          "negociation"
+        ],
+        [
+          "portefeuille client"
+        ],
+        [
+          "chiffre d'affaires"
+        ]
+      ],
+      "formate": "prospection\nnegociation\nportefeuille client\nchiffre d'affaires",
+      "groupesApresRetour": [
+        [
+          "prospection"
+        ],
+        [
+          "negociation"
+        ],
+        [
+          "portefeuille client"
+        ],
+        [
+          "chiffre d'affaires"
+        ]
+      ]
+    },
+    {
+      "modele": "Commercial terrain",
+      "critere": "Relation client",
+      "groupes": [
+        [
+          "relation client",
+          "service client"
+        ],
+        [
+          "fidelisation"
+        ],
+        [
+          "reclamation"
+        ]
+      ],
+      "formate": "relation client = service client\nfidelisation\nreclamation",
+      "groupesApresRetour": [
+        [
+          "relation client",
+          "service client"
+        ],
+        [
+          "fidelisation"
+        ],
+        [
+          "reclamation"
+        ]
+      ]
+    },
+    {
+      "modele": "Commercial terrain",
+      "critere": "Outils",
+      "groupes": [
+        [
+          "crm"
+        ],
+        [
+          "salesforce"
+        ],
+        [
+          "excel"
+        ],
+        [
+          "reporting"
+        ]
+      ],
+      "formate": "crm\nsalesforce\nexcel\nreporting",
+      "groupesApresRetour": [
+        [
+          "crm"
+        ],
+        [
+          "salesforce"
+        ],
+        [
+          "excel"
+        ],
+        [
+          "reporting"
+        ]
+      ]
+    },
+    {
+      "modele": "Commercial terrain",
+      "critere": "Expérience",
+      "groupes": [
+        [
+          "commercial"
+        ],
+        [
+          "charge de clientele"
+        ],
+        [
+          "terrain"
+        ]
+      ],
+      "formate": "commercial\ncharge de clientele\nterrain",
+      "groupesApresRetour": [
+        [
+          "commercial"
+        ],
+        [
+          "charge de clientele"
+        ],
+        [
+          "terrain"
+        ]
+      ]
+    },
+    {
+      "modele": "Logistique",
+      "critere": "Gestion des flux",
+      "groupes": [
+        [
+          "approvisionnement"
+        ],
+        [
+          "stock",
+          "inventaire"
+        ],
+        [
+          "transit"
+        ],
+        [
+          "douane"
+        ]
+      ],
+      "formate": "approvisionnement\nstock = inventaire\ntransit\ndouane",
+      "groupesApresRetour": [
+        [
+          "approvisionnement"
+        ],
+        [
+          "stock",
+          "inventaire"
+        ],
+        [
+          "transit"
+        ],
+        [
+          "douane"
+        ]
+      ]
+    },
+    {
+      "modele": "Logistique",
+      "critere": "Transport",
+      "groupes": [
+        [
+          "transport"
+        ],
+        [
+          "fret"
+        ],
+        [
+          "import",
+          "export"
+        ],
+        [
+          "incoterms"
+        ]
+      ],
+      "formate": "transport\nfret\nimport = export\nincoterms",
+      "groupesApresRetour": [
+        [
+          "transport"
+        ],
+        [
+          "fret"
+        ],
+        [
+          "import",
+          "export"
+        ],
+        [
+          "incoterms"
+        ]
+      ]
+    },
+    {
+      "modele": "Logistique",
+      "critere": "Outils",
+      "groupes": [
+        [
+          "erp"
+        ],
+        [
+          "sap"
+        ],
+        [
+          "excel"
+        ],
+        [
+          "wms"
+        ]
+      ],
+      "formate": "erp\nsap\nexcel\nwms",
+      "groupesApresRetour": [
+        [
+          "erp"
+        ],
+        [
+          "sap"
+        ],
+        [
+          "excel"
+        ],
+        [
+          "wms"
+        ]
+      ]
+    },
+    {
+      "modele": "Logistique",
+      "critere": "Expérience",
+      "groupes": [
+        [
+          "logistique"
+        ],
+        [
+          "supply chain"
+        ],
+        [
+          "magasinier"
+        ]
+      ],
+      "formate": "logistique\nsupply chain\nmagasinier",
+      "groupesApresRetour": [
+        [
+          "logistique"
+        ],
+        [
+          "supply chain"
+        ],
+        [
+          "magasinier"
+        ]
+      ]
+    }
+  ],
+  "construction": [
+    {
+      "entree": {
+        "nom": "  Langages  ",
+        "poids": 35,
+        "motsCles": "python, java",
+        "type": "requis"
+      },
+      "critere": {
+        "nom": "Langages",
+        "poids": 35,
+        "type": "requis",
+        "groupes": [
+          [
+            "python"
+          ],
+          [
+            "java"
+          ]
+        ]
+      }
+    },
+    {
+      "entree": {
+        "nom": "",
+        "poids": 0,
+        "motsCles": "",
+        "type": "requis"
+      },
+      "critere": {
+        "nom": "",
+        "poids": 0,
+        "type": "requis",
+        "groupes": []
+      }
+    },
+    {
+      "entree": {
+        "nom": "Intérim",
+        "poids": 0,
+        "motsCles": "interim = mission temporaire",
+        "type": "exclusion"
+      },
+      "critere": {
+        "nom": "Intérim",
+        "poids": 0,
+        "type": "exclusion",
+        "groupes": [
+          [
+            "interim",
+            "mission temporaire"
+          ]
+        ]
+      }
+    },
+    {
+      "entree": {
+        "nom": "Sans mot-clé",
+        "poids": 20,
+        "motsCles": "   ",
+        "type": "requis"
+      },
+      "critere": {
+        "nom": "Sans mot-clé",
+        "poids": 20,
+        "type": "requis",
+        "groupes": []
+      }
+    }
+  ],
+  "indicateurs": [
+    {
+      "criteres": [],
+      "total": 0,
+      "incomplets": []
+    },
+    {
+      "criteres": [
+        {
+          "nom": "A",
+          "poids": 35,
+          "type": "requis",
+          "groupes": [
+            [
+              "x"
+            ]
+          ]
+        }
+      ],
+      "total": 35,
+      "incomplets": []
+    },
+    {
+      "criteres": [
+        {
+          "nom": "A",
+          "poids": 35,
+          "type": "requis",
+          "groupes": [
+            [
+              "x"
+            ]
+          ]
+        },
+        {
+          "nom": "B",
+          "poids": 20,
+          "type": "exclusion",
+          "groupes": [
+            [
+              "y"
+            ]
+          ]
+        }
+      ],
+      "total": 35,
+      "incomplets": []
+    },
+    {
+      "criteres": [
+        {
+          "nom": "A",
+          "poids": 50,
+          "type": "requis",
+          "groupes": []
+        },
+        {
+          "nom": "",
+          "poids": 30,
+          "type": "requis",
+          "groupes": []
+        },
+        {
+          "nom": "C",
+          "poids": 0,
+          "type": "requis",
+          "groupes": []
+        },
+        {
+          "nom": "D",
+          "poids": 20,
+          "type": "requis",
+          "groupes": [
+            [
+              "z"
+            ]
+          ]
+        }
+      ],
+      "total": 100,
+      "incomplets": [
+        "A",
+        ""
+      ]
+    }
+  ]
+}

@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <!-- Même politique de sécurité que l'application : la page de tests ne doit
+       pas être plus permissive que ce qu'elle teste. -->
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <meta name="referrer" content="no-referrer">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TriCV — tests de non-régression</title>
+  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="tests.css">
+  <script type="module" src="tests.js"></script>
+</head>
+<body>
+  <header class="bandeau">
+    <div class="cadre">
+      <div class="barre-haut">
+        <a class="marque" href="../index.html">TriCV <b>Facile</b></a>
+        <nav class="navigation" aria-label="Navigation">
+          <a href="../index.html">Retour à l'outil</a>
+        </nav>
+      </div>
+      <p class="surtitre">Développement</p>
+      <h1>Tests de non-régression</h1>
+    </div>
+  </header>
+
+  <main class="cadre">
+    <section class="section">
+      <p class="intro">
+        Compare la version JavaScript de <code>web/js/</code> aux résultats
+        produits par le moteur Python de <code>core/</code>, enregistrés par
+        <code>tests/generer_reference_js.py</code> dans
+        <code>web/tests/reference/</code>.
+      </p>
+      <p class="intro">
+        Page de développement, à ouvrir en local : lancer
+        <code>python3 -m http.server</code> <strong>à la racine du projet</strong>,
+        puis <code>http://localhost:8000/web/tests/tests.html</code>.
+      </p>
+
+      <p id="bilan" class="bilan">Tests en cours…</p>
+      <div id="groupes"></div>
+    </section>
+  </main>
+</body>
+</html>

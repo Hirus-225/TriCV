@@ -1,0 +1,1366 @@
+[
+  {
+    "intitule": "A1 — frontières de mots",
+    "texte": "Algorithme de recrutement. Mission au Congo et en Angola.",
+    "criteres": [
+      {
+        "nom": "Courts",
+        "poids": 100,
+        "type": "requis",
+        "groupes": [
+          [
+            "r"
+          ],
+          [
+            "go"
+          ],
+          [
+            "c"
+          ],
+          [
+            "python"
+          ]
+        ]
+      }
+    ],
+    "resultat": {
+      "score": 0,
+      "signalements": [],
+      "detail": [
+        {
+          "critere": "Courts",
+          "poids": 100,
+          "points": 0,
+          "points_exacts": 0.0,
+          "trouves": [],
+          "absents": [
+            "r",
+            "go",
+            "c",
+            "python"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "intitule": "A1 — un mot-clé d'une lettre reste trouvable seul",
+    "texte": "Je programme en R et en Python.",
+    "criteres": [
+      {
+        "nom": "Courts",
+        "poids": 100,
+        "type": "requis",
+        "groupes": [
+          [
+            "r"
+          ],
+          [
+            "python"
+          ],
+          [
+            "go"
+          ]
+        ]
+      }
+    ],
+    "resultat": {
+      "score": 67,
+      "signalements": [],
+      "detail": [
+        {
+          "critere": "Courts",
+          "poids": 100,
+          "points": 67,
+          "points_exacts": 66.66666666666666,
+          "trouves": [
+            "r",
+            "python"
+          ],
+          "absents": [
+            "go"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "intitule": "A2 — mot-clé sans accent, CV accentué",
+    "texte": "Développeur back-end, spécialisé en modélisation.",
+    "criteres": [
+      {
+        "nom": "Accents",
+        "poids": 50,
+        "type": "requis",
+        "groupes": [
+          [
+            "developpeur"
+          ],
+          [
+            "modelisation"
+          ],
+          [
+            "specialise"
+          ]
+        ]
+      }
+    ],
+    "resultat": {
+      "score": 100,
+      "signalements": [],
+      "detail": [
+        {
+          "critere": "Accents",
+          "poids": 50,
+          "points": 50,
+          "points_exacts": 50.0,
+          "trouves": [
+            "developpeur",
+            "modelisation",
+            "specialise"
+          ],
+          "absents": []
+        }
+      ]
+    }
+  },
+  {
+    "intitule": "A2 — mot-clé accentué, CV sans accent",
+    "texte": "Developpeur back-end, specialise en modelisation.",
+    "criteres": [
+      {
+        "nom": "Accents",
+        "poids": 50,
+        "type": "requis",
+        "groupes": [
+          [
+            "développeur"
+          ],
+          [
+            "modélisation"
+          ]
+        ]
+      }
+    ],
+    "resultat": {
+      "score": 100,
+      "signalements": [],
+      "detail": [
+        {
+          "critere": "Accents",
+          "poids": 50,
+          "points": 50,
+          "points_exacts": 50.0,
+          "trouves": [
+            "développeur",
+            "modélisation"
+          ],
+          "absents": []
+        }
+      ]
+    }
+  },
+  {
+    "intitule": "A3 — poids 150, CV complet",
+    "texte": "python sql git",
+    "criteres": [
+      {
+        "nom": "A",
+        "poids": 100,
+        "type": "requis",
+        "groupes": [
+          [
+            "python"
+          ],
+          [
+            "sql"
+          ]
+        ]
+      },
+      {
+        "nom": "B",
+        "poids": 50,
+        "type": "requis",
+        "groupes": [
+          [
+            "git"
+          ]
+        ]
+      }
+    ],
+    "resultat": {
+      "score": 100,
+      "signalements": [],
+      "detail": [
+        {
+          "critere": "A",
+          "poids": 100,
+          "points": 100,
+          "points_exacts": 100.0,
+          "trouves": [
+            "python",
+            "sql"
+          ],
+          "absents": []
+        },
+        {
+          "critere": "B",
+          "poids": 50,
+          "points": 50,
+          "points_exacts": 50.0,
+          "trouves": [
+            "git"
+          ],
+          "absents": []
+        }
+      ]
+    }
+  },
+  {
+    "intitule": "A3 — poids 150, CV partiel",
+    "texte": "python sql",
+    "criteres": [
+      {
+        "nom": "A",
+        "poids": 100,
+        "type": "requis",
+        "groupes": [
+          [
+            "python"
+          ],
+          [
+            "sql"
+          ]
+        ]
+      },
+      {
+        "nom": "B",
+        "poids": 50,
+        "type": "requis",
+        "groupes": [
+          [
+            "git"
+          ]
+        ]
+      }
+    ],
+    "resultat": {
+      "score": 67,
+      "signalements": [],
+      "detail": [
+        {
+          "critere": "A",
+          "poids": 100,
+          "points": 100,
+          "points_exacts": 100.0,
+          "trouves": [
+            "python",
+            "sql"
+          ],
+          "absents": []
+        },
+        {
+          "critere": "B",
+          "poids": 50,
+          "points": 0,
+          "points_exacts": 0.0,
+          "trouves": [],
+          "absents": [
+            "git"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "intitule": "A3 — poids 150, CV faible",
+    "texte": "python",
+    "criteres": [
+      {
+        "nom": "A",
+        "poids": 100,
+        "type": "requis",
+        "groupes": [
+          [
+            "python"
+          ],
+          [
+            "sql"
+          ]
+        ]
+      },
+      {
+        "nom": "B",
+        "poids": 50,
+        "type": "requis",
+        "groupes": [
+          [
+            "git"
+          ]
+        ]
+      }
+    ],
+    "resultat": {
+      "score": 33,
+      "signalements": [],
+      "detail": [
+        {
+          "critere": "A",
+          "poids": 100,
+          "points": 50,
+          "points_exacts": 50.0,
+          "trouves": [
+            "python"
+          ],
+          "absents": [
+            "sql"
+          ]
+        },
+        {
+          "critere": "B",
+          "poids": 50,
+          "points": 0,
+          "points_exacts": 0.0,
+          "trouves": [],
+          "absents": [
+            "git"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "intitule": "A3 — mêmes proportions sur 15, même score",
+    "texte": "python sql",
+    "criteres": [
+      {
+        "nom": "A",
+        "poids": 10,
+        "type": "requis",
+        "groupes": [
+          [
+            "python"
+          ],
+          [
+            "sql"
+          ]
+        ]
+      },
+      {
+        "nom": "B",
+        "poids": 5,
+        "type": "requis",
+        "groupes": [
+          [
+            "git"
+          ]
+        ]
+      }
+    ],
+    "resultat": {
+      "score": 67,
+      "signalements": [],
+      "detail": [
+        {
+          "critere": "A",
+          "poids": 10,
+          "points": 10,
+          "points_exacts": 10.0,
+          "trouves": [
+            "python",
+            "sql"
+          ],
+          "absents": []
+        },
+        {
+          "critere": "B",
+          "poids": 5,
+          "points": 0,
+          "points_exacts": 0.0,
+          "trouves": [],
+          "absents": [
+            "git"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "intitule": "A4 — avec critère d'exclusion",
+    "texte": "Developpeur Python, Django, React, JavaScript. SQL, PostgreSQL, MySQL, MongoDB. Git, Docker, Linux. Freelance. Licence en informatique. Je recherche un stage de fin de cycle.",
+    "criteres": [
+      {
+        "nom": "Langages & frameworks",
+        "poids": 35,
+        "type": "requis",
+        "mots_cles": "python\njavascript = js\ndjango = flask\nreact = vue, angular",
+        "groupes": [
+          [
+            "python"
+          ],
+          [
+            "javascript",
+            "js"
+          ],
+          [
+            "django",
+            "flask"
+          ],
+          [
+            "react",
+            "vue",
+            "angular"
+          ]
+        ]
+      },
+      {
+        "nom": "Bases de données",
+        "poids": 20,
+        "type": "requis",
+        "mots_cles": "sql\npostgresql = postgres\nmysql\nmongodb = nosql",
+        "groupes": [
+          [
+            "sql"
+          ],
+          [
+            "postgresql",
+            "postgres"
+          ],
+          [
+            "mysql"
+          ],
+          [
+            "mongodb",
+            "nosql"
+          ]
+        ]
+      },
+      {
+        "nom": "Outils & versioning",
+        "poids": 15,
+        "type": "requis",
+        "mots_cles": "git = github, gitlab\ndocker\nlinux",
+        "groupes": [
+          [
+            "git",
+            "github",
+            "gitlab"
+          ],
+          [
+            "docker"
+          ],
+          [
+            "linux"
+          ]
+        ]
+      },
+      {
+        "nom": "Expérience terrain",
+        "poids": 20,
+        "type": "requis",
+        "mots_cles": "developpeur = developer, ingenieur logiciel\nfreelance\nstage",
+        "groupes": [
+          [
+            "developpeur",
+            "developer",
+            "ingenieur logiciel"
+          ],
+          [
+            "freelance"
+          ],
+          [
+            "stage"
+          ]
+        ]
+      },
+      {
+        "nom": "Formation",
+        "poids": 10,
+        "type": "requis",
+        "mots_cles": "licence = bachelor\nmaster\ninformatique",
+        "groupes": [
+          [
+            "licence",
+            "bachelor"
+          ],
+          [
+            "master"
+          ],
+          [
+            "informatique"
+          ]
+        ]
+      },
+      {
+        "nom": "Recherche un stage",
+        "poids": 0,
+        "type": "exclusion",
+        "groupes": [
+          [
+            "recherche un stage"
+          ],
+          [
+            "interim"
+          ]
+        ]
+      }
+    ],
+    "resultat": {
+      "score": 97,
+      "signalements": [
+        {
+          "critere": "Recherche un stage",
+          "declencheurs": [
+            "recherche un stage"
+          ]
+        }
+      ],
+      "detail": [
+        {
+          "critere": "Langages & frameworks",
+          "poids": 35,
+          "points": 35,
+          "points_exacts": 35.0,
+          "trouves": [
+            "python",
+            "javascript",
+            "django",
+            "react"
+          ],
+          "absents": []
+        },
+        {
+          "critere": "Bases de données",
+          "poids": 20,
+          "points": 20,
+          "points_exacts": 20.0,
+          "trouves": [
+            "sql",
+            "postgresql",
+            "mysql",
+            "mongodb"
+          ],
+          "absents": []
+        },
+        {
+          "critere": "Outils & versioning",
+          "poids": 15,
+          "points": 15,
+          "points_exacts": 15.0,
+          "trouves": [
+            "git",
+            "docker",
+            "linux"
+          ],
+          "absents": []
+        },
+        {
+          "critere": "Expérience terrain",
+          "poids": 20,
+          "points": 20,
+          "points_exacts": 20.0,
+          "trouves": [
+            "developpeur",
+            "freelance",
+            "stage"
+          ],
+          "absents": []
+        },
+        {
+          "critere": "Formation",
+          "poids": 10,
+          "points": 7,
+          "points_exacts": 6.666666666666666,
+          "trouves": [
+            "licence",
+            "informatique"
+          ],
+          "absents": [
+            "master"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "intitule": "A4 — sans critère d'exclusion",
+    "texte": "Developpeur Python, Django, React, JavaScript. SQL, PostgreSQL, MySQL, MongoDB. Git, Docker, Linux. Freelance. Licence en informatique. Je recherche un stage de fin de cycle.",
+    "criteres": [
+      {
+        "nom": "Langages & frameworks",
+        "poids": 35,
+        "type": "requis",
+        "mots_cles": "python\njavascript = js\ndjango = flask\nreact = vue, angular",
+        "groupes": [
+          [
+            "python"
+          ],
+          [
+            "javascript",
+            "js"
+          ],
+          [
+            "django",
+            "flask"
+          ],
+          [
+            "react",
+            "vue",
+            "angular"
+          ]
+        ]
+      },
+      {
+        "nom": "Bases de données",
+        "poids": 20,
+        "type": "requis",
+        "mots_cles": "sql\npostgresql = postgres\nmysql\nmongodb = nosql",
+        "groupes": [
+          [
+            "sql"
+          ],
+          [
+            "postgresql",
+            "postgres"
+          ],
+          [
+            "mysql"
+          ],
+          [
+            "mongodb",
+            "nosql"
+          ]
+        ]
+      },
+      {
+        "nom": "Outils & versioning",
+        "poids": 15,
+        "type": "requis",
+        "mots_cles": "git = github, gitlab\ndocker\nlinux",
+        "groupes": [
+          [
+            "git",
+            "github",
+            "gitlab"
+          ],
+          [
+            "docker"
+          ],
+          [
+            "linux"
+          ]
+        ]
+      },
+      {
+        "nom": "Expérience terrain",
+        "poids": 20,
+        "type": "requis",
+        "mots_cles": "developpeur = developer, ingenieur logiciel\nfreelance\nstage",
+        "groupes": [
+          [
+            "developpeur",
+            "developer",
+            "ingenieur logiciel"
+          ],
+          [
+            "freelance"
+          ],
+          [
+            "stage"
+          ]
+        ]
+      },
+      {
+        "nom": "Formation",
+        "poids": 10,
+        "type": "requis",
+        "mots_cles": "licence = bachelor\nmaster\ninformatique",
+        "groupes": [
+          [
+            "licence",
+            "bachelor"
+          ],
+          [
+            "master"
+          ],
+          [
+            "informatique"
+          ]
+        ]
+      }
+    ],
+    "resultat": {
+      "score": 97,
+      "signalements": [],
+      "detail": [
+        {
+          "critere": "Langages & frameworks",
+          "poids": 35,
+          "points": 35,
+          "points_exacts": 35.0,
+          "trouves": [
+            "python",
+            "javascript",
+            "django",
+            "react"
+          ],
+          "absents": []
+        },
+        {
+          "critere": "Bases de données",
+          "poids": 20,
+          "points": 20,
+          "points_exacts": 20.0,
+          "trouves": [
+            "sql",
+            "postgresql",
+            "mysql",
+            "mongodb"
+          ],
+          "absents": []
+        },
+        {
+          "critere": "Outils & versioning",
+          "poids": 15,
+          "points": 15,
+          "points_exacts": 15.0,
+          "trouves": [
+            "git",
+            "docker",
+            "linux"
+          ],
+          "absents": []
+        },
+        {
+          "critere": "Expérience terrain",
+          "poids": 20,
+          "points": 20,
+          "points_exacts": 20.0,
+          "trouves": [
+            "developpeur",
+            "freelance",
+            "stage"
+          ],
+          "absents": []
+        },
+        {
+          "critere": "Formation",
+          "poids": 10,
+          "points": 7,
+          "points_exacts": 6.666666666666666,
+          "trouves": [
+            "licence",
+            "informatique"
+          ],
+          "absents": [
+            "master"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "intitule": "arrondi — 12,5 points affichés",
+    "texte": "python",
+    "criteres": [
+      {
+        "nom": "A",
+        "poids": 25,
+        "type": "requis",
+        "groupes": [
+          [
+            "python"
+          ],
+          [
+            "sql"
+          ]
+        ]
+      }
+    ],
+    "resultat": {
+      "score": 50,
+      "signalements": [],
+      "detail": [
+        {
+          "critere": "A",
+          "poids": 25,
+          "points": 12,
+          "points_exacts": 12.5,
+          "trouves": [
+            "python"
+          ],
+          "absents": [
+            "sql"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "intitule": "arrondi — score global à 12,5 %",
+    "texte": "python",
+    "criteres": [
+      {
+        "nom": "A",
+        "poids": 5,
+        "type": "requis",
+        "groupes": [
+          [
+            "python"
+          ],
+          [
+            "sql"
+          ]
+        ]
+      },
+      {
+        "nom": "B",
+        "poids": 15,
+        "type": "requis",
+        "groupes": [
+          [
+            "git"
+          ]
+        ]
+      }
+    ],
+    "resultat": {
+      "score": 12,
+      "signalements": [],
+      "detail": [
+        {
+          "critere": "A",
+          "poids": 5,
+          "points": 2,
+          "points_exacts": 2.5,
+          "trouves": [
+            "python"
+          ],
+          "absents": [
+            "sql"
+          ]
+        },
+        {
+          "critere": "B",
+          "poids": 15,
+          "points": 0,
+          "points_exacts": 0.0,
+          "trouves": [],
+          "absents": [
+            "git"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "intitule": "aucun critère",
+    "texte": "python",
+    "criteres": [],
+    "resultat": {
+      "score": 0,
+      "signalements": [],
+      "detail": []
+    }
+  },
+  {
+    "intitule": "tous les poids à zéro",
+    "texte": "python",
+    "criteres": [
+      {
+        "nom": "A",
+        "poids": 0,
+        "type": "requis",
+        "groupes": [
+          [
+            "python"
+          ]
+        ]
+      }
+    ],
+    "resultat": {
+      "score": 0,
+      "signalements": [],
+      "detail": [
+        {
+          "critere": "A",
+          "poids": 0,
+          "points": 0,
+          "points_exacts": 0.0,
+          "trouves": [
+            "python"
+          ],
+          "absents": []
+        }
+      ]
+    }
+  },
+  {
+    "intitule": "critère avec un poids mais aucun groupe",
+    "texte": "python",
+    "criteres": [
+      {
+        "nom": "A",
+        "poids": 50,
+        "type": "requis",
+        "groupes": []
+      },
+      {
+        "nom": "B",
+        "poids": 50,
+        "type": "requis",
+        "groupes": [
+          [
+            "python"
+          ]
+        ]
+      }
+    ],
+    "resultat": {
+      "score": 50,
+      "signalements": [],
+      "detail": [
+        {
+          "critere": "A",
+          "poids": 50,
+          "points": 0,
+          "points_exacts": 0.0,
+          "trouves": [],
+          "absents": []
+        },
+        {
+          "critere": "B",
+          "poids": 50,
+          "points": 50,
+          "points_exacts": 50.0,
+          "trouves": [
+            "python"
+          ],
+          "absents": []
+        }
+      ]
+    }
+  },
+  {
+    "intitule": "texte vide",
+    "texte": "",
+    "criteres": [
+      {
+        "nom": "Langages & frameworks",
+        "poids": 35,
+        "type": "requis",
+        "mots_cles": "python\njavascript = js\ndjango = flask\nreact = vue, angular",
+        "groupes": [
+          [
+            "python"
+          ],
+          [
+            "javascript",
+            "js"
+          ],
+          [
+            "django",
+            "flask"
+          ],
+          [
+            "react",
+            "vue",
+            "angular"
+          ]
+        ]
+      },
+      {
+        "nom": "Bases de données",
+        "poids": 20,
+        "type": "requis",
+        "mots_cles": "sql\npostgresql = postgres\nmysql\nmongodb = nosql",
+        "groupes": [
+          [
+            "sql"
+          ],
+          [
+            "postgresql",
+            "postgres"
+          ],
+          [
+            "mysql"
+          ],
+          [
+            "mongodb",
+            "nosql"
+          ]
+        ]
+      },
+      {
+        "nom": "Outils & versioning",
+        "poids": 15,
+        "type": "requis",
+        "mots_cles": "git = github, gitlab\ndocker\nlinux",
+        "groupes": [
+          [
+            "git",
+            "github",
+            "gitlab"
+          ],
+          [
+            "docker"
+          ],
+          [
+            "linux"
+          ]
+        ]
+      },
+      {
+        "nom": "Expérience terrain",
+        "poids": 20,
+        "type": "requis",
+        "mots_cles": "developpeur = developer, ingenieur logiciel\nfreelance\nstage",
+        "groupes": [
+          [
+            "developpeur",
+            "developer",
+            "ingenieur logiciel"
+          ],
+          [
+            "freelance"
+          ],
+          [
+            "stage"
+          ]
+        ]
+      },
+      {
+        "nom": "Formation",
+        "poids": 10,
+        "type": "requis",
+        "mots_cles": "licence = bachelor\nmaster\ninformatique",
+        "groupes": [
+          [
+            "licence",
+            "bachelor"
+          ],
+          [
+            "master"
+          ],
+          [
+            "informatique"
+          ]
+        ]
+      }
+    ],
+    "resultat": {
+      "score": 0,
+      "signalements": [],
+      "detail": [
+        {
+          "critere": "Langages & frameworks",
+          "poids": 35,
+          "points": 0,
+          "points_exacts": 0.0,
+          "trouves": [],
+          "absents": [
+            "python",
+            "javascript",
+            "django",
+            "react"
+          ]
+        },
+        {
+          "critere": "Bases de données",
+          "poids": 20,
+          "points": 0,
+          "points_exacts": 0.0,
+          "trouves": [],
+          "absents": [
+            "sql",
+            "postgresql",
+            "mysql",
+            "mongodb"
+          ]
+        },
+        {
+          "critere": "Outils & versioning",
+          "poids": 15,
+          "points": 0,
+          "points_exacts": 0.0,
+          "trouves": [],
+          "absents": [
+            "git",
+            "docker",
+            "linux"
+          ]
+        },
+        {
+          "critere": "Expérience terrain",
+          "poids": 20,
+          "points": 0,
+          "points_exacts": 0.0,
+          "trouves": [],
+          "absents": [
+            "developpeur",
+            "freelance",
+            "stage"
+          ]
+        },
+        {
+          "critere": "Formation",
+          "poids": 10,
+          "points": 0,
+          "points_exacts": 0.0,
+          "trouves": [],
+          "absents": [
+            "licence",
+            "master",
+            "informatique"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "intitule": "groupe de synonymes — un seul terme suffit",
+    "texte": "Je maîtrise Angular.",
+    "criteres": [
+      {
+        "nom": "Front",
+        "poids": 40,
+        "type": "requis",
+        "groupes": [
+          [
+            "react",
+            "vue",
+            "angular"
+          ]
+        ]
+      }
+    ],
+    "resultat": {
+      "score": 100,
+      "signalements": [],
+      "detail": [
+        {
+          "critere": "Front",
+          "poids": 40,
+          "points": 40,
+          "points_exacts": 40.0,
+          "trouves": [
+            "react"
+          ],
+          "absents": []
+        }
+      ]
+    }
+  },
+  {
+    "intitule": "exclusion seule, sans aucun critère requis",
+    "texte": "Mission en interim.",
+    "criteres": [
+      {
+        "nom": "Intérim",
+        "poids": 0,
+        "type": "exclusion",
+        "groupes": [
+          [
+            "interim"
+          ]
+        ]
+      }
+    ],
+    "resultat": {
+      "score": 0,
+      "signalements": [
+        {
+          "critere": "Intérim",
+          "declencheurs": [
+            "interim"
+          ]
+        }
+      ],
+      "detail": []
+    }
+  },
+  {
+    "intitule": "modèle Comptable sur un profil de comptable",
+    "texte": "Chef comptable. Comptabilite generale et analytique, ecritures comptables. Rapprochement bancaire mensuel. Etats financiers et bilan. SYSCOHADA. Procedures comptables. Fiscalite, TVA, declarations fiscales, CNPS. Sage 100 et Excel. Cabinet d'expertise, controle interne.",
+    "criteres": [
+      {
+        "nom": "Comptabilité générale",
+        "poids": 35,
+        "type": "requis",
+        "mots_cles": "comptabilite generale = comptabilite analytique, ecritures comptables, saisie comptable\nrapprochement bancaire = rapprochements bancaires\netats financiers = etat financier, bilan, compte de resultat, balance generale\nsyscohada = ohada, syscoa\nmanuel de procedure = manuel de procedures, procedures comptables, procedures de gestion, procedures, procedure",
+        "groupes": [
+          [
+            "comptabilite generale",
+            "comptabilite analytique",
+            "ecritures comptables",
+            "saisie comptable"
+          ],
+          [
+            "rapprochement bancaire",
+            "rapprochements bancaires"
+          ],
+          [
+            "etats financiers",
+            "etat financier",
+            "bilan",
+            "compte de resultat",
+            "balance generale"
+          ],
+          [
+            "syscohada",
+            "ohada",
+            "syscoa"
+          ],
+          [
+            "manuel de procedure",
+            "manuel de procedures",
+            "procedures comptables",
+            "procedures de gestion",
+            "procedures",
+            "procedure"
+          ]
+        ]
+      },
+      {
+        "nom": "Fiscalité & déclarations",
+        "poids": 25,
+        "type": "requis",
+        "mots_cles": "fiscalite = fiscal, fiscale, fiscales, fiscaux\ntva\ndeclaration fiscale = declarations fiscales, declaration d'impots\ncnps = charges sociales, cotisations sociales",
+        "groupes": [
+          [
+            "fiscalite",
+            "fiscal",
+            "fiscale",
+            "fiscales",
+            "fiscaux"
+          ],
+          [
+            "tva"
+          ],
+          [
+            "declaration fiscale",
+            "declarations fiscales",
+            "declaration d'impots"
+          ],
+          [
+            "cnps",
+            "charges sociales",
+            "cotisations sociales"
+          ]
+        ]
+      },
+      {
+        "nom": "Outils",
+        "poids": 20,
+        "type": "requis",
+        "mots_cles": "sage = saari, sage 100\nexcel = tableur\nerp = sap, dynamics, odoo, tompro, oracle",
+        "groupes": [
+          [
+            "sage",
+            "saari",
+            "sage 100"
+          ],
+          [
+            "excel",
+            "tableur"
+          ],
+          [
+            "erp",
+            "sap",
+            "dynamics",
+            "odoo",
+            "tompro",
+            "oracle"
+          ]
+        ]
+      },
+      {
+        "nom": "Expérience",
+        "poids": 20,
+        "type": "requis",
+        "mots_cles": "comptable\nchef comptable = comptable senior, responsable comptable, directeur financier\ncabinet = cabinet comptable, cabinet d'expertise\naudit = controle de gestion, controle interne, commissariat aux comptes",
+        "groupes": [
+          [
+            "comptable"
+          ],
+          [
+            "chef comptable",
+            "comptable senior",
+            "responsable comptable",
+            "directeur financier"
+          ],
+          [
+            "cabinet",
+            "cabinet comptable",
+            "cabinet d'expertise"
+          ],
+          [
+            "audit",
+            "controle de gestion",
+            "controle interne",
+            "commissariat aux comptes"
+          ]
+        ]
+      }
+    ],
+    "resultat": {
+      "score": 93,
+      "signalements": [],
+      "detail": [
+        {
+          "critere": "Comptabilité générale",
+          "poids": 35,
+          "points": 35,
+          "points_exacts": 35.0,
+          "trouves": [
+            "comptabilite generale",
+            "rapprochement bancaire",
+            "etats financiers",
+            "syscohada",
+            "manuel de procedure"
+          ],
+          "absents": []
+        },
+        {
+          "critere": "Fiscalité & déclarations",
+          "poids": 25,
+          "points": 25,
+          "points_exacts": 25.0,
+          "trouves": [
+            "fiscalite",
+            "tva",
+            "declaration fiscale",
+            "cnps"
+          ],
+          "absents": []
+        },
+        {
+          "critere": "Outils",
+          "poids": 20,
+          "points": 13,
+          "points_exacts": 13.333333333333332,
+          "trouves": [
+            "sage",
+            "excel"
+          ],
+          "absents": [
+            "erp"
+          ]
+        },
+        {
+          "critere": "Expérience",
+          "poids": 20,
+          "points": 20,
+          "points_exacts": 20.0,
+          "trouves": [
+            "comptable",
+            "chef comptable",
+            "cabinet",
+            "audit"
+          ],
+          "absents": []
+        }
+      ]
+    }
+  }
+]
