@@ -105,39 +105,148 @@
         </details>
       </section>
 
-      <!-- Les trois sections de travail. Leur contenu est posé à l'étape E5 ;
-           seuls les titres et les repères de navigation existent ici. -->
+      <!-- Les messages de session (« Session effacée »), au-dessus du
+           formulaire : c'est là que l'utilisateur regarde après avoir
+           confirmé l'effacement. -->
+      <div class="cadre" id="messages-session" role="status"></div>
+
+      <!-- ============================================================
+           Section « Critères ».
+
+           Le contenu est dessiné par js/vue-criteres.js : seules les
+           enveloppes et les textes fixes sont ici. Les cartes de critère
+           n'existent pas dans ce fichier parce qu'il y en a zéro, une ou
+           douze selon le modèle choisi.
+           ============================================================ -->
       <section class="section cadre" id="criteres" aria-labelledby="titre-criteres">
         <div class="section__tete">
           <h2 id="titre-criteres">Critères</h2>
           <p>
-            Partez d'un modèle de poste, puis ajustez. Un critère porte un nom, des
-            mots-clés et un poids ; le signe « = » réunit des synonymes.
+            Partez d'un modèle de poste, puis ajustez. Un critère porte un nom,
+            des mots-clés et un poids ; le signe « = » réunit des synonymes.
           </p>
         </div>
-        <p class="vide" data-socle>Formulaire des critères — étape E5.</p>
+
+        <div class="modeles">
+          <p class="modeles__intitule" id="titre-modeles">Modèle de poste</p>
+          <div class="puces" id="liste-modeles" role="group" aria-labelledby="titre-modeles"></div>
+          <p class="aide">
+            Le modèle propose des critères et des mots-clés que vous pouvez
+            ensuite modifier librement.
+          </p>
+        </div>
+
+        <!-- La jauge de poids. Masquée tant qu'aucun critère n'est défini :
+             « 0 / 100 » devant un formulaire vide n'apprend rien. -->
+        <div class="jauge" id="jauge" hidden>
+          <div class="jauge__tete">
+            <span class="jauge__intitule">Poids attribués</span>
+            <span class="jauge__valeur" id="jauge-valeur">0 / 100</span>
+          </div>
+          <div class="progression">
+            <div class="progression__barre" id="jauge-barre"></div>
+          </div>
+          <p class="jauge__note" id="jauge-note"></p>
+        </div>
+
+        <div id="liste-criteres"></div>
+
+        <p class="aide" id="criteres-vide">
+          Choisissez un modèle ci-dessus, ou partez d'une page blanche pour
+          définir vos propres critères.
+        </p>
+
+        <p class="actions-critere">
+          <button type="button" class="go" id="ajouter-critere">＋ Ajouter un critère</button>
+        </p>
+
+        <!-- Les règles d'exclusion, dans leur propre bloc.
+
+             Dans la version Streamlit, une règle d'exclusion se retrouvait
+             dans la liste des critères ordinaires, avec un champ « Poids »
+             que le calcul ignorait : l'utilisateur voyait « 80 / 100 » sans
+             pouvoir comprendre où étaient passés ses vingt points. Ici elles
+             ont leur bloc, et pas de poids du tout. -->
+        <details class="exclusions" id="exclusions">
+          <summary id="exclusions-intitule">Critères d'exclusion — signalement seulement</summary>
+          <div class="exclusions__corps">
+            <p class="aide">
+              Un critère d'exclusion n'élimine jamais un candidat et ne modifie
+              jamais son score. Il pose un signalement visible dans le
+              classement ; c'est à vous de trancher.
+            </p>
+            <div id="liste-exclusions"></div>
+            <p class="actions-critere">
+              <button type="button" class="go" id="ajouter-exclusion">
+                ＋ Ajouter une règle d'exclusion
+              </button>
+            </p>
+          </div>
+        </details>
       </section>
 
+      <!-- ============================================================
+           Section « CV » : dépôt, liste des fichiers, lancement, analyse.
+           Dessinée par js/vue-depot.js.
+           ============================================================ -->
       <section class="section cadre" id="cv" aria-labelledby="titre-cv">
         <div class="section__tete">
           <h2 id="titre-cv">CV</h2>
           <p>
-            Déposez les CV du lot. Ils sont lus dans ce navigateur et ne sont envoyés
-            nulle part.
+            Déposez les CV du lot. Ils sont lus dans ce navigateur et ne sont
+            envoyés nulle part.
           </p>
         </div>
-        <p class="vide" data-socle>Zone de dépôt et lancement de l'analyse — étape E5.</p>
+
+        <!-- Un <label> qui enveloppe un <input type="file"> : cliquer dessus
+             ouvre le sélecteur, et la tabulation puis Entrée font de même.
+             Un <div> avec un gestionnaire de clic aurait la même apparence et
+             serait inutilisable au clavier. -->
+        <label class="depot" id="depot">
+          <input class="visuellement-masque" type="file" id="champ-fichiers"
+                 multiple accept=".pdf,.docx">
+          <span class="depot__titre">Glissez vos CV ici, ou parcourez vos fichiers</span>
+          <span class="depot__limites">40 fichiers maximum · 5 Mo par fichier · PDF, DOCX</span>
+        </label>
+
+        <div id="messages-depot"></div>
+        <ul class="fichiers" id="liste-fichiers"></ul>
+        <p class="aide" id="depot-resume"></p>
+
+        <button type="button" class="btn btn--lancer" id="lancer" disabled>
+          Lancer l'analyse
+        </button>
+        <p class="aide" id="lancer-raison"></p>
+
+        <!-- La zone d'analyse. Dans la version Streamlit, l'avertissement et
+             la barre apparaissaient puis disparaissaient avec la réexécution
+             du script. Ici c'est une zone stable, qui devient le résumé de
+             l'analyse une fois celle-ci terminée. -->
+        <div class="analyse" id="analyse" hidden>
+          <p class="alerte alerte--avertissement">
+            L'analyse dure quelques secondes. Ne fermez pas cet onglet : les
+            fichiers sont en mémoire vive et seraient perdus.
+          </p>
+          <div class="progression">
+            <div class="progression__barre" id="analyse-barre"></div>
+          </div>
+          <p class="analyse__etat" id="analyse-etat" role="status">Préparation…</p>
+        </div>
       </section>
 
-      <section class="section cadre" id="classement" aria-labelledby="titre-classement">
+      <!-- ============================================================
+           Section « Classement ». Entièrement dessinée par
+           js/vue-classement.js, qui n'a rien à montrer avant l'analyse.
+           ============================================================ -->
+      <section class="section cadre" id="classement" aria-labelledby="titre-classement" hidden>
         <div class="section__tete">
           <h2 id="titre-classement">Classement</h2>
           <p>
-            Les candidats par score décroissant, avec le détail critère par critère,
-            et à part ceux dont le texte n'a pas pu être lu.
+            Les candidats par score décroissant, avec le détail critère par
+            critère, et à part ceux dont le texte n'a pas pu être lu.
           </p>
         </div>
-        <p class="vide" data-socle>Tableau de classement et exports — étapes E5 et E6.</p>
+        <div id="corps-classement"></div>
       </section>
     </div>
 
@@ -150,6 +259,19 @@
       </section>
     </div>
   </main>
+
+  <!-- Confirmation d'effacement. <dialog> est un élément du navigateur : il
+       gère seul le fond grisé, la touche Échap et le retour du focus. -->
+  <dialog class="dialogue" id="dialogue-effacer" aria-labelledby="titre-effacer">
+    <h2 id="titre-effacer">Effacer la session</h2>
+    <p id="texte-effacer"></p>
+    <div class="dialogue__actions">
+      <button type="button" class="btn btn--marine" id="confirmer-effacer">
+        Oui, effacer la session
+      </button>
+      <button type="button" class="go" id="annuler-effacer">Annuler</button>
+    </div>
+  </dialog>
 
   <footer class="pied">
     <div class="cadre">

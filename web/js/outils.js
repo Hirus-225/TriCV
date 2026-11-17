@@ -138,3 +138,29 @@ const ESPACES_AUX_BORDS = new RegExp(`^${ESPACE}+|${ESPACE}+$`, "g");
 export function rogner(texte) {
   return texte.replace(ESPACES_AUX_BORDS, "");
 }
+
+// ---------------------------------------------------------------------------
+// Bandes de couleur du score
+// ---------------------------------------------------------------------------
+
+/**
+ * Vert au-dessus de 70, ambre de 40 à 70, rouge en dessous.
+ *
+ * Ces teintes qualifient LA CORRESPONDANCE AUX MOTS-CLÉS, pas le candidat —
+ * c'est ce que dit la note sous le tableau, et c'est pour cela qu'elle y est.
+ *
+ * Les deux seuils sont ici, et non dans la vue, parce que l'écran et le
+ * classeur Excel doivent employer les mêmes : un candidat vert à l'écran et
+ * ambre dans le fichier exporté serait un défaut difficile à expliquer. Côté
+ * Python, ils vivent pour la même raison dans core/export.py, d'où app.py les
+ * importe.
+ */
+export const SEUIL_VERT = 70;
+export const SEUIL_AMBRE = 40;
+
+/** Le suffixe de classe CSS correspondant au score : haut, moyen ou bas. */
+export function bandeDuScore(score) {
+  if (score >= SEUIL_VERT) return "haut";
+  if (score >= SEUIL_AMBRE) return "moyen";
+  return "bas";
+}
