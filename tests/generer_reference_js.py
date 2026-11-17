@@ -25,10 +25,13 @@ import argparse
 import io
 import json
 import sys
+from datetime import date
 from pathlib import Path
 
 RACINE = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(RACINE))
+
+from openpyxl import load_workbook  # noqa: E402
 
 from core.criteres import (  # noqa: E402
     analyser_mots_cles,
@@ -37,6 +40,7 @@ from core.criteres import (  # noqa: E402
     formater_mots_cles,
     total_des_poids,
 )
+from core.export import generer_classeur, nom_du_fichier_export  # noqa: E402
 from core.modeles import MODELES, charger_modele, noms_des_modeles  # noqa: E402
 from core.normalisation import normaliser, recomposer, supprimer_accents  # noqa: E402
 from core.parser import (  # noqa: E402
@@ -601,6 +605,189 @@ def reference_lecture():
 
 
 # ----------------------------------------------------------------------
+# 8. Le classeur Excel (étape E6)
+# ----------------------------------------------------------------------
+#
+# On ne compare pas deux fichiers octet par octet : deux classeurs .xlsx
+# peuvent décrire la même feuille avec un XML différent, et openpyxl et
+# ExcelJS ne les écrivent pas de la même façon. On compare donc ce qui se VOIT
+# à l'ouverture : la valeur de chaque cellule, sa police, son fond, son
+# alignement, ses filets, les fusions, les largeurs et les hauteurs.
+#
+# La description est produite ici en RELISANT le classeur qu'on vient
+# d'écrire. C'est volontaire : ce qui compte n'est pas ce que le code croit
+# avoir demandé, c'est ce qui est réellement dans le fichier.
+#
+# L'OCTET DE TRANSPARENCE EST IGNORÉ. openpyxl écrit les couleurs en
+# « 00FFFFFF » et ExcelJS en « FFFFFFFF » : le premier octet est le canal
+# alpha, qu'Excel n'applique pas aux cellules — les classeurs produits par
+# openpyxl s'affichent d'ailleurs normalement, alpha 00 ou pas. On ne compare
+# donc que les six chiffres de la couleur.
+
+
+def _couleur(couleur):
+    """Les six chiffres hexadécimaux d'une couleur, ou None."""
+    if couleur is None or couleur.type != "rgb" or not couleur.rgb:
+        return None
+    return str(couleur.rgb)[-6:].upper()
+
+
+def _a_des_filets(bordure):
+    cotes = (bordure.left, bordure.right, bordure.top, bordure.bottom)
+    return all(cote is not None and cote.style == "thin" for cote in cotes)
+
+
+def _decrire_feuille(feuille):
+    # La dernière ligne et la dernière colonne REMPLIES, repérées de la même
+    # façon des deux côtés : openpyxl et ExcelJS ne comptent pas les lignes
+    # vides pareil, et comparer leurs compteurs ne dirait rien.
+    derniere_ligne = 0
+    derniere_colonne = 0
+    for ligne in feuille.iter_rows():
+        for cellule in ligne:
+            if cellule.value is not None:
+                derniere_ligne = max(derniere_ligne, cellule.row)
+                derniere_colonne = max(derniere_colonne, cellule.column)
+
+    cellules = []
+    for numero_ligne in range(1, feuille.max_row + 1):
+        for numero_colonne in range(1, feuille.max_column + 1):
+            cellule = feuille.cell(numero_ligne, numero_colonne)
+            fond = (
+                _couleur(cellule.fill.fgColor)
+                if cellule.fill is not None and cellule.fill.patternType == "solid"
+                else None
+            )
+            valeur = cellule.value
+            if valeur is None and fond is None:
+                continue
+            cellules.append({
+                "adresse": cellule.coordinate,
+                "valeur": valeur,
+                "gras": bool(cellule.font.b),
+                "taille": float(cellule.font.sz) if cellule.font.sz else None,
+                "police": cellule.font.name,
+                "couleur": _couleur(cellule.font.color),
+                "fond": fond,
+                "alignementH": cellule.alignment.horizontal,
+                "alignementV": cellule.alignment.vertical,
+                "retourLigne": bool(cellule.alignment.wrap_text),
+                "filets": _a_des_filets(cellule.border),
+            })
+
+    return {
+        "nom": feuille.title,
+        "grille": bool(feuille.sheet_view.showGridLines),
+        "derniereLigne": derniere_ligne,
+        "derniereColonne": derniere_colonne,
+        "fusions": sorted(str(plage) for plage in feuille.merged_cells.ranges),
+        "largeurs": {
+            lettre: dimension.width
+            for lettre, dimension in feuille.column_dimensions.items()
+            if dimension.width is not None
+        },
+        "hauteurs": {
+            str(numero): dimension.height
+            for numero, dimension in feuille.row_dimensions.items()
+            if dimension.height is not None
+        },
+        "cellules": cellules,
+    }
+
+
+# Les jeux d'essai. Le §12 du cadrage demande d'éprouver un lot SANS aucun
+# illisible et un lot SANS aucun classé : ce sont les deux cas où un bloc du
+# classeur disparaît, et donc ceux où un décalage de lignes se produirait.
+def _jeux_de_classeur():
+    criteres = [
+        {"nom": "Comptabilité générale", "poids": 35, "type": "requis",
+         "groupes": [["comptabilite generale"], ["rapprochement bancaire"]],
+         "mots_cles": "comptabilite generale\nrapprochement bancaire"},
+        {"nom": "Fiscalité", "poids": 25, "type": "requis",
+         "groupes": [["tva"], ["cnps", "charges sociales"]],
+         "mots_cles": "tva\ncnps = charges sociales"},
+        {"nom": "Outils", "poids": 40, "type": "requis",
+         "groupes": [["sage"], ["excel"]], "mots_cles": "sage\nexcel"},
+        {"nom": "Intérim", "poids": 0, "type": "exclusion",
+         "groupes": [["interim"]], "mots_cles": "interim"},
+    ]
+
+    def candidat(fichier, nom, score, email, telephone, signalements, detail):
+        return {
+            "fichier": fichier, "lisible": True, "nom": nom, "email": email,
+            "telephone": telephone, "score": score, "signalements": signalements,
+            "detail": detail, "taille": "123 Ko",
+        }
+
+    def detail(points):
+        return [
+            {"critere": "Comptabilité générale", "poids": 35, "points": points[0],
+             "points_exacts": float(points[0]), "trouves": ["comptabilite generale"],
+             "absents": ["rapprochement bancaire"]},
+            {"critere": "Fiscalité", "poids": 25, "points": points[1],
+             "points_exacts": float(points[1]), "trouves": ["tva", "cnps"], "absents": []},
+            {"critere": "Outils", "poids": 40, "points": points[2],
+             "points_exacts": float(points[2]), "trouves": [], "absents": ["sage", "excel"]},
+        ]
+
+    classes = [
+        # Un score vert, un ambre, un rouge : les trois bandes de couleur.
+        candidat("CV_Brou_Akissi.docx", "BROU AKISSI", 82, "akissi@example.ci",
+                 "07 11 22 33 44", [], detail([30, 25, 27])),
+        candidat("CV_Kone_Hamed.pdf", "KONE Hamed", 55, None, "+225 05 00 11 22 33",
+                 [{"critere": "Intérim", "declencheurs": ["interim"]}], detail([18, 25, 12])),
+        candidat("CVBR.pdf", None, 12, "bamba.r@example.ci", None, [], detail([5, 0, 7])),
+    ]
+    illisibles = [
+        {"fichier": "CV_scanne.pdf", "lisible": False, "nom": "Traore Aminata",
+         "email": None, "telephone": None, "score": None, "signalements": [],
+         "detail": [], "taille": "56 Ko"},
+        {"fichier": "CV_abime.pdf", "lisible": False, "nom": None, "email": None,
+         "telephone": None, "score": None, "signalements": [], "detail": [],
+         "taille": "2,1 Mo"},
+    ]
+
+    return [
+        {"intitule": "lot complet", "candidats": classes + illisibles,
+         "criteres": criteres, "modele": "Comptable"},
+        {"intitule": "aucun illisible", "candidats": classes,
+         "criteres": criteres, "modele": "Comptable"},
+        {"intitule": "aucun classé", "candidats": illisibles,
+         "criteres": criteres, "modele": "Comptable"},
+        {"intitule": "critères personnalisés", "candidats": classes + illisibles,
+         "criteres": criteres, "modele": None},
+        {"intitule": "un seul candidat, aucun critère d'exclusion",
+         "candidats": classes[:1], "criteres": criteres[:3], "modele": "Développeur web"},
+    ]
+
+
+JOUR_DE_REFERENCE = date(2026, 11, 17)
+
+
+def reference_export():
+    jeux = []
+    for jeu in _jeux_de_classeur():
+        tampon = generer_classeur(
+            jeu["candidats"], jeu["criteres"], jeu["modele"], JOUR_DE_REFERENCE
+        )
+        classeur = load_workbook(tampon)
+        jeux.append({
+            "intitule": jeu["intitule"],
+            "candidats": jeu["candidats"],
+            "criteres": jeu["criteres"],
+            "modele": jeu["modele"],
+            "feuilles": [_decrire_feuille(classeur[nom]) for nom in classeur.sheetnames],
+            "nomsDesFeuilles": classeur.sheetnames,
+        })
+
+    return {
+        "jour": JOUR_DE_REFERENCE.isoformat(),
+        "nomDuFichier": nom_du_fichier_export(JOUR_DE_REFERENCE),
+        "jeux": jeux,
+    }
+
+
+# ----------------------------------------------------------------------
 # Écriture
 # ----------------------------------------------------------------------
 
@@ -633,6 +820,7 @@ def main():
         "scoring.json": reference_scoring(),
         "formatage.json": reference_formatage(),
         "lecture.json": reference_lecture(),
+        "export.json": reference_export(),
     }
 
     for nom, contenu in fichiers.items():

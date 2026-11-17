@@ -434,6 +434,7 @@ table.classement tbody tr:nth-child(even) { background: var(--mist); }
 .actions-finales {
   display: flex; flex-wrap: wrap; gap: 16px 28px; align-items: center; margin-top: 44px;
 }
+.actions-finales__note { margin-top: 12px; }
 .dialogue {
   border: 1px solid var(--rule); border-top: 8px solid var(--amber);
   padding: 28px; max-width: 46ch; background: var(--paper); color: var(--ink);

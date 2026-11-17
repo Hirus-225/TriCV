@@ -15,13 +15,15 @@
 
 import { etat } from "./etat.js";
 import { accorder, bandeDuScore, SEUIL_AMBRE, SEUIL_VERT } from "./outils.js";
-
-// Texte du §4 du cadrage, garde-fou n°3. Il figure dans l'interface ET dans
-// l'export : un classeur circule par courriel, souvent sans la personne qui
-// l'a produit, et l'avertissement doit voyager avec les chiffres.
-export const AVERTISSEMENT =
-  "Un score faible signifie que les mots-clés recherchés sont absents du CV, " +
-  "pas que le candidat est moins qualifié.";
+// L'avertissement du §4 est défini dans export.js et repris ici, exactement
+// comme app.py l'importe de core/export.py : le texte qui doit voyager avec
+// les chiffres n'a qu'une seule source.
+import {
+  AVERTISSEMENT,
+  genererClasseur,
+  nomDuFichierExport,
+  telecharger,
+} from "./export.js";
 
 let surEffacement = () => {};
 
@@ -255,6 +257,41 @@ function dessinerIllisibles(illisibles) {
 function dessinerActions(resultats) {
   const bloc = element("div", "actions-finales");
 
+  const exporter = element("button", "btn btn--marine", "Télécharger le récapitulatif (.xlsx)");
+  exporter.type = "button";
+  exporter.addEventListener("click", async () => {
+    // Le classeur est construit AU CLIC, et non à l'affichage du bouton. La
+    // version Python le reconstruisait à chaque réexécution du script, donc à
+    // chaque frappe, pour un bouton sur lequel personne n'avait cliqué : c'est
+    // le défaut n°6 du §4 de docs/MIGRATION-JS.md.
+    const intitule = exporter.textContent;
+    exporter.disabled = true;
+    exporter.textContent = "Préparation du fichier…";
+    try {
+      const octets = await genererClasseur(
+        resultats,
+        etat.criteresAnalyse ?? [],
+        etat.modeleActif,
+      );
+      telecharger(octets, nomDuFichierExport());
+    } catch {
+      // Le message d'erreur n'est pas journalisé et ne contient aucun nom de
+      // candidat : il ne parle que de la bibliothèque qui n'a pas chargé.
+      const erreur = element(
+        "p",
+        "alerte alerte--erreur",
+        "Le récapitulatif n'a pas pu être produit. Rechargez la page et " +
+          "réessayez ; vos critères et le classement sont perdus au " +
+          "rechargement, mais rien n'a été enregistré.",
+      );
+      bloc.after(erreur);
+    } finally {
+      exporter.disabled = false;
+      exporter.textContent = intitule;
+    }
+  });
+  bloc.append(exporter);
+
   const effacer = element("button", "go", "Effacer la session");
   effacer.type = "button";
   effacer.addEventListener("click", () => {
@@ -268,7 +305,17 @@ function dessinerActions(resultats) {
   });
 
   bloc.append(effacer);
-  return bloc;
+
+  const note = element(
+    "p",
+    "aide actions-finales__note",
+    "Le fichier Excel contient le classement, le détail par critère et les " +
+      "mots-clés trouvés pour chaque candidat.",
+  );
+
+  const enveloppe = element("div");
+  enveloppe.append(bloc, note);
+  return enveloppe;
 }
 
 // ---------------------------------------------------------------------------

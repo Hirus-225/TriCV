@@ -309,11 +309,25 @@ livrable. ExcelJS écrit tout cela (`fill`, `font`, `border`, `alignment`,
 `mergeCells`, `columns[].width`, `row.height`), ce qui en fait l'équivalent
 direct d'openpyxl.
 
-> À vérifier à l'étape du vendor : le poids d'ExcelJS (≈ 1 Mo minifié) et le
-> fait que son bundle navigateur fonctionne sans outil de construction. Si ce
-> point résiste, le repli est d'écrire le `.xlsx` à la main — un `.xlsx` est
-> un zip de fichiers XML, et fflate est déjà là. C'est faisable mais c'est
-> plusieurs centaines de lignes : à ne faire qu'en dernier recours.
+> **Vérifié à l'étape E6, la réserve est levée.** ExcelJS pèse 936 Ko ; il est
+> donc chargé **à la demande**, au premier clic sur le bouton d'export, et non
+> au chargement de la page. Son bundle navigateur fonctionne sans outil de
+> construction, et son unique `new Function` ne s'exécute jamais. Le repli
+> envisagé — écrire le `.xlsx` à la main avec fflate — n'a pas été nécessaire.
+
+**DEUX DIFFÉRENCES D'ÉCRITURE, SANS EFFET À L'OUVERTURE** (constatées à l'étape
+E6, en comparant les deux fichiers cellule par cellule) :
+
+| | openpyxl | ExcelJS | Ce que voit l'utilisateur |
+|---|---|---|---|
+| alignement vertical | l'API dit `center` | l'API dit `middle` | **identique** : les deux écrivent `vertical="center"` dans le fichier, vérifié en ouvrant l'archive |
+| largeurs de colonnes | une balise `<col>` par colonne | une balise par **suite de colonnes de même largeur** (`min="7" max="9"`) | **identique** : Excel applique la largeur à toute la plage |
+
+La seconde a une conséquence à connaître : `openpyxl` relisant un fichier
+produit par ExcelJS n'expose la largeur groupée que sous la **première** lettre
+de la plage. Ce n'est pas une perte d'information dans le fichier, c'est une
+particularité du lecteur. La page de tests, qui relit avec ExcelJS, vérifie
+bien les douze largeurs.
 
 ### 2.2 Ce que le navigateur sait déjà faire — sans bibliothèque
 

@@ -27,6 +27,7 @@ import {
   extraireNomDepuisTexte,
   parserCv,
 } from "../js/parser.js";
+import { genererClasseur, nomDuFichierExport } from "../js/export.js";
 
 const DOSSIER_REFERENCE = new URL("reference/", import.meta.url);
 // Les CV du corpus sont hors de web/ : on remonte à la racine du projet,
@@ -454,6 +455,218 @@ function groupeModeleComptable(reference, lecture) {
 }
 
 // ---------------------------------------------------------------------------
+// Groupe 9 — le classeur Excel
+// ---------------------------------------------------------------------------
+
+/**
+ * On ne compare pas deux fichiers .xlsx octet par octet : deux classeurs
+ * peuvent décrire la même feuille avec un XML différent, et openpyxl et
+ * ExcelJS ne l'écrivent pas de la même façon. On compare ce qui se VOIT à
+ * l'ouverture — valeur, police, fond, alignement, filets, fusions, largeurs,
+ * hauteurs — en RELISANT le fichier qu'on vient d'écrire. Ce qui compte n'est
+ * pas ce que le code croit avoir demandé, c'est ce qui est dans le fichier.
+ */
+
+/** Les six chiffres d'une couleur ARGB. L'octet de transparence est ignoré :
+ *  openpyxl écrit 00, ExcelJS écrit FF, et Excel ne l'applique pas aux
+ *  cellules. */
+const couleurHex = (argb) => (argb ? String(argb).slice(-6).toUpperCase() : null);
+
+/**
+ * L'alignement vertical, dans le vocabulaire du FICHIER et non dans celui de
+ * la bibliothèque.
+ *
+ * ExcelJS appelle « middle » ce qu'openpyxl appelle « center ». Ce n'est pas
+ * un écart de comportement : vérifié en ouvrant l'archive du .xlsx produit et
+ * en lisant xl/styles.xml, les deux écrivent `vertical="center"`. Seul le mot
+ * employé par l'API diffère, et c'est lui qu'on ramène ici au mot du fichier.
+ */
+const alignementVertical = (valeur) => (valeur === "middle" ? "center" : (valeur ?? null));
+
+/** La lettre d'une colonne : 1 -> A, 27 -> AA. */
+function lettreDeColonne(numero) {
+  let lettre = "";
+  let reste = numero;
+  while (reste > 0) {
+    const modulo = (reste - 1) % 26;
+    lettre = String.fromCharCode(65 + modulo) + lettre;
+    reste = Math.floor((reste - 1) / 26);
+  }
+  return lettre;
+}
+
+function decrireFeuille(feuille) {
+  // ExcelJS compte les lignes autrement qu'openpyxl ; on prend une marge et
+  // on repère nous-mêmes la dernière cellule remplie, comme le fait le script
+  // Python — c'est la seule façon d'obtenir deux nombres comparables.
+  const lignesAParcourir = Math.max(feuille.rowCount, 1) + 5;
+  const colonnesAParcourir = Math.max(feuille.columnCount, 1) + 5;
+
+  let derniereLigne = 0;
+  let derniereColonne = 0;
+  const cellules = [];
+
+  for (let ligne = 1; ligne <= lignesAParcourir; ligne++) {
+    for (let colonne = 1; colonne <= colonnesAParcourir; colonne++) {
+      const cellule = feuille.getRow(ligne).getCell(colonne);
+
+      // Dans une plage fusionnée, ExcelJS fait rendre à chaque cellule la
+      // valeur de la première, tandis qu'openpyxl rend None. On ne décrit donc
+      // que la cellule maîtresse, sans quoi tout bloc fusionné ressortirait
+      // comme un écart.
+      if (cellule.isMerged && cellule.master && cellule.master.address !== cellule.address) {
+        continue;
+      }
+
+      const fond =
+        cellule.fill && cellule.fill.pattern === "solid"
+          ? couleurHex(cellule.fill.fgColor?.argb)
+          : null;
+      const valeur = cellule.value === undefined ? null : cellule.value;
+
+      if (valeur !== null) {
+        derniereLigne = Math.max(derniereLigne, ligne);
+        derniereColonne = Math.max(derniereColonne, colonne);
+      }
+      if (valeur === null && fond === null) continue;
+
+      const bordure = cellule.border ?? {};
+      const filets = ["left", "right", "top", "bottom"].every(
+        (cote) => bordure[cote]?.style === "thin",
+      );
+
+      cellules.push({
+        adresse: cellule.address,
+        valeur,
+        gras: Boolean(cellule.font?.bold),
+        taille: cellule.font?.size ?? null,
+        police: cellule.font?.name ?? null,
+        couleur: couleurHex(cellule.font?.color?.argb),
+        fond,
+        alignementH: cellule.alignment?.horizontal ?? null,
+        alignementV: alignementVertical(cellule.alignment?.vertical),
+        retourLigne: Boolean(cellule.alignment?.wrapText),
+        filets,
+      });
+    }
+  }
+
+  const largeurs = {};
+  for (let colonne = 1; colonne <= colonnesAParcourir; colonne++) {
+    const largeur = feuille.getColumn(colonne).width;
+    if (largeur !== undefined && largeur !== null) largeurs[lettreDeColonne(colonne)] = largeur;
+  }
+
+  const hauteurs = {};
+  for (let ligne = 1; ligne <= lignesAParcourir; ligne++) {
+    const hauteur = feuille.getRow(ligne).height;
+    if (hauteur !== undefined && hauteur !== null) hauteurs[String(ligne)] = hauteur;
+  }
+
+  return {
+    nom: feuille.name,
+    grille: Boolean(feuille.views?.[0]?.showGridLines),
+    derniereLigne,
+    derniereColonne,
+    fusions: [...(feuille.model?.merges ?? [])].sort(),
+    largeurs,
+    hauteurs,
+    cellules,
+  };
+}
+
+/**
+ * Les critères de la référence emploient la convention de nommage de Python
+ * (`mots_cles`) ; le code JavaScript emploie la sienne (`motsCles`). Ce n'est
+ * pas un écart de comportement, on remet donc la référence dans la forme
+ * JavaScript plutôt que de trahir la convention d'un des deux langages.
+ */
+const criteresEnFormeJs = (criteres) =>
+  criteres.map((critere) => ({
+    nom: critere.nom,
+    poids: critere.poids,
+    type: critere.type,
+    groupes: critere.groupes,
+    motsCles: critere.mots_cles,
+  }));
+
+async function groupeExport(reference) {
+  const cas = [];
+  const jour = new Date(`${reference.jour}T12:00:00`);
+
+  cas.push(
+    comparer("nom du fichier proposé au téléchargement", nomDuFichierExport(jour), reference.nomDuFichier),
+  );
+
+  for (const jeu of reference.jeux) {
+    const octets = await genererClasseur(
+      jeu.candidats,
+      criteresEnFormeJs(jeu.criteres),
+      jeu.modele,
+      jour,
+    );
+
+    // On relit le fichier produit, et non l'objet en mémoire.
+    const relu = new globalThis.ExcelJS.Workbook();
+    await relu.xlsx.load(octets);
+
+    cas.push(
+      comparer(
+        `${jeu.intitule} — les trois feuilles, dans l'ordre`,
+        relu.worksheets.map((f) => f.name),
+        jeu.nomsDesFeuilles,
+      ),
+    );
+
+    for (const attendue of jeu.feuilles) {
+      const feuille = relu.getWorksheet(attendue.nom);
+      if (!feuille) {
+        cas.push({
+          statut: "ecart",
+          intitule: `${jeu.intitule} / ${attendue.nom} — feuille absente`,
+          detail: { attendu: attendue.nom },
+        });
+        continue;
+      }
+
+      const obtenue = decrireFeuille(feuille);
+      const prefixe = `${jeu.intitule} / ${attendue.nom}`;
+
+      cas.push(comparer(`${prefixe} — grille masquée`, obtenue.grille, attendue.grille));
+      cas.push(comparer(`${prefixe} — dernière ligne remplie`, obtenue.derniereLigne, attendue.derniereLigne));
+      cas.push(comparer(`${prefixe} — dernière colonne remplie`, obtenue.derniereColonne, attendue.derniereColonne));
+      cas.push(comparer(`${prefixe} — cellules fusionnées`, obtenue.fusions, attendue.fusions));
+      cas.push(comparer(`${prefixe} — largeurs de colonnes`, obtenue.largeurs, attendue.largeurs));
+      cas.push(comparer(`${prefixe} — hauteurs de lignes`, obtenue.hauteurs, attendue.hauteurs));
+
+      // Les cellules, comparées une par une : un écart doit désigner SA
+      // cellule, pas « le tableau est différent ».
+      const parAdresse = new Map(obtenue.cellules.map((c) => [c.adresse, c]));
+      for (const attendueCellule of attendue.cellules) {
+        cas.push(
+          comparer(
+            `${prefixe} — cellule ${attendueCellule.adresse}`,
+            parAdresse.get(attendueCellule.adresse) ?? null,
+            attendueCellule,
+          ),
+        );
+        parAdresse.delete(attendueCellule.adresse);
+      }
+      // Ce qui reste a été écrit par la version JavaScript seule.
+      for (const [adresse, surplus] of parAdresse) {
+        cas.push({
+          statut: "ecart",
+          intitule: `${prefixe} — cellule ${adresse} écrite en trop`,
+          detail: { obtenu: surplus, attendu: null },
+        });
+      }
+    }
+  }
+
+  return cas;
+}
+
+// ---------------------------------------------------------------------------
 // Affichage
 // ---------------------------------------------------------------------------
 
@@ -525,7 +738,7 @@ async function lancer() {
 
   let references;
   try {
-    const [arrondi, normalisation, criteres, modeles, scoring, formatage, lecture] =
+    const [arrondi, normalisation, criteres, modeles, scoring, formatage, lecture, exportation] =
       await Promise.all([
         lireJson("arrondi.json"),
         lireJson("normalisation.json"),
@@ -534,8 +747,9 @@ async function lancer() {
         lireJson("scoring.json"),
         lireJson("formatage.json"),
         lireJson("lecture.json"),
+        lireJson("export.json"),
       ]);
-    references = { arrondi, normalisation, criteres, modeles, scoring, formatage, lecture };
+    references = { arrondi, normalisation, criteres, modeles, scoring, formatage, lecture, exportation };
   } catch (erreur) {
     bilan.className = "bilan echec";
     bilan.textContent =
@@ -567,6 +781,7 @@ async function lancer() {
       "8. Le modèle « Comptable » sépare-t-il le métier ?",
       groupeModeleComptable(references.lecture, scoresComptable),
     ],
+    ["9. Le classeur Excel", await groupeExport(references.exportation)],
   ];
 
   let total = 0;

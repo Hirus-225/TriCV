@@ -48,9 +48,19 @@ fonctions : cette branche est morte. La politique de sécurité interdit l'**ex�
 d'`eval` et de `new Function`, pas leur présence dans un fichier — la bibliothèque
 fonctionne donc sous `script-src 'self'`. À revérifier si la version change.
 
-**ExcelJS — format UMD.** Contrairement aux autres, ExcelJS n'est pas un module ES :
-il se charge par une balise `<script>` ordinaire et se déclare dans `window.ExcelJS`.
-C'est pourquoi `index.html` le charge séparément des modules `js/`.
+**ExcelJS — format UMD, et chargement à la demande.** Contrairement aux autres,
+ExcelJS n'est pas un module ES : il se charge par une balise `<script>` ordinaire et se
+déclare dans `window.ExcelJS`. `web/js/export.js` insère cette balise **au premier clic
+sur le bouton de téléchargement**, et une seule fois. Le fichier pèse 936 Ko : l'imposer
+à chaque visiteur, y compris à celui qui n'exportera rien, serait payer cher une
+fonction facultative.
+
+**ExcelJS — les largeurs de colonnes groupées.** ExcelJS écrit une seule balise `<col>`
+pour une suite de colonnes de même largeur (`min="7" max="9"`), là où openpyxl en écrit
+une par colonne. Les deux sont du XML valide et Excel applique la largeur à toute la
+plage. À savoir si l'on relit un tel fichier avec openpyxl : son dictionnaire
+`column_dimensions` n'expose la largeur que sous la première lettre de la plage. C'est
+une particularité du lecteur, pas une perte dans le fichier.
 
 **fflate — pourquoi pas mammoth.js pour les `.docx`.** Mammoth convertit un document
 Word en HTML en interprétant sa mise en forme, et **ignore les zones de texte
