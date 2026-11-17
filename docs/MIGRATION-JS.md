@@ -870,7 +870,7 @@ précédente soit validée.**
 | **E6** | **Export Excel** | `export.js` | ouvrir le `.xlsx` produit **et** celui de Python côte à côte : trois feuilles, mêmes intitulés, mêmes colonnes, mêmes bandes de couleur, mêmes textes d'avertissement. Vérifier aussi un lot **sans aucun illisible** et un lot **sans aucun classé** |
 | **E7** | **Correction des défauts** | défauts 1 à 5 du §4, plus les textes réécrits du §1.5 | la référence Python est **mise à jour pour les défauts corrigés** (le cas « deux critères de même nom » doit maintenant **différer** de Python, et la raison est écrite dans le test) ; `.doc` déposé → le bon message ; critères modifiés après analyse → le bandeau apparaît |
 | **E8** | **Manuel et navigation** | `manuel.md`, `manuel.js`, navigation par ancre (`#tri`, `#manuel`), `favicon.svg` | le manuel s'affiche, les liens du bandeau fonctionnent, le bouton Retour du navigateur fait ce qu'on attend |
-| **E9** | **Recette et mise en ligne** | `RECETTE.md` adapté, publication GitHub Pages | les 10 points de la recette, **revus pour le navigateur** (le point 7 « aucune écriture disque » devient « aucune requête réseau sortante », vérifiable dans l'onglet Réseau), cochés sur **le site publié**, pas seulement en local |
+| **E9** | **Recette et mise en ligne** *(préparée)* | `docs/RECETTE-WEB.md`, workflow `.github/workflows/pages.yml`, README | les 13 points **passent en local** au 17/11/2026, dont le point 7 réécrit : « aucune requête ne sort du site », vérifié dans l'onglet Réseau **et** en provoquant un appel extérieur que le navigateur refuse. La colonne « Publié » reste à cocher : la mise en ligne demande le compte GitHub |
 
 ### 6.3 Le script de référence, en deux mots
 
