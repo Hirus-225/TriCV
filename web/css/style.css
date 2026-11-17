@@ -445,9 +445,44 @@ table.classement tbody tr:nth-child(even) { background: var(--mist); }
   display: flex; flex-wrap: wrap; gap: 16px 24px; align-items: center; margin-top: 24px;
 }
 
-/* ====================================================================
-   ÉTAPE E8 — manuel.
-   ==================================================================== */
+/* ── Page du manuel ──────────────────────────────────────────────────── */
+/* Une colonne de lecture étroite : au-delà d'environ 75 caractères, l'œil
+   perd la ligne suivante en revenant à la marge. */
+.manuel { max-width: 75ch; padding-top: 56px; }
+.manuel > :first-child { margin-top: 0; }
+.manuel h1 { font-size: clamp(1.9rem, 4vw, 2.6rem); font-weight: 800; margin: 48px 0 16px; }
+.manuel h2 {
+  font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 800; margin: 48px 0 16px;
+  padding-bottom: 8px; border-bottom: 3px solid var(--navy);
+}
+.manuel h3 { font-size: 1.2rem; font-weight: 800; margin: 32px 0 12px; }
+.manuel p, .manuel ul, .manuel ol { margin: 14px 0; }
+.manuel ul, .manuel ol { padding-left: 24px; }
+.manuel li { margin: 6px 0; }
+.manuel strong { font-weight: 800; }
+.manuel hr { border: 0; border-top: 1px solid var(--rule); margin: 44px 0; }
+.manuel code {
+  background: var(--mist); padding: 1px 5px; border-radius: 4px; font-size: .88em;
+}
+/* Les encadrés « À retenir » du manuel, écrits en citation Markdown. */
+.manuel blockquote {
+  margin: 20px 0; padding: 14px 18px; border-left: 4px solid var(--amber);
+  background: var(--amber-wash);
+}
+.manuel blockquote p { margin: 8px 0; }
+.manuel blockquote > :first-child { margin-top: 0; }
+.manuel blockquote > :last-child { margin-bottom: 0; }
+.manuel table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: .92rem; }
+.manuel th, .manuel td {
+  text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--rule);
+  vertical-align: top;
+}
+.manuel th { background: var(--navy); color: var(--paper); font-family: var(--display); }
+.manuel tbody tr:nth-child(even) { background: var(--mist); }
+
+/* Page du manuel : le bandeau se réduit (ni surtitre, ni accroche). */
+body[data-page="manuel"] .surtitre { display: none; }
+body[data-page="manuel"] .bandeau h1 { margin-bottom: 44px; }
 
 /* ── Pied marine ─────────────────────────────────────────────────────── */
 .pied {
@@ -517,4 +552,11 @@ table.classement tbody tr:nth-child(even) { background: var(--mist); }
 
   .actions-finales { gap: 14px; }
   .dialogue { padding: 20px; margin: 16px; }
+
+  /* Les tableaux du manuel ont deux ou trois colonnes de texte : ils tiennent
+     mieux en défilement horizontal qu'en cartes, le contenu d'une cellule
+     étant une phrase entière et non une valeur. */
+  .manuel { padding-top: 36px; }
+  .manuel table { display: block; overflow-x: auto; white-space: normal; }
+  .manuel th, .manuel td { min-width: 10rem; }
 }

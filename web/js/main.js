@@ -33,6 +33,7 @@ import { effacerLaSession } from "./etat.js";
 import * as vueCriteres from "./vue-criteres.js";
 import * as vueDepot from "./vue-depot.js";
 import * as vueClassement from "./vue-classement.js";
+import * as vueManuel from "./manuel.js";
 
 /**
  * Garde-fou : la page doit être servie par HTTP, pas ouverte par double-clic.
@@ -66,8 +67,55 @@ function messageDeSession(texte, classe = "alerte alerte--succes") {
   zone.append(message);
 }
 
+// ---------------------------------------------------------------------------
+// Navigation entre les deux pages
+// ---------------------------------------------------------------------------
+//
+// REMPLACE LA BARRE LATÉRALE DE STREAMLIT, où un `st.radio` à deux entrées
+// servait de navigation. Ici les deux entrées sont dans le bandeau, comme sur
+// charleszogoue.ci, et la page affichée se lit dans l'adresse : « #manuel »
+// ou rien.
+//
+// POURQUOI L'ADRESSE ET NON UNE SIMPLE VARIABLE. Parce que le bouton Retour du
+// navigateur doit marcher, et parce qu'un lien vers le manuel doit pouvoir
+// être envoyé à quelqu'un. L'événement `hashchange` se déclenche aussi bien
+// quand on clique un lien que quand on revient en arrière : les deux cas sont
+// donc traités par le même code, sans rien à synchroniser.
+
+let pageCourante = null;
+
+const pageDemandee = () => (location.hash === "#manuel" ? "manuel" : "tri");
+
+async function afficherLaPage() {
+  const page = pageDemandee();
+  const changement = page !== pageCourante;
+  pageCourante = page;
+
+  document.body.dataset.page = page;
+  document.getElementById("page-tri").hidden = page !== "tri";
+  document.getElementById("page-manuel").hidden = page !== "manuel";
+  document.getElementById("titre-tri").hidden = page !== "tri";
+  document.getElementById("titre-manuel").hidden = page !== "manuel";
+  document.getElementById("accroche").hidden = page !== "tri";
+
+  for (const lien of document.querySelectorAll(".navigation a[data-page]")) {
+    if (lien.dataset.page === page) lien.setAttribute("aria-current", "page");
+    else lien.removeAttribute("aria-current");
+  }
+
+  if (page === "manuel") await vueManuel.afficher();
+
+  // On revient en haut quand on CHANGE de page, et seulement alors : arriver
+  // au milieu du manuel parce qu'on lisait le bas du classement serait
+  // déroutant. Un simple rafraîchissement, lui, ne doit rien déplacer.
+  if (changement) window.scrollTo({ top: 0, behavior: "instant" });
+}
+
 function demarrer() {
   if (!verifierLeMode()) return;
+
+  window.addEventListener("hashchange", afficherLaPage);
+  afficherLaPage();
 
   // Quand les critères changent, seul le bloc de lancement est concerné :
   // c'est lui qui sait si l'analyse est possible et pourquoi elle ne l'est
